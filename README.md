@@ -8,3 +8,6 @@ External image-processing tools:
   - scikit-image (http://scikit-image.org/)
   - scikit-learn (http://scikit-learn.org/)
   - elastix (http://elastix.isi.uu.nl/)
+
+
+![alt tag](mainpage.png)

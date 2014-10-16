@@ -1,0 +1,42 @@
+html, body {
+    height: 100%;
+    margin: 0;
+//    padding: 0;
+//    background-color: #E3E9ED;
+}
+
+/*
+body {
+    font-size: 10pt;
+    font-family: "PT Sans", Helvetica, Arial, Sans-Serif;
+    color: #444;
+}
+*/
+
+.img_list {
+    /*background-color: lightblue;*/
+    overflow: scroll;
+}
+/*
+.fill-heigth {
+    min-height: 100%;
+    height: 100%;
+}
+*/
+.center-div {
+    text-align: center;
+    margin: 0 auto;
+}
+.frm-search {
+    background-color: lightgreen;
+    width:  200px;
+    height: 200px;
+}
+
+.frm-label {
+    text-align: center;
+    height: 5%;
+}
+#frame-list {
+//    height: 90%;
+}

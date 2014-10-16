@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+{% block content %}
+<style rel="stylesheet" type="text/css">
+    html, body {
+        height: 100%;
+//        width: 100%;
+    }
+    .img-user {
+        cursor: pointer;
+    }
+    .img-user:hover {
+        background-color: darkred;
+    }
+    .img_list {
+        overflow: auto;
+    }
+    .fill-heigth2 {
+//        min-height: 100%;
+        height: 100%;
+    }
+    .fill-heigth3 {
+//        min-height: 100%;
+//        height: 100%;
+    }
+</style>
+<div class="container-fluid fill-heigth">
+<div class="row fill-heigth">
+    <div class="col-sm-2 content">
+        <h4> <kbd>1</kbd> Upload your images:</h4><hr/>
+        {% block upload %}
+            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appxray:upload' %}">
+                <div class="btn-group-vertical">
+                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
+                    <a class="btn btn-danger" href="{% url 'appxray:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
+                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                </div>
+            </form>
+        {% endblock %}
+        <hr>
+        <div id="user_images">
+        {% for ii in uploadedImages %}
+            <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">
+        {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-sm-5 content" style="text-align: center" id="canvas_container"  style="display: table-row">
+        <div style="text-align: center">
+            <h4> <kbd>2</kbd> Select ROI and push search-query:</h4>
+            <div class="row">
+                <a href="#" class="btn btn-primary" id="id_roisearch"><span class="glyphicon glyphicon-search"></span> Search ROI</a>
+                <span id="id_help" title='<span class="glyphicon glyphicon glyphicon-question-sign"></span> <b>LeftMouseButton</b> - change ROI position<br><b>RightMouseButton</b> - change ROI size' data-html="true" style="border-bottom: 1px dashed #000080; margin: 12px">Help</span>
+            </div>
+        </div>
+        <br/>
+        <canvas id="canvas" width="480px" height="360px"></canvas>
+{#        <canvas id="canvas" width="300px" height="300px"></canvas>#}
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="id_progress"></div>
+        </div>
+        <div class="alert alert-danger fade in" id="message-error" style="position: relative; z-index: 10; display: none">
+            <button type="button" class="close">×</button>
+            <dix id="message-error-text">Your error message goes here...</dix>
+        </div>
+    </div>
+
+        <div class="col-sm-4 content fill-height3">
+            <div style="text-align: center">
+                <h4> <kbd>3</kbd> Explore search-query results:</h4><hr/>
+            </div>
+            <hr/>
+            <div class="img_list" id="id_query_res"></div>
+        </div>
+    </div>
+</div>
+{#<canvas id="canvas_hidden" width="1000px" height="1000px" style="display: none"></canvas>#}
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 90%; height: 90%">
+    <div class="modal-content" style="width: 100%; height: 100%">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">X-Ray database</h4>
+      </div>
+      <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx_gallery"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+<script type="application/javascript">
+    $(function () {
+        $("#id_help").tooltip({html:true});
+        $("#navbar-xray").addClass("active");
+        $('.alert .close').on('click', function(e) {
+            $(this).parent().hide();
+        });
+        $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+            event.preventDefault();
+			return $(this).ekkoLightbox();
+        });
+        $("#id_file").on("change", function() {
+            $("#id_form_upload").submit();
+        });
+        $("#id_showdb").on('click', function () {
+            var gal = $('#idx_gallery');
+            var param={'num': 10};
+            $.ajax({
+                url: "{% url 'appxray:gallery' %}",
+                type: "POST",
+                data: param,
+                success: function (data, textStatus, jqXHR) {
+                    var tobj = $.parseJSON(data);
+                    var dataLen=tobj.length;
+                    var maxSiz=200;
+                    gal.empty();
+                    for(var ii=0; ii<dataLen; ii++) {
+                        var tUrl = tobj[ii].url;
+                        var pw = 1;
+                        var ph = 1;
+                        if (tobj[ii].w >= tobj[ii].h) {
+                            pw = maxSiz;
+                            ph = Math.floor(maxSiz * tobj[ii].h / tobj[ii].w);
+                        } else {
+                            pw = Math.floor(maxSiz * tobj[ii].w / tobj[ii].h);
+                            ph = maxSiz;
+                        }
+                        var tmpImg = $('<img>',{
+                            class: 'img-thumbnail',
+                            width:  pw,
+                            height: ph,
+                            id:  'gal_'+tobj[ii].idx,
+                            src: tUrl
+                        });
+                        $(tmpImg).on('click', function() {
+                            var spl = this.src.split('/');
+                            var fn  = spl[spl.length-1];
+                            console.log(fn);
+                            $('#gallery-close').click();
+                            var param2={'fname': fn};
+                            $.ajax({
+                                url: "{% url 'appxray:uploadfdb' %}",
+                                type: "POST",
+                                data: param2,
+                                success: function (data, textStatus, jqXHR) {
+                                    console.log(data);
+                                    window.location="{% url 'appxray:index' %}";
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    funShowErrorMessage('Server error: bad image in DB');
+                                }
+                            });
+                            //window.location="/";
+                        });
+                        $(tmpImg).css('cursor','pointer');
+                        $(tmpImg).prop('title', 'Press mouse button to add image');
+                        gal.append(tmpImg);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    funShowErrorMessage('Error gallery query...');
+                }
+            });
+        });
+        var funShowErrorMessage = function(txt) {
+            $('#message-error-text').html(txt);
+            $('#message-error').show();
+        };
+
+        $('#canvas').on('contextmenu', function (e) {
+            return false;
+        });
+        var canvas = document.getElementById('canvas');
+        var imageCurrent = new Image();
+        var imageCurrentW = -1;
+        var imageCurrentH = -1;
+        var imageCurrentK = -1;
+        var imageCurrIdx = -1;
+        var imageIsLoaded = false;
+        var isStateWait   = false;
+        var ctxMaxSize = 100;
+        var ctx = canvas.getContext('2d');
+        var canvasW = canvas.width;
+        var canvasH = canvas.height;
+        var textButtonSearch = $("#id_roisearch").html();
+        ctx.beginPath();
+        ctx.fillStyle = "#C0C0C0";
+        ctx.fillRect(0,0,canvasW, canvasH);
+        ctx.fillStyle = "#B0B0BB";
+        ctx.font = '30pt Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Please, upload your image', canvas.width/2, canvas.height/2);
+
+    /////////////////////////////////////////////////
+        // Class definitions
+            var Rect = {
+                x1: 0,
+                y1: 0,
+                x2: 1,
+                y2: 1
+            };
+            Rect.setPosAll = function (nx1,ny1,nx2,ny2) {
+                this.x1=nx1;
+                this.y1=ny1;
+                this.x2=nx2;
+                this.y2=ny2;
+            };
+            Rect.checkBoundary = function () {
+                var tw = this.x2 - this.x1;
+                var th = this.y2 - this.y1;
+                if (this.x1<0) {
+                    this.x1 = 0;
+                }
+                if (this.y1<0) {
+                    this.y1 = 0;
+                }
+                if (this.x2>=canvasW) {
+                    this.x1 = canvasW - tw - 1;
+                    this.x2 = this.x1 + tw;
+                }
+                if (this.y2>=canvasH) {
+                    this.y1 = canvasH - th - 1;
+                    this.y2 = this.y1 + th;
+                }
+            };
+            Rect.setPos1 = function (x1new, y1new) {
+                var tw = this.x2 - this.x1;
+                var th = this.y2 - this.y1;
+                this.x1 = x1new;
+                this.y1 = y1new;
+                this.x2 = x1new + tw;
+                this.y2 = y1new + th;
+            };
+            Rect.setPos2 = function (x2new, y2new) {
+                var tw = x2new - this.x1;
+                var th = y2new - this.y1;
+                if(tw<20) {
+                    tw = 20;
+                }
+                if(th<20) {
+                    th=20;
+                }
+                this.x2 = this.x1 + tw;
+                this.y2 = this.y1 + th;
+                this.checkBoundary();
+            };
+
+    /////////////////////////////////////////////////
+        var updateCanvasRect = function () {
+            console.log('FFFUCK');
+            ctx.beginPath();
+            ctx.drawImage(imageCurrent, 0,0, canvasW,canvasH);
+            ctx.rect(Rect.x1, Rect.y1, Rect.x2-Rect.x1, Rect.y2-Rect.y1);
+            ctx.fillStyle   = "#FF0000";
+            ctx.globalAlpha = 0.2;
+            ctx.fillRect(Rect.x1, Rect.y1, Rect.x2-Rect.x1, Rect.y2-Rect.y1);
+            ctx.globalAlpha = 1.0;
+            ctx.stroke();
+        };
+
+    /////////////////////////////////////////////////
+            // Mouse events:
+        $("#canvas").on('mousedown', function (e) {
+            var ctxPos = canvas.getBoundingClientRect();
+            var tx = e.clientX - ctxPos.left;
+            var ty = e.clientY - ctxPos.top;
+            if (e.button == 0) {
+                Rect.setPos1(tx, ty);
+            } else if (e.button == 2) {
+                Rect.setPos2(tx, ty);
+            }
+            updateCanvasRect();
+            console.log('pos = [' + tx + ', ' + ty + ']' + e.button);
+        });
+        $("#id_roisearch").on('click', function () {
+            if(!isStateWait) {
+                $('#message-error').hide();
+                if(!$.trim($("#user_images").html())) {
+                    funShowErrorMessage('Error: no user images, please upload images');
+                    return;
+                }
+                var roiData = {
+                    x1: Rect.x1*imageCurrentK,
+                    y1: Rect.y1*imageCurrentK,
+                    x2: Rect.x2*imageCurrentK,
+                    y2: Rect.y2*imageCurrentK,
+                    idx: imageCurrIdx.substring('imguser_'.length, imageCurrIdx.length)
+                };
+{#                $('#id_progress').css('width', (100) + '%');#}
+                funSetStateWait();
+                var maxSiz=200;
+                $.ajax({
+                    url: "{% url 'appxray:roisearch' %}",
+                    type: "POST",
+                    data: roiData,
+                    success: function (data, textStatus, jqXHR) {
+                        $("#id_query_res").empty();
+                        var tobjAll = $.parseJSON(data);
+                        var tobjErr = tobjAll[0];
+                        if(tobjErr==1) {
+                            var strErr = 'Error: Not a chest X-Ray image!';
+                            funShowErrorMessage(strErr);
+                            funSetStateFinish();
+                            alert(strErr);
+                            return;
+                        }
+                        var tobj    = tobjAll[1];
+                        var dataLen=tobj.length;
+                        for(var ii=0; ii<dataLen; ii++) {
+                            var tUrl=tobj[ii].url2;
+                            var tmpA = $('<a>',{
+                                'href': tUrl,
+                                'data-toggle': 'lightbox',
+                                'data-title':   tobj[ii].idx,
+                                'data-footer': 'corr=' + tobj[ii].corr
+                            });
+                            var pw = 1;
+                            var ph = 1;
+                            if(tobj[ii].w>=tobj[ii].h) {
+                                pw=maxSiz;
+                                ph=Math.floor(maxSiz*tobj[ii].h/tobj[ii].w);
+                            } else {
+                                pw=Math.floor(maxSiz*tobj[ii].w/tobj[ii].h);
+                                ph=maxSiz;
+                            }
+                            var tmpImg = $('<img>',{
+                                class: 'img-responsive img-thumbnail',
+                                width:  pw,
+                                height: ph,
+                                id:  'ret_'+tobj[ii].idx,
+                                src: tUrl
+                            });
+                            tmpA.append(tmpImg);
+                            $("#id_query_res").append(tmpA);
+                        }
+                        funSetStateFinish();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('Error: ' + textStatus);
+                        funSetStateFinish();
+                    }
+                });
+            }
+        });
+
+    /////////////////////////////////////////////////
+        var funSetStateWait =function () {
+            $("#id_roisearch").html('wait...');
+            $('#id_progress').css('width', (100) + '%');
+            isStateWait = true;
+        };
+        var funSetStateFinish =function () {
+            $("#id_roisearch").html(textButtonSearch);
+            $('#id_progress').css('width', (0) + '%');
+            isStateWait = false;
+        };
+
+    /////////////////////////////////////////////////
+        $("#user_images img").on('click', function () {
+            console.log('fuck:' + $(this).attr('id'));
+            funLoadImageToCanvas(this);
+        });
+        var funLoadImageToCanvas = function (imgLink) {
+            imageIsLoaded = false;
+            imageCurrent = new Image();
+            imageCurrent.src = imgLink.src;
+            imageCurrent.onload = function () {
+{#                ctxMaxSize = $("#canvas_container").width()-80;#}
+                ctxMaxSize = 400;
+                var tmpMax = Math.max(this.width, this.height);
+                imageCurrentW = this.width;
+                imageCurrentH = this.height;
+                if (this.width>this.height) {
+                    canvasW  = ctxMaxSize;
+                    canvasH = Math.floor(ctxMaxSize*this.height/this.width);
+                } else {
+                    canvasH = ctxMaxSize;
+                    canvasW  = Math.floor(ctxMaxSize*this.width/this.height);
+                }
+                imageCurrentK = imageCurrentW/canvasW;
+                Rect.x1 = Math.floor(0.01*canvasW);
+                Rect.x2 = Math.floor(0.20*canvasW);
+                Rect.y1 = Math.floor(0.01*canvasH);
+                Rect.y2 = Math.floor(0.20*canvasH);
+                canvas.width  = canvasW;
+                canvas.height = canvasH;
+                ctx = canvas.getContext('2d');
+                imageCurrIdx = $(imgLink).attr('id');
+                updateCanvasRect();
+            };
+        };
+        var lstImages = $("#user_images").html();
+        if ($.trim($("#user_images").html())) {
+            $("#user_images img")[0].click();
+        }
+    /////////////////////////////////////////////////
+    });
+</script>
+
+{% endblock %}

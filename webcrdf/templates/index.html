@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container" xmlns="http://www.w3.org/1999/html">
+        <header class="jumbotron hero-spacer">
+            <h1>BTBDB: Web-Applications Portal</h1>
+{#            <center><h2>Unpublished yet</h2></center>#}
+            <p>Here we presenting the 1-st version of web-based services which potentially can be included into the BTBDB Portal.</p>
+{#            <p>Portal contains several examples of interactive web applications for medical image processing tasks.</p>#}
+{#            <p><a class="btn btn-primary btn-large">Call to action!</a></p>#}
+            <script type="text/javascript">
+                function src_on_hover(el, src) {
+                    el.setAttribute('src', src);
+                }
+                /*
+                function src_un_hover(el, src) {
+                    el.setAttribute('src', src);
+                }
+                */
+            </script>
+        </header>
+
+        <div class="row text-center">
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <!--img src="http://placehold.it/800x500" alt=""-->
+{#                    <img src="/data/img/cbir-ct0.png" alt="" class="img-thumbnail">#}
+                    <a href="/appcbir/"><img src="/data/img/cbir-ct0.png" alt="" class="img-thumbnail"
+                         onmouseover="src_on_hover(this,'/data/img/cbir-ct1.png');"
+                         onmouseout ="src_on_hover(this,'/data/img/cbir-ct0.png');"></a>
+                    <div class="caption">
+                        <h3>CBIR-CT</h3>
+{#                         and search similar images#}
+                        <p>Explore CT-Archive: ~14000 CT-scans, ~1.5 millions of 2D-slices.</p>
+                        <p>
+                            <a href="/appcbir/" class="btn btn-primary">Run app</a>
+{#                            <a href="#" class="btn btn-default">More Info</a>#}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <!--img src="http://placehold.it/800x500" alt=""-->
+{#                    <img src="/data/img/roisearch0.png" alt="" class="img-thumbnail">#}
+{#                    <a href="/appxray/"><img src="/data/img/roisearch0.png" alt="" class="img-thumbnail"#}
+                    <a href="#"><img src="/data/img/roisearch0.png" alt="" class="img-thumbnail"#}
+                         onmouseover="src_on_hover(this,'/data/img/roisearch1.png');"
+                         onmouseout ="src_on_hover(this,'/data/img/roisearch0.png');"></a>
+                    <div class="caption">
+                        <h3>ROI-Search</h3>
+                        <p>Explore X-Ray archive and search similar image regions.</p>
+                        <p>
+                            <a href="#" class="btn btn-default">Under construction</a>
+{#                            <a href="#" class="btn btn-default">More Info</a>#}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <!--img src="http://placehold.it/800x500" alt=""-->
+{#                    <img src="/data/img/xraysegm0.png" alt="" class="img-thumbnail">#}
+                    <a href="/appsegmxr/"><img src="/data/img/xraysegm0.png" alt="" class="img-thumbnail"
+                         onmouseover="src_on_hover(this,'/data/img/xraysegm1.png');"
+                         onmouseout ="src_on_hover(this,'/data/img/xraysegm0.png');"></a>
+                    <div class="caption">
+                        <h3>X-Ray Segmentation</h3>
+{#                        <p>You can segment lung regions on uploaded X-Ray images.</p>#}
+                        <p>Upload your X-Ray and segment lung region automatically.</p>
+                        <p>
+                            <a href="/appsegmxr/" class="btn btn-primary">Run app</a>
+{#                            <a href="#" class="btn btn-default">More Info</a>#}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <!--img src="http://placehold.it/800x500" alt=""-->
+{#                    <img src="/data/img/webcam0.png" alt="" class="img-thumbnail">#}
+                    <a href="/appwebcam/"><img src="/data/img/webcam0.png" alt="" class="img-thumbnail"
+                         onmouseover="src_on_hover(this,'/data/img/webcam1.png');"
+                         onmouseout ="src_on_hover(this,'/data/img/webcam0.png');"></a>
+                    <div class="caption">
+                        <h3>WebCam Search</h3>
+{#                        <p>Realtime similar search for WebCamera. Just for fun.</p>#}
+                        <p>Searching similar WebCam frames in real-time. Just for fun.</p>
+                        <p>
+                            <a href="/appwebcam/" class="btn btn-primary">Run app</a>
+{#                            <a href="#" class="btn btn-default">More Info</a>#}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

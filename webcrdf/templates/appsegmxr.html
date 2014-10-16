@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block content %}
+    <style type="text/css">
+        .container00 {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: inline-block;
+        }
+        .main_image00 {
+            width: 100%;
+            height: 100%;
+        }
+        .overlay_image00 {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+<div class="container-fluid fill-heigth">
+<div class="row fill-heigth">
+    <div class="col-sm-2 content">
+        <h4> <kbd>1</kbd> Upload your X-Ray chest images:</h4><hr/>
+        {% block upload %}
+            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmxr:upload' %}">
+                <div class="btn-group-vertical">
+                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
+                    <a class="btn btn-danger" href="{% url 'appsegmxr:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
+{#                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Show Database</a>#}
+                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                </div>
+            </form>
+        {% endblock %}
+    </div>
+    <div class="col-sm-5 content" style="text-align: center" id="canvas_container"  style="display: table-row;">
+        <h4> <kbd>2</kbd> Segmentation results:</h4><hr/>
+        <div id="user_images" style="min-height: 300px;">
+        {% for ii in uploadedImages %}
+            <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">
+                <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">
+                <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
+            </a>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 90%; height: 90%">
+    <div class="modal-content" style="width: 100%; height: 100%">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">X-Ray database</h4>
+      </div>
+      <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx_gallery"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+<script type="application/javascript">
+    var currentImageInfo = null;
+    $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox.defaults.onShow = function() {
+            console.log("::onShow()");
+            $("#lightbox_btna").on("click", function() {
+                var urlZip = $("#lightbox_img_href").attr('src');
+                //TODO: This IS STUPID HAK(FUCK)!!!!
+                urlZip = urlZip.substr(0,urlZip.length-11) + ".zip";
+{#                $.fileDownload(urlZip);#}
+                window.location=urlZip;
+                console.log("::onClick() : " + urlZip);
+            });
+        };
+        return $(this).ekkoLightbox();
+    });
+    $(function () {
+        var timeCounter = 0;
+        var timeDelay   = 1000;
+        ///////////////////////////////////////
+        function imageListUpdater() {
+            $.ajax({
+                url: "{% url 'appsegmxr:getinfo' %}",
+                success: function(data) {
+                    currentImageInfo = $.parseJSON(data);
+                    console.log(currentImageInfo);
+                    var isAllFinished = true;
+                    var tStatus, tIdx;
+                    for(var ii=0; ii<currentImageInfo.length; ii++) {
+                        tStatus = currentImageInfo[ii].isFinished;
+                        tIdx    = currentImageInfo[ii].idx;
+                        if(tStatus) {
+                            $('#'   + tIdx).attr('src', currentImageInfo[ii].urlSegm);
+                            $('#a_' + tIdx).attr('href',currentImageInfo[ii].urlSegm);
+                            $('#info_' + tIdx).hide();
+                        } else {
+{#                            $('#'   + tIdx).attr('src', currentImageInfo[ii].url);#}
+{#                            $('#a_' + tIdx).attr('href',currentImageInfo[ii].url);#}
+                            $('#info_' + tIdx).show();
+                            isAllFinished = false;
+                        }
+                    }
+                    if(!isAllFinished) {
+                        updateImageList();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR[Ajax] : status=" + textStatus);
+                }
+            });
+        }
+        function updateImageList() {
+            var currDelay = 100;
+            if(timeCounter>0) {
+                currDelay=timeDelay;
+            }
+            setTimeout(function() {
+                console.log("Timeout: " + timeCounter);
+                timeCounter++;
+                imageListUpdater();
+            }, currDelay);
+        }
+        updateImageList();
+        ///////////////////////////////////////
+        $("#id_help").tooltip({html:true});
+        $("#navbar-segmxr").addClass("active");
+        $('.alert .close').on('click', function(e) {
+            $(this).parent().hide();
+        });
+
+        $("#id_file").on("change", function() {
+            $("#id_form_upload").submit();
+        });
+        var funShowErrorMessage = function(txt) {
+            $('#message-error-text').html(txt);
+            $('#message-error').show();
+        };
+    /////////////////////////////////////////////////
+        $("#id_showdb").on('click', function () {
+            var gal = $('#idx_gallery');
+            var param={'num': 10};
+            $.ajax({
+                url: "{% url 'appsegmxr:gallery' %}",
+                type: "POST",
+                data: param,
+                success: function (data, textStatus, jqXHR) {
+                    var tobj = $.parseJSON(data);
+                    var dataLen=tobj.length;
+                    var maxSiz=200;
+                    gal.empty();
+                    for(var ii=0; ii<dataLen; ii++) {
+                        var tUrl = tobj[ii].url;
+                        var pw = 1;
+                        var ph = 1;
+                        if (tobj[ii].w >= tobj[ii].h) {
+                            pw = maxSiz;
+                            ph = Math.floor(maxSiz * tobj[ii].h / tobj[ii].w);
+                        } else {
+                            pw = Math.floor(maxSiz * tobj[ii].w / tobj[ii].h);
+                            ph = maxSiz;
+                        }
+                        var tmpImg = $('<img>',{
+                            class: 'img-thumbnail',
+                            width:  pw,
+                            height: ph,
+                            id:  'gal_'+tobj[ii].idx,
+                            src: tUrl
+                        });
+                        $(tmpImg).on('click', function() {
+                            var spl = this.src.split('/');
+                            var fn  = spl[spl.length-1];
+                            console.log(fn);
+                            $('#gallery-close').click();
+                            var param2={'fname': fn};
+                            $.ajax({
+                                url: "{% url 'appsegmxr:uploadfdb' %}",
+                                type: "POST",
+                                data: param2,
+                                success: function (data, textStatus, jqXHR) {
+                                    console.log(data);
+                                    window.location="{% url 'appsegmxr:index' %}";
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    funShowErrorMessage('Server error: bad image in DB');
+                                }
+                            });
+                            //window.location="/";
+                        });
+                        $(tmpImg).css('cursor','pointer');
+                        $(tmpImg).prop('title', 'Press mouse button to add image');
+                        gal.append(tmpImg);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    funShowErrorMessage('Error gallery query...');
+                }
+            });
+        });
+    /////////////////////////////////////////////////
+        /*
+        $("#user_images img").on('click', function () {
+            console.log('fuck:' + $(this).attr('id'));
+            funLoadImageToCanvas(this);
+        });
+        var funLoadImageToCanvas = function (imgLink) {
+            imageIsLoaded = false;
+            imageCurrent = new Image();
+            imageCurrent.src = imgLink.src;
+            imageCurrent.onload = function () {
+                ctxMaxSize = $("#canvas_container").width()-80;
+                var tmpMax = Math.max(this.width, this.height);
+                imageCurrentW = this.width;
+                imageCurrentH = this.height;
+                if (this.width>this.height) {
+                    canvasW  = ctxMaxSize;
+                    canvasH = Math.floor(ctxMaxSize*this.height/this.width);
+                } else {
+                    canvasH = ctxMaxSize;
+                    canvasW  = Math.floor(ctxMaxSize*this.width/this.height);
+                }
+                imageCurrentK = imageCurrentW/canvasW;
+                Rect.x1 = Math.floor(0.01*canvasW);
+                Rect.x2 = Math.floor(0.20*canvasW);
+                Rect.y1 = Math.floor(0.01*canvasH);
+                Rect.y2 = Math.floor(0.20*canvasH);
+                canvas.width  = canvasW;
+                canvas.height = canvasH;
+                ctx = canvas.getContext('2d');
+                imageCurrIdx = $(imgLink).attr('id');
+                updateCanvasRect();
+            };
+        };
+        */
+    /////////////////////////////////////////////////
+    });
+</script>
+
+{% endblock %}

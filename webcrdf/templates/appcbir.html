@@ -1,0 +1,726 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid fill-heigth">
+
+    <!-- DB-Info -->
+    <div class="col-sm-4 fill-heigth content" style="text-align: center">
+        <h4> <kbd>1</kbd> <b>CT-Archive</b>: one point corresponds to one CT-scan</h4>
+            <canvas id="canvas_db" width="400px" height="200px" title="...">
+            </canvas>
+        <hr/>
+            <h4> <kbd>2</kbd> Select slice of current CT-scan:</h4>
+            <h4><!--CT-Info:-->
+                <span class="label label-default" id="id_info_sexage">Sex</span>
+                <span class="label label-default" id="id_info_meta">Date</span>
+            </h4>
+            <canvas id="canvas_preview" width="200px" height="200px"></canvas>
+    </div>
+
+    <!-- Search-Results -->
+    <div class="col-sm-5 content" style="text-align: center" id="canvas_container" style="display: table-row">
+        <h4> <kbd>3</kbd> Search images similar to this one:</h4>
+            <canvas id="canvas" width="340px" height="340px"></canvas>
+                <div class="row">
+                    <div style="text-align: center; margin-bottom: 4px">
+                        <a href="#" class="btn btn-primary" id="id_searchdb"><span class="glyphicon glyphicon-search"></span> Search Image</a>
+                        <a href="/data/help/cbir_help.png" data-toggle="lightbox" data-title="CBIR-CT: Quick help" id="id_help" title='GLCM Texture Descriptor: IID135 (http://scikit-image.org/)' style="border-bottom: 1px dashed #000080; margin: 12px">Help
+                        <span class="glyphicon glyphicon-question-sign"></span></a>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="id_progress"></div>
+                </div>
+            <div class="alert alert-danger fade in" id="message-error" style="position: relative; z-index: 10; display: none">
+                <button type="button" class="close">×</button>
+                <div id="message-error-text">Your error message goes here...</div>
+            </div>
+            <canvas id="canvas_result" width="664px" height="268px" title="..."></canvas>
+    </div>
+
+
+    <!-- User-Data -->
+    <div class="row fill-heigth">
+        <div class="col-sm-2 content">
+            <h4> <kbd>4</kbd> Upload your images:</h4>
+            {% block upload %}
+                <form class="form-inline" id="id_form_upload" role="form" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appcbir:upload' %}">
+                    <div class="btn-group-vertical">
+                        <input class="btn btn-primary" type="file" value="file" name="file" id="id_file"/>
+                        <a class="btn btn-danger" href="{% url 'appcbir:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
+                    </div>
+                </form>
+            {% endblock %}
+            <hr/>
+            <h4> <kbd>5</kbd> Search images similar to yours:</h4>
+            <div id="user_images">
+                {% for ii in uploadedImages %}
+                    <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}"
+                         style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<script type="application/javascript">
+    var arrayImagesData = null;
+    var arrayImagesIsLoaded = null;
+    var dataDbInfo = null;
+    var dataDbPath = null;
+    var dataDbMean = null;
+    var currIdxDb  = 0;
+    var colorMap = [[0,0,1.3281],
+                    [3.5417,3.5417,6.1979],
+                    [7.0833,7.0833,11.0677],
+                    [10.6250,10.6250,15.9375],
+                    [14.1667,14.1667,20.8073],
+                    [17.7083,17.7083,25.6771],
+                    [21.2500,21.2500,30.5469],
+                    [24.7917,24.7917,35.4167],
+                    [28.3333,28.3333,40.2865],
+                    [31.8750,31.8750,45.1562],
+                    [35.4167,35.4167,50.0260],
+                    [38.9583,38.9583,54.8958],
+                    [42.5000,42.5000,59.7656],
+                    [46.0417,46.0417,64.6354],
+                    [49.5833,49.5833,69.5052],
+                    [53.1250,53.1250,74.3750],
+                    [56.6667,56.6667,79.2448],
+                    [60.2083,60.2083,84.1146],
+                    [63.7500,63.7500,88.9844],
+                    [67.2917,67.2917,93.8542],
+                    [70.8333,70.8333,98.7240],
+                    [74.3750,74.3750,103.5937],
+                    [77.9167,77.9167,108.4635],
+                    [81.4583,81.4583,113.3333],
+                    [85.0000,86.3281,116.8750],
+                    [88.5417,91.1979,120.4167],
+                    [92.0833,96.0677,123.9583],
+                    [95.6250,100.9375,127.5000],
+                    [99.1667,105.8073,131.0417],
+                    [102.7083,110.6771,134.5833],
+                    [106.2500,115.5469,138.1250],
+                    [109.7917,120.4167,141.6667],
+                    [113.3333,125.2865,145.2083],
+                    [116.8750,130.1563,148.7500],
+                    [120.4167,135.0260,152.2917],
+                    [123.9583,139.8958,155.8333],
+                    [127.5000,144.7656,159.3750],
+                    [131.0417,149.6354,162.9167],
+                    [134.5833,154.5052,166.4583],
+                    [138.1250,159.3750,170.0000],
+                    [141.6667,164.2448,173.5417],
+                    [145.2083,169.1146,177.0833],
+                    [148.7500,173.9844,180.6250],
+                    [152.2917,178.8542,184.1667],
+                    [155.8333,183.7240,187.7083],
+                    [159.3750,188.5938,191.2500],
+                    [162.9167,193.4635,194.7917],
+                    [166.4583,198.3333,198.3333],
+                    [171.9922,201.8750,201.8750],
+                    [177.5260,205.4167,205.4167],
+                    [183.0599,208.9583,208.9583],
+                    [188.5938,212.5000,212.5000],
+                    [194.1276,216.0417,216.0417],
+                    [199.6615,219.5833,219.5833],
+                    [205.1953,223.1250,223.1250],
+                    [210.7292,226.6667,226.6667],
+                    [216.2630,230.2083,230.2083],
+                    [221.7969,233.7500,233.7500],
+                    [227.3307,237.2917,237.2917],
+                    [232.8646,240.8333,240.8333],
+                    [238.3984,244.3750,244.3750],
+                    [243.9323,247.9167,247.9167],
+                    [249.4661,251.4583,251.4583],
+                    [255.0000,255.0000,255.0000]];
+    $(function () {
+        $("#navbar-cbir").addClass("active");
+        $("#id_help").tooltip();
+        $('.alert .close').on('click', function(e) {
+            $(this).parent().hide();
+        });
+        $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+            event.preventDefault();
+			return $(this).ekkoLightbox();
+        });
+
+        $("#id_file").on("change", function() {
+            $("#id_form_upload").submit();
+        });
+        var funShowErrorMessage = function(txt) {
+            $('#message-error-text').html(txt);
+            $('#message-error').show();
+        };
+
+        $('#canvas').on('contextmenu', function (e) {
+            return false;
+        });
+        $('#canvas_db').on('contextmenu', function (e) {
+            return false;
+        });
+        $('#canvas_preview').on('contextmenu', function (e) {
+            return false;
+        });
+        var canvas      = document.getElementById('canvas');
+        var canvasRes   = document.getElementById('canvas_result');
+        var canvasDb    = document.getElementById('canvas_db');
+        var canvasPrv   = document.getElementById('canvas_preview');
+        // DB-Info:
+        var sizRec      = 3;
+        var numCRec     = 154;
+        var numRRec     = -1;
+        var numCT       = -1;
+        var canvasDbW   = -1;
+        var canvasDbH   = -1;
+        // DB-Preview:
+        var currentPreview  = new Image();
+        currentPreview.isLoaded = false;
+        currentPreview.onload = function() {
+            this.isLoaded = true;
+            drawPreviewCTImage();
+        };
+        var currPrvIdxTmp = 0;
+        var currPrvIdxPos = 0;
+        var numCCPrv    = 14;
+        var numRRPrvMin = 10;
+        var sizImgPrv   = 34;
+        var sizBndPrv   = 2;
+        var canvasWPrv  = sizImgPrv*numCCPrv;
+        var canvasHPrv  = sizImgPrv*numRRPrvMin;
+        var canvasBG    = "rgb(60,60,60)";
+        canvasPrv.width = canvasWPrv;
+        canvasPrv.height= canvasHPrv;
+        var infoSelStat = null;
+        var infoSelDyn  = null;
+        //
+        var isUserImage  = true;
+        var imageCurrent = new Image();
+        var imageCurrentW = -1;
+        var imageCurrentH = -1;
+        var imageCurrentK = -1;
+        var imageCurrIdx = -1;
+        var imageIsLoaded = false;
+        var isStateWait   = false;
+        var ctxMaxSize    = 340;
+        var ctx     = canvas.getContext('2d');
+        var ctxRes  = canvasRes.getContext('2d');
+        var canvasW = canvas.width;
+        var canvasH = canvas.height;
+        //
+        var resB    = 4;
+        var infoSearchRes = null;
+        var sizRes0 = 128; //128
+        var sizRes  = 128+resB;
+        var numCRes = 5;
+        var numRRes = 2;
+        var resW    = sizRes0*numCRes + resB*(numCRes+1);
+        var resH    = sizRes0*numRRes + resB*(numRRes+1);
+        //
+        var textButtonSearch = $("#id_searchdb").html();
+        ctx.beginPath();
+        ctx.fillStyle = "#C0C0C0";
+        ctx.fillRect(0,0,canvasW, canvasH);
+        ctx.fillStyle = "#B0B0BB";
+        ctx.font = '22pt Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Please, upload your image', canvas.width/2, canvas.height/2);
+        var tmpListImages = null;
+        function clearFormSearhResults() {
+            if( (canvasRes.width!=resW) || (canvasRes.height!=resH)) {
+                canvasRes.width=resW;
+                canvasRes.height=resH;
+                ctxRes = canvasRes.getContext('2d');
+            }
+            ctxRes.beginPath();
+            ctxRes.fillStyle="rgb(0,0,0)";
+            ctxRes.fillRect(0,0,canvasRes.width,canvasRes.height);
+            ctxRes.strokeStyle="rgb(60,60,60)";
+            for(var xx=0; xx<numCRes; xx++) {
+                for(var yy=0; yy<numCRec; yy++) {
+                    ctxRes.rect(resB+xx*(sizRes0+resB), resB + yy*(sizRes0+resB), sizRes0, sizRes0);
+                }
+            }
+            ctxRes.stroke();
+        }
+        function uploadResImages(listUrlImages, listDst) {
+            if(listUrlImages!=null) {
+                ctxRes.beginPath();
+                if ((arrayImagesData == null) || (arrayImagesData.length != listUrlImages.length)) {
+                    arrayImagesData = new Array(listUrlImages.length);
+                    for (var ii = 0; ii < listUrlImages.length; ii++) {
+                        var tmpImage = new Image();
+                        arrayImagesData[ii] = tmpImage;
+                        tmpImage.isLoaded = false;
+                        tmpImage.idx = ii;
+                        tmpImage.dst = ii;
+                        tmpImage.onload = function () {
+                            this.isLoaded = true;
+                            console.log('loaded...    ' + this.idx + '  :  ' + this.src + " * " + this.dst);
+                            var cc = Math.floor(this.idx / numCRes);
+                            var rr = this.idx - numCRes * cc;
+                            var px = rr * (128 + resB) + resB;
+                            var py = cc * (128 + resB) + resB;
+                            var sim = 1.0-this.dst;
+                            ctxRes.fillStyle="#000000";
+                            ctxRes.shadowOffsetX = 2;
+                            ctxRes.shadowOffsetY = 2;
+                            ctxRes.shadowBlur = 4;
+                            ctxRes.shadowColor = '#000';
+                            ctxRes.fillRect(px,py,128,128);
+                            var txt = "sim=" + sim;
+                            txt = txt.substr(0, 10);
+                            ctxRes.font = 'bold 16px Arial';
+                            if (sim>0.7) {
+                                ctxRes.fillStyle = "#00FF00";
+                                ctxRes.drawImage(this, px, py, 128, 128);
+                                ctxRes.fillText(txt, px + 2, py + 16);
+                            } else {
+                                ctxRes.fillStyle = "#FF0000";
+                                ctxRes.globalAlpha=0.5;
+                                ctxRes.drawImage(this, px, py, 128, 128);
+                                ctxRes.fillText(txt, px + 2, py + 16);
+                                ctxRes.globalAlpha=1.0;
+                            }
+                            /*
+                            ctxRes.drawImage(this, px, py, 128, 128);
+                            ctxRes.shadowOffsetX = 2;
+                            ctxRes.shadowOffsetY = 2;
+                            ctxRes.shadowBlur = 4;
+                            ctxRes.shadowColor = '#000';
+                            var txt = "dst=" + this.dst;
+                            txt = txt.substr(0, 10);
+                            var tmpTxtWidth = ctxRes.measureText(txt).width;
+                            ctxRes.fillStyle = "#FFFFFF";
+                            ctxRes.font = 'bold 16px Arial';
+                            ctxRes.fillText(txt, px + 2, py + 16);
+                            */
+                        }
+                    }
+                }
+                for (var ii = 0; ii < listUrlImages.length; ii++) {
+                    arrayImagesData[ii].src = "";
+                    arrayImagesData[ii].isLoaded = false;
+                    if (listDst != null) {
+                        arrayImagesData[ii].dst = listDst[ii];
+                    }
+                    arrayImagesData[ii].src = listUrlImages[ii];
+                }
+            }
+        }
+        clearFormSearhResults();
+        uploadResImages(tmpListImages, null);
+    /////////////////////////////////////////////////
+        function getTextInfoAboutCT(idxCT) {
+             if(dataDbInfo!=null) {
+                if ((idxCT >= 0) && (idxCT < dataDbInfo.length)) {
+                    var tmpData =dataDbInfo[idxCT];
+                    var strSexAge = "";
+                    if(tmpData[0]==0) {
+                        strSexAge += "Female";
+                    } else {
+                        strSexAge += "Male";
+                    }
+                    strSexAge += ", Age: " + tmpData[1];
+                    var strMeta = "ID: " + tmpData[2] + ", Date: " + tmpData[3];
+                    return [strSexAge, strMeta];
+                }
+            } else {
+                 return null;
+            }
+        }
+        $("#canvas_db").tooltip();
+        function showQuickInformationAboutCT(idxCT) {
+            var ret = getTextInfoAboutCT(idxCT);
+            var newTitle=ret[0] + ", " + ret[1];
+            $("#canvas_db").attr('title', newTitle).tooltip('fixTitle').data('bs.tooltip').$tip.find('.tooltip-inner').text(newTitle);
+        }
+        function showInformationAboutCT() {
+            var ret = getTextInfoAboutCT(currIdxDb);
+            if(ret!=null) {
+                $("#id_info_sexage").html(ret[0]);
+                $("#id_info_meta").html(ret[1]);
+            }
+        }
+        function drawPreviewCTImage() {
+            canvasPrv.width=currentPreview.width;
+            if((currentPreview.width!=canvasPrv.width) || (currentPreview.height!=canvasPrv.height)) {
+                if (currentPreview.height > (sizImgPrv * numRRPrvMin)) {
+                    canvasPrv.height = currentPreview.height;
+                } else {
+                    canvasPrv.height = sizImgPrv * numRRPrvMin;
+                }
+            }
+            var tmpCtx = canvasPrv.getContext('2d');
+            tmpCtx.beginPath();
+            tmpCtx.fillStyle = canvasBG;
+            tmpCtx.fillRect(0,0,canvasPrv.width,canvasPrv.height);
+            tmpCtx.drawImage(currentPreview,0,0);
+            //
+            if(infoSelDyn!=null) {
+                tmpCtx.globalAlpha=1.0;
+                tmpCtx.rect(infoSelDyn[0]*sizImgPrv, infoSelDyn[1]*sizImgPrv, sizImgPrv,sizImgPrv);
+                tmpCtx.strokeStyle="#FFFFFF";
+                tmpCtx.stroke();
+            }
+            if(infoSelStat!=null) {
+                tmpCtx.beginPath();
+                tmpCtx.strokeStyle="#000000";
+                tmpCtx.rect(infoSelStat[0]*sizImgPrv, infoSelStat[1]*sizImgPrv, sizImgPrv,sizImgPrv);
+                tmpCtx.globalAlpha=0.2;
+                tmpCtx.fillStyle="#FFFF00";
+                tmpCtx.fillRect(infoSelStat[0]*sizImgPrv, infoSelStat[1]*sizImgPrv, sizImgPrv,sizImgPrv);
+                tmpCtx.globalAlpha=1.0;
+                tmpCtx.stroke();
+            }
+            if( (infoSearchRes!=null) && (infoSearchRes.length>3)) {
+                var tmpPosCT, pxy;
+                tmpCtx.strokeStyle="rgb(0,0,255)";
+                tmpCtx.lineWidth=3;
+                tmpCtx.beginPath();
+                for(var ii=0; ii<infoSearchRes[2].length; ii++) {
+                    if(infoSearchRes[2][ii]==currIdxDb) {
+                        tmpPosCT= infoSearchRes[4][ii];
+                        pxy = getPreviewXYByPos(tmpPosCT);
+                        tmpCtx.rect(pxy[0]*sizImgPrv+3,pxy[1]*sizImgPrv+3, sizImgPrv-6, sizImgPrv-6);
+                        tmpCtx.stroke();
+                    }
+                }
+            }
+        }
+        function showPreviewCTImage() {
+            if(dataDbInfo!=null) {
+                if( (currIdxDb>=0) && (currIdxDb<dataDbInfo.length) ) {
+                    var tmp = "/data/datadb.cbir/dbdir_ct_10k/" + dataDbPath[currIdxDb] + "2.jpg";
+                    currentPreview.isLoaded=false;
+                    currentPreview.src=tmp;
+                }
+            }
+        }
+        function drawDataDbInfo() {
+            if(dataDbInfo!=null) {
+                var tmpCtx = canvasDb.getContext('2d');
+                tmpCtx.beginPath();
+                var tmpCnt = 0;
+                for (var yy = 0; yy < numRRec; yy++) {
+                    for (var xx = 0; xx < numCRec; xx++) {
+                        var tmr= Math.floor(colorMap[dataDbMean[tmpCnt]][0]);
+                        var tmg= Math.floor(colorMap[dataDbMean[tmpCnt]][1]);
+                        var tmb= Math.floor(colorMap[dataDbMean[tmpCnt]][2]);
+                        tmpCtx.fillStyle = "rgb(" + tmr + "," + tmg + "," + tmb + ")";
+                        tmpCtx.fillRect(xx * sizRec, yy * sizRec, sizRec, sizRec);
+                        /*
+                        var ta = 200 - 200 * dataDbInfo[tmpCnt][1] / 100;
+                        var tm = Math.floor( 1.5*(dataDbMean[tmpCnt]-50));
+                        if (dataDbInfo[tmpCnt][0]) {
+                                tmpCtx.fillStyle = "rgb(" + (50+tm) + "," + tm + "," + tm + ")";
+                        } else {
+                            tmpCtx.fillStyle = "rgb(" + tm + "," + (50+tm) + "," + tm + ")";
+                        }
+                        tmpCtx.fillRect(xx * sizRec, yy * sizRec, sizRec, sizRec);
+                        */
+                        tmpCnt++;
+                        if (tmpCnt >= numCT) break;
+                    }
+                }
+                // draw search-results
+                if(infoSearchRes!=null && (infoSearchRes.length>3)) {
+                    var tmpIdx = 0;
+                    var xx=0,yy=0;
+                    tmpCtx.fillStyle = "rgb(0,0,255)";
+                    for(var ii=0; ii<infoSearchRes[2].length; ii++) {
+                        tmpIdx = infoSearchRes[2][ii];
+                        yy=Math.floor(tmpIdx/numCRec);
+                        xx=tmpIdx - yy*numCRec;
+                        tmpCtx.fillRect(xx*sizRec-1, yy*sizRec-1, sizRec+2, sizRec+2);
+                    }
+                }
+                // draw Selected CT point
+                var py = Math.floor(currIdxDb/numCRec);
+                var px = currIdxDb - py*numCRec;
+                tmpCtx.fillStyle = "rgb(0,0,255)";
+                tmpCtx.beginPath();
+                tmpCtx.strokeStyle = "rgb(255,0,0)";
+                tmpCtx.lineWidth = 3;
+                tmpCtx.rect(px * sizRec-1, py * sizRec-1, sizRec+2, sizRec+2)
+                tmpCtx.stroke();
+            }
+        }
+        $.ajax({
+            url: "{% url 'appcbir:apiRequestDbInfo' %}",
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                var tmpObj = $.parseJSON(data);
+                dataDbInfo = tmpObj[0];
+                dataDbPath = tmpObj[1];
+                dataDbMean = tmpObj[2];
+                console.log(dataDbInfo.length);
+                console.log(tmpListImages);
+                numCT       = dataDbInfo.length;
+                numRRec     = Math.ceil(numCT/numCRec);
+                canvasDbW   = sizRec*numCRec;
+                canvasDbH   = sizRec*numRRec;
+                canvasDb.width  = canvasDbW;
+                canvasDb.height = canvasDbH;
+                drawDataDbInfo();
+                showPreviewCTImage();
+                showInformationAboutCT();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                funShowErrorMessage('Error connect to server...');
+            }
+        });
+        //mousedown
+        $("#canvas_db").on('mousemove', function (e) {
+            var ctxPos = canvasDb.getBoundingClientRect();
+            var tx = e.clientX - ctxPos.left;
+            var ty = e.clientY - ctxPos.top;
+            if(dataDbInfo!=null) {
+                var tmpCurrIdxDb=Math.floor(tx/sizRec) + numCRec*Math.floor(ty/sizRec);
+                if(tmpCurrIdxDb>=dataDbInfo.length) {
+                    tmpCurrIdxDb = dataDbInfo.length - 1;
+                }
+                showQuickInformationAboutCT(tmpCurrIdxDb);
+            }
+        });
+        $("#canvas_db").on('mousedown', function (e) {
+            var ctxPos = canvasDb.getBoundingClientRect();
+            var tx = e.clientX - ctxPos.left;
+            var ty = e.clientY - ctxPos.top;
+            if(e.button == 0) {
+                if(dataDbInfo!=null) {
+                    currIdxDb=Math.floor(tx/sizRec) + numCRec*Math.floor(ty/sizRec);
+                    if(currIdxDb>=dataDbInfo.length) {
+                        currIdxDb=dataDbInfo.length-1;
+                    }
+                    drawDataDbInfo();
+                    refreshPreviewPosInfo();
+                    showPreviewCTImage();
+                    showInformationAboutCT();
+                    if(infoSelStat!=null) {
+                        funLoadImageToCanvas(infoSelStat[4]);
+                    }
+                }
+                clearFormSearhResults();
+            }
+        });
+    /////////////////////////////////////////////////
+        function getPreviewXYByPos(pos) {
+            var py = Math.floor(pos/numCCPrv);
+            var px = pos - py*numCCPrv;
+            return [px,py];
+        }
+        function getPreviewPosInfo(xx, yy) {
+            if ((currentPreview.isLoaded) && (dataDbInfo != null)) {
+                var tmp = dataDbInfo[currIdxDb];
+                var num = tmp[5];
+                var px = Math.floor(xx / sizImgPrv);
+                var py = Math.floor(yy / sizImgPrv);
+                var pos = numCCPrv * py + px;
+                if (pos >= num) {
+                    pos = num - 1;
+                    py = Math.floor(pos / num);
+                    px = pos - numCCPrv * py;
+                }
+                var tmpPos = '0000000'+pos;
+                tmpPos = tmpPos.substr(tmpPos.length-3,tmpPos.length);
+                var imgUrl = '/data/datadb.cbir/dbdir_ct_10k/' + dataDbPath[currIdxDb].substr(0,dataDbPath[currIdxDb].length-8) + "_" + tmpPos + ".jpg";
+                var tmpImgPos = dataDbInfo[currIdxDb][6]+pos;
+                return [px, py, pos, num, imgUrl, tmpImgPos];
+            } else {
+                return null;
+            }
+        }
+        function refreshPreviewPosInfo() {
+            if(infoSelDyn!=null) {
+                infoSelDyn=getPreviewPosInfo(infoSelDyn[0]*sizImgPrv,infoSelDyn[1]*sizImgPrv);
+            }
+            if(infoSelStat!=null) {
+                infoSelStat=getPreviewPosInfo(infoSelStat[0]*sizImgPrv,infoSelStat[1]*sizImgPrv);
+            }
+        }
+        $("#canvas_preview").on('mousemove', function (e) {
+            var ctxPos = canvasPrv.getBoundingClientRect();
+            var tx = e.clientX - ctxPos.left;
+            var ty = e.clientY - ctxPos.top;
+            infoSelDyn = getPreviewPosInfo(tx,ty);
+            drawPreviewCTImage();
+        });
+        $("#canvas_preview").on('mousedown', function (e) {
+            var ctxPos = canvasPrv.getBoundingClientRect();
+            var tx = e.clientX - ctxPos.left;
+            var ty = e.clientY - ctxPos.top;
+            infoSelStat = getPreviewPosInfo(tx,ty);
+            drawPreviewCTImage();
+            isUserImage = false;
+            funLoadImageToCanvas(infoSelStat[4]);
+            clearFormSearhResults();
+            console.log(infoSelStat);
+        });
+        $("#canvas_preview").css('cursor','pointer');
+    /////////////////////////////////////////////////
+        $("#canvas_result").css('cursor','pointer');
+        $("#canvas_result").tooltip();
+        function showQuickInformationAboutSearchRes(idxCT) {
+            var ret = getTextInfoAboutCT(idxCT);
+            var newTitle=ret[0];// + ", " + ret[1];
+            $("#canvas_result").attr('title', newTitle).tooltip('fixTitle').data('bs.tooltip').$tip.find('.tooltip-inner').text(newTitle);
+        }
+        function getPosFromCanvasResXY(e) {
+            var ctxPos = canvasRes.getBoundingClientRect();
+            var tx = e.clientX - ctxPos.left;
+            var ty = e.clientY - ctxPos.top;
+            var px = Math.floor((tx-resB)/sizRes);
+            var py = Math.floor((ty-resB)/sizRes);
+            if(px<0) {
+                px = 0;
+            }
+            if(px>=numCRes) {
+                px=numCRes-1;
+            }
+            if(py<0) {
+                py = 0;
+            }
+            if(py>=numRRes) {
+                py=numRRes-1;
+            }
+            return py*numCRes+px;
+        }
+        $("#canvas_result").on('mousemove', function (e) {
+            var pos = getPosFromCanvasResXY(e);
+            if(infoSearchRes!=null) {
+                showQuickInformationAboutSearchRes(infoSearchRes[2][pos]);
+            }
+        });
+        $("#canvas_result").on('mousedown', function (e) {
+            var pos =getPosFromCanvasResXY(e);
+            if(infoSearchRes!=null) {
+                currIdxDb = infoSearchRes[2][pos];
+                drawDataDbInfo();
+                refreshPreviewPosInfo();
+                showPreviewCTImage();
+                showInformationAboutCT();
+            }
+        });
+    /////////////////////////////////////////////////
+        var updateCanvasRect = function () {
+            ctx.beginPath();
+            ctx.drawImage(imageCurrent, 0,0, canvasW,canvasH);
+        };
+    /////////////////////////////////////////////////
+    // Mouse events:
+        $("#canvas").on('mousedown', function (e) {
+            var ctxPos = canvas.getBoundingClientRect();
+            var tx = e.clientX - ctxPos.left;
+            var ty = e.clientY - ctxPos.top;
+            updateCanvasRect();
+{#            console.log('pos = [' + tx + ', ' + ty + ']' + e.button);#}
+{#            console.log(infoSelStat + ", currIdx=" + currIdxDb + ", currentPos=" + currPrvIdxPos);#}
+        });
+        $("#id_searchdb").on('click', function () {
+            if(!isStateWait) {
+                if(imageIsLoaded) {
+                    funSetStateWait();
+                    if(true || (!isUserImage) ) {
+                        console.log(infoSelStat);
+                        var tmpIdx = -1;
+                        var tmpFimg = 'none';
+                        if(!isUserImage) {
+                            tmpIdx = infoSelStat[5];
+                        } else {
+                            tmpFimg = imageCurrIdx.substr('imguser_'.length, imageCurrIdx.length);
+                        }
+                        var params={
+                            type:   isUserImage,
+                            idx:    tmpIdx,
+                            fimg:   tmpFimg
+                        };
+                        $.ajax({
+                            url: "{% url 'appcbir:apiSearchDB' %}",
+                            type: "POST",
+                            data: params,
+                            success: function (data, textStatus, jqXHR) {
+                                if(data != null) {
+                                    infoSearchRes = $.parseJSON(data);
+                                    if(infoSearchRes.length>2) {
+                                        uploadResImages(infoSearchRes[0], infoSearchRes[1]);
+                                        drawDataDbInfo();
+                                        drawPreviewCTImage();
+                                        console.log(infoSearchRes[2]);
+                                    } else {
+                                        infoSearchRes=null;
+                                        funShowErrorMessage('Error: bad query results');
+                                    }
+
+                                }
+                                funSetStateFinish();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+{#                                funShowErrorMessage('Error: ' + textStatus);#}
+                                funShowErrorMessage('Error: ');
+                                funSetStateFinish();
+                            }
+                        })
+                    } else {
+                        console.log("Image: " + imageCurrIdx + " * " + isUserImage);
+                        funSetStateFinish();
+                    }
+                }
+            }
+        });
+    /////////////////////////////////////////////////
+        var funSetStateWait =function () {
+            $("#id_searchdb").html('wait...');
+            $('#id_progress').css('width', (100) + '%');
+            isStateWait = true;
+        };
+        var funSetStateFinish =function () {
+            $("#id_searchdb").html(textButtonSearch);
+            $('#id_progress').css('width', (0) + '%');
+            isStateWait = false;
+        };
+    /////////////////////////////////////////////////
+        $("#user_images img").on('click', function () {
+            console.log('fuck:' + $(this).attr('id'));
+            isUserImage = true;
+            imageCurrIdx = $(this).attr('id');
+            funLoadImageToCanvas(this.src);
+            clearFormSearhResults();
+        });
+        var funLoadImageToCanvas = function (imgLink) {
+            imageIsLoaded = false;
+            imageCurrent = new Image();
+            imageCurrent.src = imgLink;//.src;
+            imageCurrent.onload = function () {
+                //ctxMaxSize = $("#canvas_container").width()-80;
+{#                ctxMaxSize=256;#}
+                var tmpMax = Math.max(this.width, this.height);
+                imageCurrentW = this.width;
+                imageCurrentH = this.height;
+                if (this.width>this.height) {
+                    canvasW  = ctxMaxSize;
+                    canvasH = Math.floor(ctxMaxSize*this.height/this.width);
+                } else {
+                    canvasH = ctxMaxSize;
+                    canvasW  = Math.floor(ctxMaxSize*this.width/this.height);
+                }
+                imageCurrentK = imageCurrentW/canvasW;
+                canvas.width  = canvasW;
+                canvas.height = canvasH;
+                ctx = canvas.getContext('2d');
+{#                imageCurrIdx = $(imgLink).attr('id');#}
+                updateCanvasRect();
+                imageIsLoaded=true;
+            };
+        };
+        var lstImages = $("#user_images").html();
+        if ($.trim($("#user_images").html())) {
+            console.log('fuck');
+            $("#user_images img")[0].click();
+        }
+    /////////////////////////////////////////////////
+    });
+</script>
+{% endblock %}

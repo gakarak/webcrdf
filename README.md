@@ -8,7 +8,7 @@ Parent project: http://tuberculosis.by/
 
 
 External image-processing tools:
-  - Opencv (http://opencv.org/)
+  - opencv (http://opencv.org/)
   - scikit-image (http://scikit-image.org/)
   - scikit-learn (http://scikit-learn.org/)
   - elastix (http://elastix.isi.uu.nl/)

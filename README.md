@@ -1,8 +1,7 @@
 webcrdf
 =======
-    Django project with three sample
-    applications: CBIR, ROI-Search, X-Ray
-    segmenctation, WebCam-CBIR
+    Django project with three applications: 
+    CBIR, ROI-Search, X-Ray segmentation, WebCam-CBIR
 
 External image-processing tools:
     - Opencv (http://opencv.org/)

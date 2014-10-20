@@ -44,6 +44,6 @@ def WebCamSearch(request):
         if 'username' in request.session:
             userName = request.session['username']
         context={'userName': userName}
-        return render(request, 'appwebcam.html', context)
+        return render(request, 'appwebcam2.html', context)
     else:
         return render(request, 'login.html')

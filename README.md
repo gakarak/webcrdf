@@ -5,6 +5,7 @@ webcrdf
 
 Parent project: http://tuberculosis.by/
 
+Permanent link: http://imlab.grid.by
 
 
 External image-processing tools:

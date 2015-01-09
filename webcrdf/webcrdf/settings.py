@@ -16,14 +16,15 @@ import numpy as np
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 import appcbir.alg as algCBIR
-import appsegmxr.alg as algSegmXR
+import appsegmxr.alg   as algSegmXR
+import appmelanoma.alg as algMelanoma
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '11111111111111111111111111111111111111111111111111'
+SECRET_KEY = 'lb1tg7xh#dy-qo529ir-@4rn))1&sinxtg+(p*w_+))koouzmb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -113,7 +114,7 @@ if not os.path.isdir(STATIC_ROOT_USERDATA_CBIR):
 
 CBIR=algCBIR.SCBIR(STATIC_ROOT_DATADB)
 CBIR.load()
-##CBIR.printInfo()
+CBIR.printInfo()
 
 #### Loading X-Ray data
 STATIC_ROOT_XRAY_USERDATA  =os.path.join(BASE_DIR, 'data/users_xray')
@@ -144,3 +145,24 @@ taskManagerSegmXR.loadData(STATIC_ROOT_SEGMXR_DBDATA)
 regXray = algSegmXR.RegisterXray()
 regXray.loadDB(STATIC_ROOT_SEGMXR_DBDATA)
 regXray.numNGBH=1
+
+
+#### Loading Melanoma Data
+URL_MELANOMA_USERDATA='data/users_melanoma'
+STATIC_ROOT_MELANOMA_USERDATA  = os.path.join(BASE_DIR, URL_MELANOMA_USERDATA)
+STATIC_ROOT_MELANOMA_DBDATA    = os.path.join(BASE_DIR, 'data/datadb.melanoma')
+STATIC_ROOT_MELANOMA_DBDATA_DSC= os.path.join(BASE_DIR, 'data/datadb.melanomadb')
+STATIC_ROOT_MELANOMA_SCRIPTS   = os.path.join(BASE_DIR, 'data/scripts_melanoma')
+taskManagerClassMelanoma = algMelanoma.TaskManagerClassifyMelanoma()
+taskManagerClassMelanoma.loadData(STATIC_ROOT_MELANOMA_DBDATA_DSC, STATIC_ROOT_MELANOMA_SCRIPTS)
+if not os.path.isdir(STATIC_ROOT_MELANOMA_USERDATA):
+    os.mkdir(STATIC_ROOT_MELANOMA_USERDATA)
+IMAGEDB_MELANOMA=[]
+for ii in glob.glob('%s/*.png' % STATIC_ROOT_MELANOMA_DBDATA):
+    img=cv2.imread(ii, 0)
+    if img!=None:
+        tmp={'w': img.shape[1], 'h': img.shape[0], 'url': '/data/datadb.melanoma/%s' % os.path.basename(ii), 'idx': os.path.basename(ii)}
+        IMAGEDB_MELANOMA.append(tmp)
+
+
+

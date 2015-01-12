@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container" xmlns="http://www.w3.org/1999/html">
         <header class="jumbotron hero-spacer">
-            <h1>BTBDB: Web-Applications Portal</h1>
+            <h1>BTBDB: Web-Services</h1>
 {#            <center><h2>Unpublished yet</h2></center>#}
             <p>Here we presenting the 1-st version of web-based services which potentially can be included into the BTBDB Portal.</p>
 {#            <p>Portal contains several examples of interactive web applications for medical image processing tasks.</p>#}
@@ -44,14 +44,15 @@
                     <!--img src="http://placehold.it/800x500" alt=""-->
 {#                    <img src="/data/img/roisearch0.png" alt="" class="img-thumbnail">#}
 {#                    <a href="/appxray/"><img src="/data/img/roisearch0.png" alt="" class="img-thumbnail"#}
-                    <a href="#"><img src="/data/img/roisearch0.png" alt="" class="img-thumbnail"#}
+                    <a href="#"><img src="/data/img/roisearch0.png" alt="" class="img-thumbnail"
                          onmouseover="src_on_hover(this,'/data/img/roisearch1.png');"
                          onmouseout ="src_on_hover(this,'/data/img/roisearch0.png');"></a>
                     <div class="caption">
                         <h3>ROI-Search</h3>
                         <p>Explore X-Ray archive and search similar image regions.</p>
                         <p>
-                            <a href="#" class="btn btn-default">Under construction</a>
+                            {# <a href="/appxray/" class="btn btn-default">Under construction</a> #}
+                            <a href="/appxray/" class="btn btn-primary">Run app</a>
 {#                            <a href="#" class="btn btn-default">More Info</a>#}
                         </p>
                     </div>

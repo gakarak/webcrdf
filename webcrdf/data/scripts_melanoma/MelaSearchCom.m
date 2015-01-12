@@ -4,7 +4,7 @@ function MelaSearchCom(pathDB, filename, oiFlag)
 % initialize
 warning off all
 
-ver = 'v0.4(com)';
+ver = 'v0.4.3(com)';
 logmess('');
 logmess(['MelaSearch ' ver ' started']);
 
@@ -81,8 +81,16 @@ handles = makeView(handles);
 procImage = fitImage(handles.proc.view);
 
 fid = fopen(outfile, 'wt');
-fprintf(fid, ['Probability=%i%%\nSimilarity=%s\n' ...
-    '%s\n%s\n'], resProc, resDB, messDB, handles.txtInfo);
+if resProc < 15
+    strProc = '<span class=colorProbL>Not suspicious</span>';
+elseif resProc < 25
+    strProc = '<span class=colorProbM>Suspicious</span>';
+else
+    strProc = '<span class=colorProbH>Highly suspicious</span>';
+end
+
+fprintf(fid, ['Probability of Melanoma = %i%% (%s)\n' ...
+    '%s\n%s\n'], resProc, strProc, messDB, handles.txtInfo);
 fclose(fid);
 
 if numel(outfile > 4)
@@ -249,13 +257,13 @@ elseif min(4, sum(dists < thr)) < 3
     mess = 'Too few similar images found';
     res = '-';
 elseif nmel < 2
-    mess = sprintf('Looks like a NEVUS (%i of 4)', nmel);
+    mess = sprintf('Looks like a <span class=colorProbL>NEVUS</span> (%i of 4)', nmel);
     res = num2str(nmel);
 elseif nmel < 4
-    mess = sprintf('Looks like MELANOMA (%i of 4)', nmel);
+    mess = sprintf('Looks like <span class=colorProbM>MELANOMA</span> (%i of 4)', nmel);
     res = num2str(nmel);
 else
-    mess = sprintf('Very similar to MELANOMA (%i of 4)', nmel);
+    mess = sprintf('Very similar to <span class=colorProbH>MELANOMA</span> (%i of 4)', nmel);
     res = num2str(nmel);
 end
 

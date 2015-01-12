@@ -7,6 +7,18 @@
 {#            height: 110px;#}
             display: inline-block;
         }
+        .colorProbL {
+            font-weight: bold;
+            color: blue;
+        }
+        .colorProbM {
+            font-weight: bold;
+            color: darkorange;
+        }
+        .colorProbH {
+            font-weight: bold;
+            color: red;
+        }
         .img_max32 {
             max-width:  32px;
             max-height: 32px;
@@ -39,14 +51,15 @@
 <div class="container-fluid fill-heigth">
 <div class="row fill-heigth">
     <div class="col-md-2 content">
-        <h4> <kbd>1</kbd> Upload Melanoma images:</h4><hr/>
+        <h4> <kbd>1</kbd> Upload legion images for examination:</h4>
         {% block upload %}
             <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appmelanoma:upload' %}">
                 <div class="btn-group-vertical">
                     <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
-                    <a class="btn btn-danger" href="{% url 'appmelanoma:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
+{#                    <a class="btn btn-danger" href="{% url 'appmelanoma:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>#}
 {#                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Show Database</a>#}
                     <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                    <a class="btn btn-danger" href="{% url 'appmelanoma:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Clear </a>
                 </div>
             </form>
         {% endblock %}
@@ -59,6 +72,7 @@
 {#        </div>#}
 
         <div id="user_images" style="min-height: 300px;">
+        <h4> <kbd>2</kbd> Examined images:</h4>
         {% for ii in uploadedImages %}
 {#            <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">#}
             <div class="container00">
@@ -72,13 +86,15 @@
             </div>
 {#            </a>#}
         {% endfor %}
+        <hr/>
+
         </div>
 
     </div>
     <div class="col-md-8 content" style="text-align: center" id="canvas_container"  style="display: table-row;">
-        <h4> <kbd>2</kbd> Classification results:</h4><hr/>
 
         <div class="col-md-6">
+            <h4> <kbd>3</kbd> Examination results:</h4><hr/>
             <img id="img_selected" class="img-thumbnail" src="/data/cameramask.png" style="max-width: 380px; max-height: 380px;">
             <br>
             <br>
@@ -96,6 +112,7 @@
                 </div>
                 <div class="panel-body" id="id_txt_body2">
 {#                    <h5>Header info</h5>#}
+                    <b>Extracted features:</b>
                 </div>
                 <!-- Table -->
                 <table class="table" id="id_txt_table">
@@ -103,6 +120,7 @@
             </div>
         </div>
         <div class="col-md-6">
+            <h4> <kbd>4</kbd> Similar images:</h4><hr/>
             <div class="row">
                 <div class="col-xs-6">
 {#                    <div class="container00">#}
@@ -132,6 +150,7 @@
                 </div>
             </div>
             <br>
+
             <div class="panel panel-default">
                 <div class="panel-heading text-left" id="id_txt_body">
                     Legend:
@@ -150,8 +169,20 @@
                     </tr>
                 </table>
             </div>
-        </div>
 
+            <div class="panel panel-default">
+                <div class="panel-heading text-left" id="id_txt_body_sim">
+                    <h4> <b>Looks like a NEVUS (1 of 4)</b></h4>
+                </div>
+{#                <div class="panel-body" id="id_txt_body2">#}
+{#                    <h5>Header info</h5>#}
+{#                </div>#}
+{#                <!-- Table -->#}
+{#                <table class="table" id="id_txt_table">#}
+{#                </table>#}
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -266,10 +297,13 @@
                     if(currInfo.data!=null) {
                         var numTxt = currInfo.data.length;
 
-                        $('#id_txt_body').html('<h4>'
+                        $('#id_txt_body').html('<h4><b>'
                                 + currInfo.data[0].replace('\n','<br>')
-                                + currInfo.data[1].replace('\n','<br>')
-                                + '<b>' + currInfo.data[2].replace('\n','<br>') + '</b>'
+{#                                + currInfo.data[1].replace('\n','<br>')#}
+                                + '</b></h4>');
+
+                        $('#id_txt_body_sim').html('<h4>'
+                                + '<b>' + currInfo.data[1].replace('\n','<br>') + '</b>'
                                 + '</h4>');
 
                         $('#id_txt_table').html('');
@@ -366,6 +400,7 @@
             $('#id_progress_div').show();
             $('#id_progress').css('width', (100) + '%');
             $('#id_txt_body').html('<h4>Pleae wait...</h4>');
+            $('#id_txt_body_sim').html('...');
             $('#id_txt_table').html('');
         };
         var funSetStateFinish =function () {

@@ -33,7 +33,8 @@ def Index(request):
         context={'userName': userName, 'uploadedImages': uploadedImages}
         return render(request, 'appmelanoma.html', context)
     else:
-        return render(request, 'login.html')
+        context={'next', '/appmelanoma/'}
+        return render(request, 'login.html', context)
 
 ################################################
 def getInfoAboutImages(request):

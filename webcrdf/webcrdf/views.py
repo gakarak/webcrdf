@@ -28,6 +28,11 @@ def Login(request):
     if not 'is_logged' in request.session:
         request.session['is_logged'] = '1'
         request.session['username'] = 'Anonymous'
+    if request.GET:
+        print request.GET
+        tmpRediretUrl=request.GET.get('next')
+        if tmpRediretUrl is not None:
+            return HttpResponseRedirect(tmpRediretUrl)
     return HttpResponseRedirect('/')
 
 def Logout(request):

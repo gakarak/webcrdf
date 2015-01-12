@@ -10,7 +10,11 @@
         <div class="jumbotron">
             <h1>Hello, User!</h1>
             <p>Please login for to continue working on our portal...</p>
-            <p><a href="/login/" class="btn btn-primary btn-lg" role="button">Login</a></p>
+            {% if next %}
+        	<p><a href="/login/?next={{ next }}" class="btn btn-primary btn-lg" role="button">Continue</a></p>
+            {% else %}
+        	<p><a href="/login/" class="btn btn-primary btn-lg" role="button">Login</a></p>
+            {% endif %}
         </div>
     </div>
 </body>

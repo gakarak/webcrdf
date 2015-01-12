@@ -4,7 +4,7 @@ function MelaSearchCom(pathDB, filename, oiFlag)
 % initialize
 warning off all
 
-ver = 'v0.4.3(com)';
+ver = 'v0.4(com)';
 logmess('');
 logmess(['MelaSearch ' ver ' started']);
 
@@ -256,14 +256,17 @@ if sum(dists < thr) == 0
 elseif min(4, sum(dists < thr)) < 3
     mess = 'Too few similar images found';
     res = '-';
-elseif nmel < 2
-    mess = sprintf('Looks like a <span class=colorProbL>NEVUS</span> (%i of 4)', nmel);
+elseif nmel == 0
+    mess = 'Looks like a <span class=colorProbL>NEVUS</span> (no similar Melanoma images found)';
+    res = num2str(nmel);
+elseif nmel == 1
+    mess = sprintf('Looks like a <span class=colorProbL>NEVUS</span> (%i similar Melanoma image found)', nmel);
     res = num2str(nmel);
 elseif nmel < 4
-    mess = sprintf('Looks like <span class=colorProbM>MELANOMA</span> (%i of 4)', nmel);
+    mess = sprintf('Looks like <span class=colorProbM>MELANOMA</span> (%i similar Melanoma images found)', nmel);
     res = num2str(nmel);
 else
-    mess = sprintf('Very similar to <span class=colorProbH>MELANOMA</span> (%i of 4)', nmel);
+    mess = sprintf('Very similar to <span class=colorProbH>MELANOMA</span> (%i similar Melanoma images found)', nmel);
     res = num2str(nmel);
 end
 

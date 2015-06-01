@@ -15,9 +15,11 @@ import cv2
 import numpy as np
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-import appcbir.alg as algCBIR
-import appsegmxr.alg   as algSegmXR
-import appmelanoma.alg as algMelanoma
+import appcbir.alg      as algCBIR
+import appsegmxr.alg    as algSegmXR
+import appmelanoma.alg  as algMelanoma
+import appsegmct.alg    as algSegmCT
+import appdrugres.alg   as algDrugRes
 
 
 # Quick-start development settings - unsuitable for production
@@ -46,6 +48,8 @@ INSTALLED_APPS = (
     'appcbir',
     'appxray',
     'appsegmxr',
+    'appmelanoma',
+    'appsegmct'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -165,4 +169,34 @@ for ii in glob.glob('%s/*.png' % STATIC_ROOT_MELANOMA_DBDATA):
         IMAGEDB_MELANOMA.append(tmp)
 
 
+#### Loading CT-Segmentation data
+STATIC_ROOT_SEGMCT_USERDATA=os.path.join(BASE_DIR, 'data/users_segmct')
+STATIC_ROOT_SEGMCT_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.segmct')
+taskManagerSegmCT = algSegmCT.TaskManagerSegmCT()
+if not os.path.isdir(STATIC_ROOT_SEGMCT_USERDATA):
+    os.mkdir(STATIC_ROOT_SEGMCT_USERDATA)
+IMAGEDB_CT=[]
+for ii in glob.glob('%s/data/datadb.segmct/*.nii.gz' % BASE_DIR):
+    fimg="%s_preview.png" % ii
+    if os.path.isfile(fimg):
+        tmp={'w': 128, 'h': 128,
+             'url': '/data/datadb.segmct/%s' % os.path.basename(fimg),
+             'urlData': '/data/datadb.segmct/%s' % os.path.basename(ii),
+             'idx': os.path.basename(ii)}
+        IMAGEDB_CT.append(tmp)
 
+#### Loading Drug-Resistance data
+taskManagerDrugRes = algDrugRes.TaskManagerDrugRes()
+URL_DRUGRES_USERDATA='data/users_drugres'
+STATIC_ROOT_DRUGRES_USERDATA=os.path.join(BASE_DIR, 'data/users_drugres')
+STATIC_ROOT_DRUGRES_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.drugres')
+SDRUGRES_TMPDIR="tmp_data"
+IMAGEDB_CT_DRUGRES=[]
+for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):
+    fimg="%s_preview.png" % ii
+    if os.path.isfile(fimg):
+        tmp={'w': 128, 'h': 128,
+             'url': '/data/datadb.drugres/%s' % os.path.basename(fimg),
+             'urlData': '/data/datadb.drugres/%s' % os.path.basename(ii),
+             'idx': os.path.basename(ii)}
+        IMAGEDB_CT_DRUGRES.append(tmp)

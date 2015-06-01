@@ -29,7 +29,9 @@ def Index(request):
         context={'userName': userName, 'uploadedImages': uploadedImages}
         return render(request, 'appsegmxr.html', context)
     else:
-        return render(request, 'login.html')
+        context={'next': '/appsegmxr/'}
+        # return render(request, 'login.html', context)
+        return HttpResponseRedirect('/login/?next=%s' % request.path)
 
 ################################################
 def getInfoAboutImages(request):

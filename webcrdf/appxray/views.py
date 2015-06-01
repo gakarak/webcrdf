@@ -29,7 +29,9 @@ def Index(request):
         context={'userName': userName, 'uploadedImages': uploadedImages}
         return render(request, 'appxray.html', context)
     else:
-        return render(request, 'login.html')
+        context={'next': '/appxray/'}
+        # return render(request, 'login.html', context)
+        return HttpResponseRedirect('/login/?next=%s' % request.path)
 
 ################################################
 class ImageUplInfo:

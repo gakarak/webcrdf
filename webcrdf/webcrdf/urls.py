@@ -19,5 +19,7 @@ urlpatterns = patterns('',
     url(r'^appxray/',	include('appxray.urls',  namespace='appxray', app_name='appxray')),
     url(r'^appsegmxr/',	include('appsegmxr.urls',  namespace='appsegmxr', app_name='appsegmxr')),
     url(r'^appmelanoma/',	include('appmelanoma.urls',  namespace='appmelanoma', app_name='appmelanoma')),
+    url(r'^appsegmct/',	    include('appsegmct.urls',  namespace='appsegmct', app_name='appsegmct')),
+    url(r'^appdrugres/',	include('appdrugres.urls', namespace='appdrugres',app_name='appdrugres')),
 )
 

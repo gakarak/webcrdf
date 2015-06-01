@@ -34,7 +34,8 @@ def Index(request):
         return render(request, 'appmelanoma.html', context)
     else:
         context={'next', '/appmelanoma/'}
-        return render(request, 'login.html', context)
+        # return render(request, 'login.html', context)
+        return HttpResponseRedirect('/login/?next=%s' % request.path)
 
 ################################################
 def getInfoAboutImages(request):

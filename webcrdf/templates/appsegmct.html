@@ -1,0 +1,398 @@
+{% extends "base.html" %}
+{% block content %}
+    <style type="text/css">
+        .container00 {
+            position: relative;
+{#            width: 200px;#}
+{#            height: 200px;#}
+            display: inline-block;
+        }
+        .main_image00 {
+            width: 100%;
+            height: 100%;
+        }
+        .overlay_image00 {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+<div class="container-fluid fill-heigth">
+<div class="row fill-heigth">
+    <div class="col-md-2 col-sm-2 content">
+        <h4> <kbd>1</kbd> Upload your CT chest images:</h4><hr/>
+{#        {% block upload %}#}
+{#            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmct:upload' %}">#}
+                <div class="btn-group-vertical" role="group">
+{#                <div class="input-group">#}
+{#                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />#}
+                    <a href="#" class="btn btn-success btn-block" id="id-showdb" data-toggle="modal" data-target="#myModal">
+                        <span class="glyphicon glyphicon-th"></span> Select from a Database
+                    </a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#id_dialog">
+                        <span class="glyphicon glyphicon-cloud-upload"></span> Upload CT-Image
+                    </button>
+                    <a class="btn btn-danger" href="{% url 'appsegmct:clean' %}">
+                        <span class="glyphicon glyphicon-remove-circle"></span> Remove files
+                    </a>
+{#                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#id_dialog">Upload dialog</button>#}
+
+                </div>
+{#            </form>#}
+{#        {% endblock %}#}
+        <br>
+    </div>
+    <div class="col-md-7 content" style="text-align: center" id="canvas_container">
+{#    <div class="row text-center" id="canvas_container">#}
+        <h4> <kbd>2</kbd> Segmentation results:</h4><hr/>
+        <div id="user_images">
+        {% for ii in uploadedImages %}
+            <div class="col-md-4 col-sm-6 hero-feature">
+                <div class="thumbnail">
+{#                    <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">#}
+                    <a id="ashow-{{ ii.idx }}" class="container00" href="#" url-inp="{{ ii.urlInp }}" data-toggle="modal" data-target="#myModal3D">
+{#                        <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">#}
+                        <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" id="{{ ii.idx }}">
+                        <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
+                    </a>
+                    <div class="caption" id="caption-{{ ii.idx }}">
+                        {% if ii.isFinished %}
+{#                        <div class="btn-group btn-group-sm">#}
+                            <a id="ashow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary" url-inp="{{ ii.urlSegm }}" data-toggle="modal" data-target="#myModal3D">
+                                <span class="glyphicon glyphicon-eye-open"></span> Segmented
+                            </a>
+                            <a id="zip-{{ ii.idx }}" href="#" class="btn btn-sm btn-primary" url-data="{{ ii.urlZip }}"><span class="glyphicon glyphicon-circle-arrow-up"></span> Download</a>
+{#                        </div>#}
+                        {% else %}
+                            <a id="ashow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary disabled" url-inp="{{ ii.urlSegm }}" data-toggle="modal" data-target="#myModal3D">
+                                <span class="glyphicon glyphicon-eye-open"></span> Segmented
+                            </a>
+                            <a id="zip-{{ ii.idx }}" href="#" class="btn btn-sm btn-primary disabled" url-data="{{ ii.urlZip }}"><span class="glyphicon glyphicon-circle-arrow-up"></span> Download</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+{#            <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">#}
+{#                <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">#}
+{#                <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>#}
+{#            </a>#}
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 90%; height: 90%">
+    <div class="modal-content" style="width: 100%; height: 100%">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">CT chest database</h4>
+      </div>
+      <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-gallery"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 3D-CT Preview -->
+    <div class="modal fade" id="myModal3D" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">3D CT-Image preview</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div style="width: 720px; height: 720px; float: none; margin: 0 auto;">
+                        <div class="papaya" id="id-papaya"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Modal Error dialog-->
+    <div class="modal fade" id="myModalError" tabindex="-1" role="dialog" aria-labelledby="myModalLabelError" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Error in segmentation process</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <h4 id="error-text">
+                    </h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="modal fade" id="id_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">CT-data upload dialog</h4>
+      </div>
+      <div class="modal-body">
+
+        <div role="tabpanel">
+            <ul class="nav nav-tabs">
+              <li role="presentation" class="active"><a href="#tab_nifti" aria-controls="tab_nifti" role="tab" data-toggle="tab">NIfTI</a></li>
+              <li role="presentation"><a href="#tab_analyze" aria-controls="tab_analyze" role="tab" data-toggle="tab">Analyze</a></li>
+              <li role="presentation"><a href="#tab_dicom" aria-controls="tab_dicom" role="tab" data-toggle="tab">DICOM-Archive</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="tab_nifti">
+                    <h2>Please, select NIfTi format</h2>
+                    <hr>
+                    {% block upload %}
+                        <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmct:upload' %}">
+{#                            <div class="btn-group btn-group-justified">#}
+                                <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
+{#                            </div>#}
+                        </form>
+                    {% endblock %}
+                    <br>
+                    <div id="progress" class="progress">
+                        <div class="progress-bar progress-bar-success"></div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab_analyze">
+                    <h1>Upload Analyze</h1>
+                    <br>
+                    Currently not supported
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tab_dicom">
+                    <h1>Upload DICOM</h1>
+                    <br>
+                    Currently not supported
+                </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="/data/cssjs/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="/data/cssjs/jquery.fileupload.js"></script>
+
+
+<script type="application/javascript">
+    var currentUrlCT = null;
+    var currentImageInfo = null;
+    $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox.defaults.onShow = function() {
+            console.log("::onShow()");
+            $("#lightbox_btna").on("click", function() {
+                var urlZip = $("#lightbox_img_href").attr('src');
+                //TODO: This IS STUPID HAK(FUCK)!!!!
+                urlZip = urlZip.substr(0,urlZip.length-11) + "result.zip";
+                window.location=urlZip;
+                console.log("::onClick() : " + urlZip);
+            });
+        };
+        return $(this).ekkoLightbox();
+    });
+    $("a[id^='ashow-']").on("click", function() {
+        var tmpUrl = $(this).attr('url-inp');
+        console.log(tmpUrl);
+        if(currentUrlCT!=null && currentUrlCT===tmpUrl) {
+//            papayaContainers[0].viewer.loadBaseImage(tmpUrl, true, false);
+        } else {
+            papayaContainers[0].viewer.resetViewer();
+            papayaContainers[0].viewer.loadBaseImage(tmpUrl, true, false);
+        }
+        currentUrlCT=tmpUrl;
+    });
+    $("a[id^='zip-']").on("click", function() {
+        var urlZip = $(this).attr('url-data');
+        window.location=urlZip;
+    });
+    $(function () {
+        var timeCounter = 0;
+        var timeDelay   = 1500;
+        ///////////////////////////////////////
+        function imageListUpdater() {
+            $.ajax({
+                url: "{% url 'appsegmct:getinfo' %}",
+                success: function(data) {
+                    currentImageInfo = $.parseJSON(data);
+{#                    console.log(currentImageInfo);#}
+                    var isAllFinished = true;
+                    var tStatus, tIdx;
+                    for(var ii=0; ii<currentImageInfo.length; ii++) {
+                        tStatus = currentImageInfo[ii].isFinished;
+                        isError  = currentImageInfo[ii].isError;
+                        tIdx    = currentImageInfo[ii].idx;
+                        console.log('tIdx = ' + tIdx + ', status = ' + tStatus);
+                        if(tStatus) {
+                            $('#'   + tIdx).attr('src', currentImageInfo[ii].urlSegm);
+                            $('#info_' + tIdx).hide();
+                            $('#ashow-' + tIdx + '-segm').removeClass('disabled');
+                            $('#zip-'+tIdx).removeClass('disabled');
+                        } else if(isError) {
+                            var caption = $('#caption-'+tIdx);
+                            $('#info_' + tIdx).hide();
+                            caption.empty();
+                            var btnError=$('<a>',{
+                                class: 'btn btn-sm btn-danger'
+                            });
+                            $(btnError).attr('data-toggle', 'modal');
+                            $(btnError).attr('data-target', '#myModalError');
+                            $(btnError).html("<span class='glyphicon glyphicon-exclamation-sign'></span> Error");
+                            caption.append(btnError);
+                            $("#error-text").html(currentImageInfo[ii].txtError);
+                        } else {
+{#                            $('#'   + tIdx).attr('src', currentImageInfo[ii].url);#}
+{#                            $('#a_' + tIdx).attr('href',currentImageInfo[ii].url);#}
+                            $('#info_' + tIdx).show();
+                            isAllFinished = false;
+                        }
+                    }
+                    if(!isAllFinished) {
+                        updateImageList();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR[Ajax] : status=" + textStatus);
+                }
+            });
+        }
+        function updateImageList() {
+{#            imageListUpdater();#}
+            var currDelay = 100;
+            if(timeCounter>0) {
+                currDelay=timeDelay;
+            }
+            setTimeout(function() {
+                console.log("Timeout: " + timeCounter);
+                timeCounter++;
+                imageListUpdater();
+            }, currDelay);
+        }
+        updateImageList();
+        ///////////////////////////////////////
+{#        $("#id_help").tooltip({html:true});#}
+        $("#navbar-segmct").addClass("active");
+        $('.alert .close').on('click', function(e) {
+            $(this).parent().hide();
+        });
+        $('#id_file').fileupload({
+            url: "{% url 'appsegmct:upload' %}",
+            dataType: 'json',
+            fail: function (e, data) {
+                  console.log("[FAIL] : FUCK!");
+            },
+            done: function (e, data) {
+                console.log("[DONE] : FUCK!" + data);
+                window.location="{% url 'appsegmct:index' %}";
+{#                $.each(data.result.files, function (index, file) {#}
+{#                    $('<p/>').text(file.name).appendTo('#files');#}
+{#                });#}
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .progress-bar').css( 'width', progress + '%');
+            }
+        }).prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+{#        $("#id_file").on("change", function() {#}
+{#            $("#id_form_upload").submit();#}
+{#        });#}
+        var funShowErrorMessage = function(txt) {
+            $('#message-error-text').html(txt);
+            $('#message-error').show();
+        };
+    /////////////////////////////////////////////////
+        $("#id-showdb").on('click', function () {
+            console.log('FUCK');
+            var gal = $('#idx-gallery');
+            var param={'num': 10};
+            $.ajax({
+                url: "{% url 'appsegmct:gallery' %}",
+                type: "POST",
+                data: param,
+                success: function (data, textStatus, jqXHR) {
+                    var tobj = $.parseJSON(data);
+                    var dataLen=tobj.length;
+                    var maxSiz=200;
+                    gal.empty();
+                    for(var ii=0; ii<dataLen; ii++) {
+                        var tUrl = tobj[ii].url;
+                        var pw = 1;
+                        var ph = 1;
+                        if (tobj[ii].w >= tobj[ii].h) {
+                            pw = maxSiz;
+                            ph = Math.floor(maxSiz * tobj[ii].h / tobj[ii].w);
+                        } else {
+                            pw = Math.floor(maxSiz * tobj[ii].w / tobj[ii].h);
+                            ph = maxSiz;
+                        }
+                        var tmpImg = $('<img>',{
+                            class: 'img-thumbnail',
+                            width:  pw,
+                            height: ph,
+                            id:  'gal_'+tobj[ii].idx,
+                            src: tUrl
+                        });
+                        $(tmpImg).attr('srcData', tobj[ii].urlData);
+                        $(tmpImg).on('click', function() {
+                            var fnData = $(this).attr('srcData');
+                            var spl = fnData.split('/');
+                            var fn  = spl[spl.length-1];
+                            console.log(fn);
+                            $('#gallery-close').click();
+                            var param2={'fname': fn};
+                            $.ajax({
+                                url: "{% url 'appsegmct:uploadfdb' %}",
+                                type: "POST",
+                                data: param2,
+                                success: function (data, textStatus, jqXHR) {
+                                    console.log(data);
+                                    window.location="{% url 'appsegmct:index' %}";
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    funShowErrorMessage('Server error: bad image in DB');
+                                }
+                            });
+                            //window.location="/";
+                        });
+                        $(tmpImg).css('cursor','pointer');
+                        $(tmpImg).prop('title', 'Press mouse button to add image');
+                        gal.append(tmpImg);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    funShowErrorMessage('Error gallery query...');
+                }
+            });
+        });
+    /////////////////////////////////////////////////
+    });
+</script>
+
+{% endblock %}

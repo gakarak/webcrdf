@@ -21,13 +21,16 @@ def Index(request):
         ##return render(request, 'index.html')
         return render(request, 'index.html', context)
     else:
-        return render(request, 'login.html')
+        # return render(request, 'login.html')
+        return HttpResponseRedirect('/login/')
 
 def Login(request):
     print '::Login: session-Id = (%s)' % request.session.session_key
     if not 'is_logged' in request.session:
         request.session['is_logged'] = '1'
         request.session['username'] = 'Anonymous'
+    print "next=[%s]" % request.GET.get('next')
+    print "next-path=[%s]" % request.path
     if request.GET:
         print request.GET
         tmpRediretUrl=request.GET.get('next')

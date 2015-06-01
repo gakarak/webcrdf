@@ -32,7 +32,10 @@ def Index(request):
         context={'userName': userName, 'uploadedImages': uploadedImages}
         return render(request, 'appcbir.html', context)
     else:
-        return render(request, 'login.html')
+        # return render(request, 'login.html')
+        context={'next': '/appcbir/'}
+        # return render(request, 'login.html', context)
+        return HttpResponseRedirect('/login/?next=%s' % request.path)
 
 def Login(request):
     print '::Login: session-Id = (%s)' % request.session.session_key

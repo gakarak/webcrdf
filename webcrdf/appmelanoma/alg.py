@@ -31,7 +31,7 @@ def task_proc_classify_melanoma(data):
     mrunStr="cd('%s'); try MelaSearchCom('%s', '%s', '-oi'); catch end; exit" % (dirScr, dirDB, imPath)
     # mrunStr="cd('%s'); MelaSearchCom('%s', '%s', '-oi'); exit" % (dirScr, dirDB, imPath)
     # runStr="matlab2014a -nodesktop -nojvm -r \"%s\" >/dev/null 2>&1" % mrunStr
-    runStr="matlab2014a -nodesktop -nojvm -r \"%s\" " % mrunStr
+    runStr="matlab -nodesktop -nojvm -r \"%s\" " % mrunStr
     print "[%s]" % runStr
     os.system(runStr)
 

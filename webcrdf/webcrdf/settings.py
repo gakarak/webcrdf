@@ -117,8 +117,8 @@ if not os.path.isdir(STATIC_ROOT_USERDATA_CBIR):
     os.mkdir(STATIC_ROOT_USERDATA_CBIR)
 
 CBIR=algCBIR.SCBIR(STATIC_ROOT_DATADB)
-CBIR.load()
-CBIR.printInfo()
+# CBIR.load()
+# CBIR.printInfo()
 
 #### Loading X-Ray data
 STATIC_ROOT_XRAY_USERDATA  =os.path.join(BASE_DIR, 'data/users_xray')

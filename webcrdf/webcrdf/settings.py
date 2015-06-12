@@ -49,7 +49,8 @@ INSTALLED_APPS = (
     'appxray',
     'appsegmxr',
     'appmelanoma',
-    'appsegmct'
+    'appsegmct',
+    'appdrugres',
 )
 
 MIDDLEWARE_CLASSES = (

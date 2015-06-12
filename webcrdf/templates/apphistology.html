@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+    <style type="text/css">
+        .container00 {
+            position: relative;
+{#            width: 200px;#}
+{#            height: 200px;#}
+            display: inline-block;
+        }
+        .main_image00 {
+            width: 100%;
+            height: 100%;
+        }
+        .overlay_image00 {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+<div class="container-fluid fill-heigth">
+<div class="row fill-heigth">
+    <div class="col-md-2 col-sm-2 content">
+        <h1>Fuck #1</h1>
+    </div>
+    <div class="col-md-7 content" style="text-align: center" id="canvas_container">
+        <h1>Fuck #2</h1>
+    </div>
+</div>
+</div>
+
+
+<script type="application/javascript">
+    $(function () {
+{#        alert('Fuck #3');#}
+    });
+</script>
+
+{% endblock %}

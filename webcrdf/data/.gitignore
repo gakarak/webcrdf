@@ -18,3 +18,7 @@
 /datadb.segmxr-bk/
 /datadb.xray-bk/
 /scripts_melanoma_tmp/
+/datadb.xray
+/datadb.cbir
+/datadb.segmct
+/datadb.segmxr

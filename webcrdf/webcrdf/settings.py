@@ -132,7 +132,7 @@ IMAGEDB_DPTS=[]
 for ii in glob.glob('%s/data/datadb.xray/*.png' % BASE_DIR):
     img=cv2.imread(ii, 0) ##cv2.CV_LOAD_IMAGE_GRAYSCALE)
     fpts="%s_pts.csv" % ii
-    if img!=None:
+    if img is not None:
         tmp={'w': img.shape[1], 'h': img.shape[0], 'url': '/data/datadb.xray/%s' % os.path.basename(ii), 'idx': os.path.basename(ii)}
         # IMAGEDB.append((img, tmp))
         IMAGEDB.append(tmp)
@@ -165,7 +165,7 @@ if not os.path.isdir(STATIC_ROOT_MELANOMA_USERDATA):
 IMAGEDB_MELANOMA=[]
 for ii in glob.glob('%s/*.png' % STATIC_ROOT_MELANOMA_DBDATA):
     img=cv2.imread(ii, 0)
-    if img!=None:
+    if img is not None:
         tmp={'w': img.shape[1], 'h': img.shape[0], 'url': '/data/datadb.melanoma/%s' % os.path.basename(ii), 'idx': os.path.basename(ii)}
         IMAGEDB_MELANOMA.append(tmp)
 

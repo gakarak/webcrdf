@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'appmelanoma',
     'appsegmct',
     'appdrugres',
+    'apphistology'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,7 +91,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
@@ -201,3 +203,8 @@ for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):
              'urlData': '/data/datadb.drugres/%s' % os.path.basename(ii),
              'idx': os.path.basename(ii)}
         IMAGEDB_CT_DRUGRES.append(tmp)
+
+#### Loading Histology data
+URL_HISTOLOGY_USERDATA='data/users_histology'
+STATIC_ROOT_HISTOLOGY_USERDATA=os.path.join(BASE_DIR, 'data/users_histology')
+STATIC_ROOT_HISTOLOGY_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.histology')

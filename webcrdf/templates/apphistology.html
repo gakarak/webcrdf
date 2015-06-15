@@ -29,12 +29,15 @@
         }
         #imgZoomed {
             z-index: 9999;
-            max-width: 512px;
+            max-width: 400px;
             display: none;
             position: absolute;
             left: 200px;
             right: 200px;
-            box-shadow: 0 0 15px 8px;
+            box-shadow: 0 0 6px 3px;
+            -webkit-border-radius: 6px 6px 6px 6px;
+            -moz-border-radius: 6px 6px 6px 6px;
+                border-radius: 6px 6px 6px 6px;
         }
         .div-hidden {
             display: none;
@@ -47,7 +50,7 @@
     <img id="imgZoomed" src="#">
 <div class="container div-90p">
     <div class="row">
-        <div class="col-md-3 col-xs-12">
+        <div class="col-md-3 col-sm-12 col-xs-12">
             <div class="panel panel-default pad8 algnc">
                 <div class="panel-heading">
                     <h4>Histology database</h4>
@@ -64,7 +67,7 @@
         <div class="col-md-9 col-xs-12" id="main_container">
             <div class="row">
 
-                <div class="col-md-7 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="panel panel-default pad8 algnc" id="panelCurrent">
                         <div class="panel-heading">
                             <h4>Current histology slide:</h4>
@@ -83,7 +86,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="panel panel-default pad8 algnc" id="panelQuery" style="display: none; height: 100%;">
                         <div class="panel-heading">
                             <h4>Query image from microscope:</h4>

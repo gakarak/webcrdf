@@ -4,6 +4,8 @@ __author__ = 'ar'
 import numpy as np
 import os
 import sys
+import json
+import cv2
 
 import array
 
@@ -19,15 +21,98 @@ def readBinData(fname, ptype=np.int64):
     f.close()
     return data
 
+class HistologySearcher:
+    def __init__(self, wdir=None):
+        if wdir is not None:
+            self.loadDir(wdir)
+    def loadDir(self, wdir):
+        self.wdir=wdir
+        self.fnDataJson="%s/data.json" % wdir
+        self.fnDataDSC="%s/dsc.dat" % wdir
+        self.fnDataIDX="%s/idx.dat" % wdir
+        self.dataIDX=readBinData(self.fnDataIDX, ptype=np.float64).astype(np.int)
+        self.dataDSC=readBinData(self.fnDataDSC, ptype=np.float32)
+        # self.idxShifts=np.zeros(self.dataIDX.shape[0],np.int)
+        with open(self.fnDataJson, 'r') as f:
+            self.dataJson=json.load(f)
+        numSlides=len(self.dataJson)
+        self.idxShifts=np.zeros(numSlides,np.int)
+        tshift=0
+        for ii in xrange(numSlides):
+            dshift=self.dataJson[ii][1][0]*self.dataJson[ii][1][1]
+            # self.idxShifts[tshift:tshift+dshift]=tshift
+            self.idxShifts[ii]=tshift
+            tshift+=dshift
+    def printInfo(self):
+        print "---- JSON ----"
+        for ii in self.dataJson:
+            print ii
+        print "---- DSC ----"
+        print "dsc-size: [%dx%d]" % self.dataDSC.shape
+        print self.dataDSC
+        print "---- IDX ----"
+        print "idx-size: [%dx%d]" % self.dataIDX.shape
+        print self.dataIDX
+        print "---- IDX-SHIFT ----"
+        print self.idxShifts
+    """
+    numeration idxSlide, posr, posc like in MATLAB: started from 1
+    """
+    def getLinearIdx(self, idxSlide, posr, posc):
+        # tidx=self.dataIDX[np.where(self.dataIDX[:,0]==idxSlide),:][0]
+        pidx=self.dataJson[idxSlide-1][1][1]*(posr-1)+posc-1
+        linIdx=self.idxShifts[idxSlide-1] + pidx
+        # print self.dataIDX[linIdx,:]
+        # print tidx[pidx,:]
+        return linIdx
+    def getSelectedDSC(self, idxSlide, posr, posc):
+        tidx=self.getLinearIdx(idxSlide,posr,posc)
+        ret=self.dataDSC[tidx,:]
+        # print ret
+        return ret
+    def getImgFileName(self, idxSlide, posr, posc):
+        return "%s/%03d_%03d.jpg" % (self.dataJson[idxSlide-1][3], posr, posc)
+    def getListNGBH(self, idxSlide, posr, posc, numNGBH=8):
+        linIdx=self.getLinearIdx(idxSlide, posr, posc)
+        tdsc=self.dataDSC[linIdx,:]
+        tdst=MT.pairwise_distances(self.dataDSC, tdsc, metric='l1')[:,0]
+        tdstSortIdx=np.argsort(tdst)[1:numNGBH+1]
+        ret=[]
+        for ii in xrange(numNGBH):
+            tidxS=tdstSortIdx[ii]
+            tdstS=tdst[tidxS]
+            tpos=self.dataIDX[tidxS,:]
+            tfn='%s/%03d_%03d.jpg' % (self.dataJson[tpos[0]-1][3], tpos[1], tpos[2])
+            # tfn="%s/%s" % (self.wdir, tfn)
+            ret.append((tfn, tdstS))
+            # print tpos
+        # print tdstSortIdx
+        # print ret
+        return json.dumps(ret)
+    def generateDstSegmentation(self, idxSlide, posr, posc):
+        numSlides=len(self.dataJson)
+        for ii in xrange(numSlides):
+            print numSlides
+
+
 if __name__=='__main__':
-    fdsc='/home/ar/img.data/data_histology/004-data-dsc-tot-p2q(16)[1,3,5]-rc.dat'
-    fidx='/home/ar/img.data/data_histology/004-data-idx-tot-p2q(16)[1,3,5]-rc.dat'
-    idx=readBinData(fidx,ptype=np.float64).astype(np.int)
-    dsc=readBinData(fdsc,ptype=np.float64).astype(np.float32)
-    dsc1=dsc[1000,:]
-    dst=MT.pairwise_distances(dsc, dsc1, metric='l1')
-    print idx
-    print '----------------'
-    print dsc
-    print '----------------'
-    print dst
+    wdir='/media/Elements/data_histology/datadb.histology'
+    histoSearch=HistologySearcher(wdir)
+    # histoSearch.printInfo()
+    # histoSearch.getLinearIdx(3,30,150)
+    # histoSearch.getSelectedDSC(5,30,150)
+    # print "%s/%s" % (histoSearch.wdir, histoSearch.getImgFileName(5,30,50))
+    # print histoSearch.getListNGBH(5,30,50)
+    histoSearch.generateDstSegmentation(5,30,50)
+
+    # fdsc='/home/ar/img.data/data_histology/004-data-dsc-tot-p2q(16)[1,3,5]-rc.dat'
+    # fidx='/home/ar/img.data/data_histology/004-data-idx-tot-p2q(16)[1,3,5]-rc.dat'
+    # idx=readBinData(fidx,ptype=np.float64).astype(np.int)
+    # dsc=readBinData(fdsc,ptype=np.float64).astype(np.float32)
+    # dsc1=dsc[1000,:]
+    # dst=MT.pairwise_distances(dsc, dsc1, metric='l1')
+    # print idx
+    # print '----------------'
+    # print dsc
+    # print '----------------'
+    # print dst

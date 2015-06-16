@@ -19,7 +19,7 @@
     </style>
 <div class="container-fluid fill-heigth">
 <div class="row fill-heigth">
-    <div class="col-md-2 col-sm-2 content">
+    <div class="col-md-3 col-lg-2 content">
         <h4> <kbd>1</kbd> Upload your CT chest images:</h4><hr/>
 {#        {% block upload %}#}
 {#            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmct:upload' %}">#}
@@ -42,12 +42,12 @@
 {#        {% endblock %}#}
         <br>
     </div>
-    <div class="col-md-7 content" style="text-align: center" id="canvas_container">
+    <div class="col-md-9 col-lg-8 content" style="text-align: center" id="canvas_container">
 {#    <div class="row text-center" id="canvas_container">#}
         <h4> <kbd>2</kbd> Segmentation results:</h4><hr/>
         <div id="user_images">
         {% for ii in uploadedImages %}
-            <div class="col-md-4 col-sm-6 hero-feature">
+            <div class="col-sm-6 col-md-4  hero-feature">
                 <div class="thumbnail">
 {#                    <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">#}
                     <a id="ashow-{{ ii.idx }}" class="container00" href="#" url-inp="{{ ii.urlInp }}" data-toggle="modal" data-target="#myModal3D">

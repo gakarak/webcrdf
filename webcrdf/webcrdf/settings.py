@@ -20,6 +20,7 @@ import appsegmxr.alg    as algSegmXR
 import appmelanoma.alg  as algMelanoma
 import appsegmct.alg    as algSegmCT
 import appdrugres.alg   as algDrugRes
+import apphistology.alg as algHistology
 
 
 # Quick-start development settings - unsuitable for production
@@ -208,3 +209,4 @@ for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):
 URL_HISTOLOGY_USERDATA='data/users_histology'
 STATIC_ROOT_HISTOLOGY_USERDATA=os.path.join(BASE_DIR, 'data/users_histology')
 STATIC_ROOT_HISTOLOGY_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.histology')
+HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)

@@ -5,6 +5,9 @@
         #panelPreview .img-thumbnail:hover {
             background-color: darkred;
         }
+        #panelPreviewSegmImages .img-thumbnail:hover {
+            background-color: darkred;
+        }
         .pad8 {
             padding: 4px;
         }
@@ -21,10 +24,14 @@
             max-width: 56px;
             margin: 1px;
         }
+        #panelPreviewSegmImages img {
+            max-width: 56px;
+            margin: 1px;
+        }
         #panelCurrent img {
             width: 256px;
         }
-        #panelQuery img {
+        #panelQuery #imgQuery {
             width: 256px;
         }
         #imgZoomed {
@@ -50,7 +57,7 @@
     <img id="imgZoomed" src="#">
 <div class="container div-90p">
     <div class="row">
-        <div class="col-md-3 col-sm-12 col-xs-12">
+        <div class="col-md-4 col-sm-12 col-xs-12">
             <div class="panel panel-default pad8 algnc">
                 <div class="panel-heading">
                     <h4>Histology database</h4>
@@ -59,12 +66,29 @@
                         Preview dataset
                     </a>
                 </div>
-                <div class="panel-body" id="panelPreview">
-                    ...
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12" id="panelPreview">
+                            ...
+                        </div>
+                        <div class="col-xs-12" id="progressQuerySEGM" style="display: none;">
+                            <hr>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12" id="panelPreviewSegm" style="display: none;">
+                            <hr>
+                            <h4>Segmented histology maps:</h4>
+                            <div id="panelPreviewSegmImages">
+                                ...
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-9 col-xs-12" id="main_container">
+        <div class="col-md-8 col-xs-12" id="main_container">
             <div class="row">
 
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -82,6 +106,10 @@
                             <h4>Number of images:
                                 <span class="label label-default" id="infoData">...</span>
                             </h4>
+                            <div class="alert alert-danger fade in" id="message-error" style="position: relative; z-index: 10; display: none">
+                                <button type="button" class="close">×</button>
+                                <div id="message-error-text">Your error message goes here...</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,17 +121,47 @@
                         </div>
                         <div class="panel-body">
                             <img class="img-thumbnail" id="imgQuery">
+                            <hr>
+                            <div class="row">
+                                <div class="progress" id="progressQueryCBIR" style="display: none;">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%"></div>
+                                </div>
+                                <div class="col-xs-12" id="retQueryCBIR">
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <img src="/data/img/doge2.jpg" width="100%">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="panel-footer">
-                            <a class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search in histology database</a>
+                            <a class="btn btn-default disabled"><span class="glyphicon glyphicon-search"></span> Search in histology database</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <hr>
-
 {#    <div class="row algnc">#}
 {#        <div class="col-md-6">#}
 {#            <div class="panel panel-defailt">#}
@@ -218,6 +276,7 @@
     //
     var dataHistology = null;
     var currentPreviewIdx = -1;
+    var isQueryProcessed = false;
     $(function () {
         var isShowImgZoomed = false;
         showWaitProgress(true);
@@ -278,6 +337,17 @@
             $("#infoData").empty();
             $("#infoData").append(pNumImg);
         }
+        function loadCurrentPreviewSegm(idx, turl) {
+            currentPreviewIdx = idx;
+            var timgURL     = turl;
+            var pDirSize    = dataHistology[currentPreviewIdx][4];
+            var pNumImg     = dataHistology[currentPreviewIdx][1][0]*dataHistology[currentPreviewIdx][1][1];
+            $("#imgCurrent").attr('src', timgURL);
+            $("#infoSize").empty();
+            $("#infoSize").append(pDirSize);
+            $("#infoData").empty();
+            $("#infoData").append(pNumImg);
+        }
         //
         function showWaitProgress(isShow) {
             if(isShow) {
@@ -289,9 +359,7 @@
         $("#btnShowDataset").on('click', function () {
             console.log('TODO: #btnShowDataset');
         });
-        function getSelectedImgURL(tx,ty) {
-            var dataPath = "{{ STATIC_URL }}datadb.histology/";
-            var timgURL = dataPath + dataHistology[currentPreviewIdx][3];
+        function getRowCol(tx,ty) {
             var tsiz = dataHistology[currentPreviewIdx][1];
             var timsizX = $("#imgCurrent").width();
             var timsizY = $("#imgCurrent").height();
@@ -309,6 +377,14 @@
             if (posc > tsiz[1]) {
                 posc = tsiz[1];
             }
+            return [posr, posc];
+        }
+        function getSelectedImgURL(tx,ty) {
+            var dataPath = "{{ STATIC_URL }}datadb.histology/";
+            var timgURL = dataPath + dataHistology[currentPreviewIdx][3];
+            var tmp=getRowCol(tx,ty);
+            var posr = tmp[0];
+            var posc = tmp[1];
             posr = "000" + posr;
             posc = "000" + posc;
             posr = posr.substr(posr.length - 3);
@@ -317,16 +393,91 @@
             return timgURL;
         }
         $("#imgCurrent").mousedown(function (ev) {
-            console.log('FUCK');
-            var ctxPos = $(this).offset();
-            var tx = ev.clientX - ctxPos.left;
-            var ty = ev.clientY - ctxPos.top;
-            if(isShowImgZoomed) {
-                var turl = getSelectedImgURL(tx,ty);
-                $("#imgQuery").attr('src', turl);
-                $("#panelQuery").show();
+            if(!isQueryProcessed) {
+                var ctxPos = $(this).offset();
+                var tx = ev.clientX - ctxPos.left;
+                var ty = ev.clientY - ctxPos.top;
+                if(isShowImgZoomed) {
+                    var turl = getSelectedImgURL(tx,ty);
+                    $("#imgQuery").attr('src', turl);
+                    $("#panelQuery").show();
+                    var tmp=getRowCol(tx,ty);
+                    var posr=tmp[0];
+                    var posc=tmp[1];
+                    loadCurrentPreview(currentPreviewIdx);
+                    runSearchRequest(parseInt(currentPreviewIdx)+1, posr, posc);
+                }
             }
         });
+        //
+        var funShowErrorMessage = function(txt) {
+            $('#message-error-text').html(txt);
+            $('#message-error').show();
+        };
+        function runSearchRequest(idxSlide, idxRow, idxCol) {
+            $("#panelPreviewSegmImages").empty();
+            $("#retQueryCBIR").empty();
+            $("#progressQuerySEGM").show();
+            $("#progressQueryCBIR").show();
+            console.log("idxSlide=" + idxSlide + ", idxRow=" + idxRow + ", idxCol=" + idxCol);
+            var params={
+                idSlide: idxSlide,
+                idRow: idxRow,
+                idCol: idxCol
+            };
+            $.ajax({
+                url: "{% url 'apphistology:apiSearch' %}",
+                type: 'POST',
+                data: params,
+                success: function (data, textStatus, jqXHR) {
+                    var retJSON = $.parseJSON(data);
+                    $("#progressQuerySEGM").hide();
+                    $("#progressQueryCBIR").hide();
+                    //
+                    $("#panelPreviewSegm").show();
+                    $("#retQueryCBIR").empty();
+                    var retCBIR=retJSON[0];
+                    for(var ii=0; ii<retCBIR.length; ii++) {
+                        var timg = $('<img>', {
+                            'id': 'retcbir-' + ii,
+                            'src': "{{ STATIC_URL }}/datadb.histology/" + retCBIR[ii][0],
+                            'class': 'img-thumbnail',
+                            'data-id': ii
+                        });
+                        var tdiv = $('<div>', {
+                            class: "col-xs-3 col-sm-4 col-lg-3"
+                        });
+                        tdiv.append(timg);
+                        $("#retQueryCBIR").append(tdiv);
+                    }
+                    var retSEGM=retJSON[1];
+                    $("#panelPreviewSegmImages").empty();
+                    for(var ii=0; ii<retSEGM.length; ii++) {
+                        var tidx = 'img-segm-'+ii;
+                        var timg = $('<img>', {
+                            'id': tidx,
+                            'src': "{{ STATIC_URL }}/users_histology/" + retSEGM[ii],
+                            'class': 'img-thumbnail',
+                            'data-id': ii
+                        });
+                        timg.on('click', function() {
+                            var tidx = $(this).attr('data-id');
+                            var turl = $(this).attr('src');
+                            loadCurrentPreviewSegm(tidx, turl);
+                            console.log('click tidx = ' + tidx);
+                        });
+                        $("#panelPreviewSegmImages").append(timg);
+                    }
+                    console.log(retJSON);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#progressQuerySEGM").hide();
+                    $("#progressQueryCBIR").hide();
+                    funShowErrorMessage('Error: ' + textStatus);
+                }
+            });
+        }
+        //
         $("#imgCurrent").mousemove(function (ev) {
             var ctxPos = $(this).offset();
             var tx = ev.clientX - ctxPos.left;

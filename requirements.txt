@@ -1,0 +1,9 @@
+numpy
+scipy
+matplotlib
+multiprocessing
+scikit-learn
+scikit-image
+pydicom
+nibabel
+Django

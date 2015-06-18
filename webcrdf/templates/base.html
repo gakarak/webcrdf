@@ -2,8 +2,8 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/data/cssjs/papaya.css" />
-    <script type="text/javascript" src="/data/cssjs/papaya.js"></script>
+    <link rel="stylesheet" type="text/css" href="/data/cssjs/papaya-0.7.css" />
+    <script type="text/javascript" src="/data/cssjs/papaya-0.7.js"></script>
 
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css">
@@ -90,29 +90,52 @@
         padding: 8px;
     }
 </style>
-<div class="navbar navbar-default navbar-custom">
+<div class="navbar navbar-default navbar-custom" role="navigation">
     <div class="container">
         <div class="navbar-header">
 {#            <a class="navbar-brand" href="/">Hello, <strong>{{ userName }}</strong></a>#}
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" href="/">IMLAB&trade;</a>
-{#            &trade;#}
         </div>
         <div class="navbar-collapse collapse">
 {#            <ul class="nav navbar-nav pull-left">#}
             <ul class="nav navbar-nav">
-            <!-- class="active" -->
-                <li id="navbar-cbir">   <a href="/appcbir/">CBIR-CT</a></li>
-                <li id="navbar-xray">   <a href="/appxray/">ROI-Search</a></li>
-{#                <li id="navbar-xray">   <a href="#">ROI-Search</a></li>#}
-                <li id="navbar-segmxr"> <a href="/appsegmxr/">X-RAY Segmentation</a></li>
-                <!--li id="navbar-segmct"> <a href="#">CT Segmentation</a></li-->
-                <!--li id="navbar-visdb">  <a href="#">BTBDB Visualisation</a></li-->
-                <li id="navbar-melanoma"> <a href="/appmelanoma/">Melanoma</a></li>
-                <li id="navbar-segmct"> <a href="/appsegmct/">CT Segmentation</a></li>
-                <li id="navbar-drugres"> <a href="/appdrugres/">Drug-Resistance</a></li>
-                <li id="navbar-webcam"> <a href="/appwebcam/">WebCam-Search</a></li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                        <span class="glyphicon glyphicon-leaf"></span> Medical Imaging<span class="caret"></span>
+                    </a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li id="navbar-cbir">   <a href="/appcbir/">CBIR-CT</a></li>
+                        <li id="navbar-xray">   <a href="/appxray/">ROI-Search</a></li>
+                        <li id="navbar-segmxr"> <a href="/appsegmxr/">X-RAY Segmentation</a></li>
+                        <li id="navbar-melanoma"> <a href="/appmelanoma/">Melanoma</a></li>
+                        <li id="navbar-segmct"> <a href="/appsegmct/">CT Segmentation</a></li>
+                        <li id="navbar-drugres"> <a href="/appdrugres/">Drug-Resistance</a></li>
+                        <li class="divider"></li>
+                        <li id="navbar-histology"> <a href="/apphistology/">Histology</a></li>
+                    </ul>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                        <span class="glyphicon glyphicon-eye-open"></span> Computer Vision<span class="caret"></span>
+                    </a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li id="navbar-webcam">
+                            <a href="/appwebcam/"><span class="glyphicon glyphicon-facetime-video"></span> WebCam-Search (need camera)</a>
+                        </li>
+                    </ul>
+                </li>
                 <li id="navbar-about" > <a href="http://tuberculosis.by/research/experience/overview">About</a></li>
             </ul>
+{#            <ul class="nav navbar-nav pull-right">#}
+{#                <li id="navbar-about" > <a href="http://tuberculosis.by/research/experience/overview">About</a></li>#}
+{#            </ul>#}
+
 {#            <ul class="nav navbar-nav pull-right">#}
 {#                <li style="padding-left: 18px"><a class="btn btn-default" href="/logout/"><span class="glyphicon glyphicon-off"></span> Logout</a></li>#}
 {#            </ul>#}

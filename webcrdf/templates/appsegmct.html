@@ -19,7 +19,7 @@
     </style>
 <div class="container-fluid fill-heigth">
 <div class="row fill-heigth">
-    <div class="col-md-2 col-sm-2 content">
+    <div class="col-md-3 col-lg-2 content">
         <h4> <kbd>1</kbd> Upload your CT chest images:</h4><hr/>
 {#        {% block upload %}#}
 {#            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmct:upload' %}">#}
@@ -42,18 +42,20 @@
 {#        {% endblock %}#}
         <br>
     </div>
-    <div class="col-md-7 content" style="text-align: center" id="canvas_container">
+    <div class="col-md-9 col-lg-8 content" style="text-align: center" id="canvas_container">
 {#    <div class="row text-center" id="canvas_container">#}
         <h4> <kbd>2</kbd> Segmentation results:</h4><hr/>
         <div id="user_images">
         {% for ii in uploadedImages %}
-            <div class="col-md-4 col-sm-6 hero-feature">
+            <div class="col-sm-6 col-md-4  hero-feature">
                 <div class="thumbnail">
 {#                    <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">#}
                     <a id="ashow-{{ ii.idx }}" class="container00" href="#" url-inp="{{ ii.urlInp }}" data-toggle="modal" data-target="#myModal3D">
 {#                        <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">#}
                         <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" id="{{ ii.idx }}">
-                        <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
+                        {% if not ii.isFinished %}
+                            <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
+                        {% endif %}
                     </a>
                     <div class="caption" id="caption-{{ ii.idx }}">
                         {% if ii.isFinished %}
@@ -158,9 +160,7 @@
                     <hr>
                     {% block upload %}
                         <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmct:upload' %}">
-{#                            <div class="btn-group btn-group-justified">#}
                                 <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
-{#                            </div>#}
                         </form>
                     {% endblock %}
                     <br>
@@ -178,7 +178,6 @@
                     <br>
                     Currently not supported
                 </div>
-
           </div>
         </div>
       </div>
@@ -217,7 +216,7 @@
         return $(this).ekkoLightbox();
     });
     $("a[id^='ashow-']").on("click", function() {
-        var tmpUrl = $(this).attr('url-inp');
+        var tmpUrl = [$(this).attr('url-inp')];
         console.log(tmpUrl);
         if(currentUrlCT!=null && currentUrlCT===tmpUrl) {
 //            papayaContainers[0].viewer.loadBaseImage(tmpUrl, true, false);
@@ -240,7 +239,6 @@
                 url: "{% url 'appsegmct:getinfo' %}",
                 success: function(data) {
                     currentImageInfo = $.parseJSON(data);
-{#                    console.log(currentImageInfo);#}
                     var isAllFinished = true;
                     var tStatus, tIdx;
                     for(var ii=0; ii<currentImageInfo.length; ii++) {
@@ -266,8 +264,6 @@
                             caption.append(btnError);
                             $("#error-text").html(currentImageInfo[ii].txtError);
                         } else {
-{#                            $('#'   + tIdx).attr('src', currentImageInfo[ii].url);#}
-{#                            $('#a_' + tIdx).attr('href',currentImageInfo[ii].url);#}
                             $('#info_' + tIdx).show();
                             isAllFinished = false;
                         }
@@ -281,8 +277,8 @@
                 }
             });
         }
+
         function updateImageList() {
-{#            imageListUpdater();#}
             var currDelay = 100;
             if(timeCounter>0) {
                 currDelay=timeDelay;
@@ -294,12 +290,13 @@
             }, currDelay);
         }
         updateImageList();
+
         ///////////////////////////////////////
-{#        $("#id_help").tooltip({html:true});#}
         $("#navbar-segmct").addClass("active");
         $('.alert .close').on('click', function(e) {
             $(this).parent().hide();
         });
+
         $('#id_file').fileupload({
             url: "{% url 'appsegmct:upload' %}",
             dataType: 'json',
@@ -309,9 +306,6 @@
             done: function (e, data) {
                 console.log("[DONE] : FUCK!" + data);
                 window.location="{% url 'appsegmct:index' %}";
-{#                $.each(data.result.files, function (index, file) {#}
-{#                    $('<p/>').text(file.name).appendTo('#files');#}
-{#                });#}
             },
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -320,16 +314,12 @@
         }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-{#        $("#id_file").on("change", function() {#}
-{#            $("#id_form_upload").submit();#}
-{#        });#}
         var funShowErrorMessage = function(txt) {
             $('#message-error-text').html(txt);
             $('#message-error').show();
         };
     /////////////////////////////////////////////////
         $("#id-showdb").on('click', function () {
-            console.log('FUCK');
             var gal = $('#idx-gallery');
             var param={'num': 10};
             $.ajax({

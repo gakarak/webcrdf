@@ -399,7 +399,7 @@
         $("#myModalInfo").show();
     });
     $("a[id^='ctshow-']").on("click", function() {
-        var tmpUrl = $(this).attr('url-inp');
+        var tmpUrl = [$(this).attr('url-inp')];
         console.log(tmpUrl);
         if(currentUrlCT!=null && currentUrlCT===tmpUrl) {
 //            papayaContainers[0].viewer.loadBaseImage(tmpUrl, true, false);

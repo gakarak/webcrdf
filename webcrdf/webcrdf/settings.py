@@ -20,6 +20,7 @@ import appsegmxr.alg    as algSegmXR
 import appmelanoma.alg  as algMelanoma
 import appsegmct.alg    as algSegmCT
 import appdrugres.alg   as algDrugRes
+import apphistology.alg as algHistology
 
 
 # Quick-start development settings - unsuitable for production
@@ -49,7 +50,9 @@ INSTALLED_APPS = (
     'appxray',
     'appsegmxr',
     'appmelanoma',
-    'appsegmct'
+    'appsegmct',
+    'appdrugres',
+    'apphistology'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,7 +92,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
@@ -131,7 +135,7 @@ IMAGEDB_DPTS=[]
 for ii in glob.glob('%s/data/datadb.xray/*.png' % BASE_DIR):
     img=cv2.imread(ii, 0) ##cv2.CV_LOAD_IMAGE_GRAYSCALE)
     fpts="%s_pts.csv" % ii
-    if img!=None:
+    if img is not None:
         tmp={'w': img.shape[1], 'h': img.shape[0], 'url': '/data/datadb.xray/%s' % os.path.basename(ii), 'idx': os.path.basename(ii)}
         # IMAGEDB.append((img, tmp))
         IMAGEDB.append(tmp)
@@ -164,7 +168,7 @@ if not os.path.isdir(STATIC_ROOT_MELANOMA_USERDATA):
 IMAGEDB_MELANOMA=[]
 for ii in glob.glob('%s/*.png' % STATIC_ROOT_MELANOMA_DBDATA):
     img=cv2.imread(ii, 0)
-    if img!=None:
+    if img is not None:
         tmp={'w': img.shape[1], 'h': img.shape[0], 'url': '/data/datadb.melanoma/%s' % os.path.basename(ii), 'idx': os.path.basename(ii)}
         IMAGEDB_MELANOMA.append(tmp)
 
@@ -200,3 +204,9 @@ for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):
              'urlData': '/data/datadb.drugres/%s' % os.path.basename(ii),
              'idx': os.path.basename(ii)}
         IMAGEDB_CT_DRUGRES.append(tmp)
+
+#### Loading Histology data
+URL_HISTOLOGY_USERDATA='data/users_histology'
+STATIC_ROOT_HISTOLOGY_USERDATA=os.path.join(BASE_DIR, 'data/users_histology')
+STATIC_ROOT_HISTOLOGY_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.histology')
+HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)

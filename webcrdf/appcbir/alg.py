@@ -17,6 +17,8 @@ from skimage import io
 from skimage import draw
 from skimage import exposure
 import os
+import struct
+import math
 
 import matplotlib.pyplot as plt
 

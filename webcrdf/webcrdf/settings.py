@@ -21,6 +21,7 @@ import appmelanoma.alg  as algMelanoma
 import appsegmct.alg    as algSegmCT
 import appdrugres.alg   as algDrugRes
 import apphistology.alg as algHistology
+import appvideocbir.alg as algVideoCBIR
 
 
 # Quick-start development settings - unsuitable for production
@@ -52,7 +53,8 @@ INSTALLED_APPS = (
     'appmelanoma',
     'appsegmct',
     'appdrugres',
-    'apphistology'
+    'apphistology',
+    'appvideocbir'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -121,8 +123,8 @@ if not os.path.isdir(STATIC_ROOT_USERDATA_CBIR):
     os.mkdir(STATIC_ROOT_USERDATA_CBIR)
 
 CBIR=algCBIR.SCBIR(STATIC_ROOT_DATADB)
-CBIR.load()
-CBIR.printInfo()
+# CBIR.load()
+# CBIR.printInfo()
 
 #### Loading X-Ray data
 STATIC_ROOT_XRAY_USERDATA  =os.path.join(BASE_DIR, 'data/users_xray')
@@ -209,4 +211,11 @@ for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):
 URL_HISTOLOGY_USERDATA='data/users_histology'
 STATIC_ROOT_HISTOLOGY_USERDATA=os.path.join(BASE_DIR, 'data/users_histology')
 STATIC_ROOT_HISTOLOGY_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.histology')
-HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)
+# HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)
+HISTOLOGY=algHistology.HistologySearcher()
+
+#### Loading Video-CBIR data
+URL_VIDEOCBIR_USERDATA='data/users_videocbir'
+STATIC_ROOT_VIDEOCBIR_USERDATA=os.path.join(BASE_DIR, 'data/users_videocbir')
+STATIC_ROOT_VIDEOCBIR_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.videocbir')
+VIDEOCBIR=algVideoCBIR.VideoCBIRSearcher(STATIC_ROOT_VIDEOCBIR_DBDATA)

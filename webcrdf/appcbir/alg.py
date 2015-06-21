@@ -607,6 +607,7 @@ if __name__=="__main__":
     cbir=SCBIR(def_wdir)
     cbir.load()
     cbir.printInfo()
+    plt.get_cmap()
     ##############################
 
     # fimg='/home/ar/img/lena.png'

@@ -22,5 +22,6 @@ urlpatterns = patterns('',
     url(r'^appsegmct/',	    include('appsegmct.urls',    namespace='appsegmct',     app_name='appsegmct')),
     url(r'^appdrugres/',	include('appdrugres.urls',   namespace='appdrugres',    app_name='appdrugres')),
     url(r'^apphistology/',	include('apphistology.urls', namespace='apphistology',  app_name='apphistology')),
+    url(r'^appvideocbir/',	include('appvideocbir.urls', namespace='appvideocbir',  app_name='appvideocbir')),
 )
 

@@ -30,8 +30,8 @@ def apiSearch(request):
     if request.method=='POST':
         qIdxVideo=int(request.POST['idVideo'])
         qIdxFrame=int(request.POST['idFrame'])
-        # retJSON=HISTOLOGY.processSelection(qIdxSlide, qIdxRow, qIdxCol, odir)
-        retJSON=None
+        retJSON=VIDEOCBIR.processSelection(qIdxVideo, qIdxFrame)
+        # retJSON=[]
         return HttpResponse(json.dumps(retJSON))
     else:
         return HttpResponse(json.dumps(()))

@@ -45,7 +45,7 @@ class VideoCBIRSearcher:
         lstDST=[]
         for ii in xrange(len(self.lstDSC)):
             tdst=MT.pairwise_distances(self.lstDSC[ii], tdsc, metric='l1')[:,0]
-            tdst=(255*(2.0-tdst)/2.0).astype(np.int)
+            tdst=(255*(2.0-1.5*tdst)/2.0).astype(np.int)
             tdst[tdst<0]=0
             tdst[tdst>=255]=255
             lstDST.append(tdst.tolist())

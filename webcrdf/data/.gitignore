@@ -26,3 +26,4 @@
 /users_histology/
 *.drugres
 /datadb.histology
+/datadb.videocbir/

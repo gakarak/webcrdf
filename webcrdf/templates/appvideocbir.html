@@ -465,8 +465,8 @@
                             if(posIdx>=(sizCanvasW)) posIdx=sizCanvasW-1;
                             var urlImg=getFrameName(idxCanvas,posIdx);
                             $("#idImagePreview").attr('src',  urlImg);
-                            $("#idImagePreview").css('left', ev.clientX+25);
-                            $("#idImagePreview").css('top',  ev.clientY+64);
+                            $("#idImagePreview").css('left', ev.pageX+25);
+                            $("#idImagePreview").css('top',  ev.pageY+0);
                         }
                     });
                 }

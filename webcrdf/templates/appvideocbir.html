@@ -258,6 +258,7 @@
             //////////
             var arrCanvasImages=null;
             var isRequestInProgress=false;
+            $("#navbar-videocbir").addClass("active");
             $("#progressContainer").show();
             $.getJSON("{{ STATIC_URL }}datadb.videocbir/data.json", function (data) {
                 dataJSON = data;

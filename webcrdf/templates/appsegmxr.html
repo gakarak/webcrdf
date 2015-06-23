@@ -36,9 +36,9 @@
                         {% block upload %}
                             <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmxr:upload' %}">
                                 <div class="btn-group-vertical" style="width: 100%;">
+                                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
                                     <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
                                     <a class="btn btn-danger" href="{% url 'appsegmxr:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
-                                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
                                 </div>
                             </form>
                         {% endblock %}

@@ -69,8 +69,8 @@
                         {% block upload %}
                             <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appmelanoma:upload' %}">
                                 <div class="btn-group-vertical" style="width: 100%">
-                                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
                                     <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
                                     <a class="btn btn-danger" href="{% url 'appmelanoma:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Clear </a>
                                 </div>
                             </form>
@@ -169,17 +169,17 @@
                     <div class="panel-heading text-left" id="id_txt_body">
                         Legend:
                     </div>
-                    <table class="table">
+                    <table class="table algnc">
                         <tr>
-                            <th>
-                                <img src="/data/legend_tnevus.png" class="img_max32"> <b>Typical nevus</b>
-                            </th>
-                            <th>
-                                <img src="/data/legend_anevus.png" class="img_max32"> <b>Atypical nevus</b>
-                            </th>
-                            <th>
-                                <img src="/data/legend_melanoma.png" class="img_max32"> <b>Melanoma</b>
-                            </th>
+                            <td>
+                                <img src="/data/legend_tnevus.png" class="img_max32"><br><b>Typical nevus</b>
+                            </td>
+                            <td>
+                                <img src="/data/legend_anevus.png" class="img_max32"><br><b>Atypical nevus</b>
+                            </td>
+                            <td>
+                                <img src="/data/legend_melanoma.png" class="img_max32"><br><b>Melanoma</b>
+                            </td>
                         </tr>
                     </table>
                 </div>

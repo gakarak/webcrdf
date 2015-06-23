@@ -18,34 +18,52 @@
             top: 10px;
             left: 10px;
         }
+        .div-90p {
+            width: 100%;
+        }
+        .algnc {
+            text-align: center;
+        }
     </style>
-<div class="container-fluid fill-heigth">
-<div class="row fill-heigth">
-    <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3 content">
-        <h4> <kbd>1</kbd> Upload your X-Ray chest images:</h4><hr/>
-        {% block upload %}
-            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmxr:upload' %}">
-                <div class="btn-group-vertical">
-                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
-                    <a class="btn btn-danger" href="{% url 'appsegmxr:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
-{#                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Show Database</a>#}
-                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+    <div class="container div-90p">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4> <kbd>1</kbd> Upload your X-Ray chest images:</h4>
+                    </div>
+                    <div class="panel-body">
+                        {% block upload %}
+                            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmxr:upload' %}">
+                                <div class="btn-group-vertical" style="width: 100%;">
+                                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
+                                    <a class="btn btn-danger" href="{% url 'appsegmxr:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
+                                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                                </div>
+                            </form>
+                        {% endblock %}
+                    </div>
                 </div>
-            </form>
-        {% endblock %}
-    </div>
-    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7 content" style="text-align: center" id="canvas_container"  style="display: table-row;">
-        <h4> <kbd>2</kbd> Segmentation results:</h4><hr/>
-        <div id="user_images" style="min-height: 300px;">
-        {% for ii in uploadedImages %}
-            <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">
-                <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">
-                <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
-            </a>
-        {% endfor %}
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading algnc">
+                        <h4> <kbd>2</kbd> Segmentation results:</h4>
+                    </div>
+                    <div class="panel-body algnc">
+                        <div id="user_images" style="min-height: 300px;">
+                            {% for ii in uploadedImages %}
+                                <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">
+                                    <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">
+                                    <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width: 90%; height: 90%">
@@ -60,9 +78,6 @@
       </div>
     </div>
   </div>
-</div>
-
-
 </div>
 
 <script type="application/javascript">
@@ -204,41 +219,6 @@
                 }
             });
         });
-    /////////////////////////////////////////////////
-        /*
-        $("#user_images img").on('click', function () {
-            console.log('fuck:' + $(this).attr('id'));
-            funLoadImageToCanvas(this);
-        });
-        var funLoadImageToCanvas = function (imgLink) {
-            imageIsLoaded = false;
-            imageCurrent = new Image();
-            imageCurrent.src = imgLink.src;
-            imageCurrent.onload = function () {
-                ctxMaxSize = $("#canvas_container").width()-80;
-                var tmpMax = Math.max(this.width, this.height);
-                imageCurrentW = this.width;
-                imageCurrentH = this.height;
-                if (this.width>this.height) {
-                    canvasW  = ctxMaxSize;
-                    canvasH = Math.floor(ctxMaxSize*this.height/this.width);
-                } else {
-                    canvasH = ctxMaxSize;
-                    canvasW  = Math.floor(ctxMaxSize*this.width/this.height);
-                }
-                imageCurrentK = imageCurrentW/canvasW;
-                Rect.x1 = Math.floor(0.01*canvasW);
-                Rect.x2 = Math.floor(0.20*canvasW);
-                Rect.y1 = Math.floor(0.01*canvasH);
-                Rect.y2 = Math.floor(0.20*canvasH);
-                canvas.width  = canvasW;
-                canvas.height = canvasH;
-                ctx = canvas.getContext('2d');
-                imageCurrIdx = $(imgLink).attr('id');
-                updateCanvasRect();
-            };
-        };
-        */
     /////////////////////////////////////////////////
     });
 </script>

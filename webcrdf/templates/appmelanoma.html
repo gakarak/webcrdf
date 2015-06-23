@@ -27,7 +27,7 @@
         }
         .img_scores {
             max-width:  180px;
-            max-height: 180px;
+            width:      100%;
         }
         .main_image00 {
             width: 100%;
@@ -38,155 +38,160 @@
             top: 10px;
             left: 10px;
         }
-    .bs-example {
-        margin-right: 0;
-        margin-left: 0;
-        background-color: #fff;
-        border-style: solid;
-        border-color: #ddd;
-        border-width: 1px;
-        border-radius: 4px 4px 0 0;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-    }
+        .bs-example {
+            margin-right: 0;
+            margin-left: 0;
+            background-color: #fff;
+            border-style: solid;
+            border-color: #ddd;
+            border-width: 1px;
+            border-radius: 4px 4px 0 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+        .algnc {
+            text-align: center;
+        }
+        .div-90p {
+            width: 100%;
+        }
     </style>
-<div class="container-fluid fill-heigth">
-<div class="row fill-heigth">
-    <div class="col-md-2 content">
-        <h4> <kbd>1</kbd> Upload legion images for examination:</h4>
-        {% block upload %}
-            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appmelanoma:upload' %}">
-                <div class="btn-group-vertical">
-                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
-{#                    <a class="btn btn-danger" href="{% url 'appmelanoma:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>#}
-{#                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Show Database</a>#}
-                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
-                    <a class="btn btn-danger" href="{% url 'appmelanoma:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Clear </a>
-                </div>
-            </form>
-        {% endblock %}
-
-        <hr>
-{#        <div id="user_images">#}
-{#        {% for ii in uploadedImages %}#}
-{#            <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">#}
-{#        {% endfor %}#}
-{#        </div>#}
-
-        <div id="user_images" style="min-height: 300px;">
-        <h4> <kbd>2</kbd> Examined images:</h4>
-        {% for ii in uploadedImages %}
-{#            <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">#}
-            <div class="container00">
-{#                <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">#}
-                {% if ii.isSegm %}
-                    <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.urlSegm }}" style="max-width: 90px; max-height: 90px;" id="{{ ii.idx }}">
-                {% else %}
-                    <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="max-width: 90px; max-height: 90px;" id="{{ ii.idx }}">
-                {% endif %}
-                <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
-            </div>
-{#            </a>#}
-        {% endfor %}
-        <hr/>
-
-        </div>
-
-    </div>
-    <div class="col-md-8 content" style="text-align: center" id="canvas_container"  style="display: table-row;">
-
-        <div class="col-md-6">
-            <h4> <kbd>3</kbd> Examination results:</h4><hr/>
-            <img id="img_selected" class="img-thumbnail" src="/data/cameramask.png" style="max-width: 380px; max-height: 380px;">
-            <br>
-            <br>
-            <div class="row">
-{#                <div id="btn_show_segm" class="btn btn-primary"><span class="glyphicon glyphicon-eye-open"></span> Show segmented </div>#}
-                <a id="id_btn_show_segm" class="btn btn-sm btn-primary" data-toggle="lightbox" data-title="Segmented image"><span class="glyphicon glyphicon-eye-open"></span> Show enlarged</a>
-            </div>
-            <div class="progress" id="id_progress_div" style="display: none;">
-                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="id_progress"></div>
-            </div>
-            <br>
-            <div class="panel panel-default">
-                <div class="panel-heading text-left" id="id_txt_body">
-                    Melanoma classification results:
-                </div>
-                <div class="panel-body" id="id_txt_body2">
-{#                    <h5>Header info</h5>#}
-                    <b>Extracted features:</b>
-                </div>
-                <!-- Table -->
-                <table class="table" id="id_txt_table">
-                </table>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <h4> <kbd>4</kbd> Similar images:</h4><hr/>
-            <div class="row">
-                <div class="col-xs-6">
-{#                    <div class="container00">#}
-                    <a id="id_a_imsim1" data-toggle="lightbox" data-title="Similar image #1" href="/data/cameramask.png">
-                        <img id="id_imsim1" class="img-thumbnail img_scores" src="/data/cameramask.png" width="200px" height="200px">
-                    </a>
-{#                        <span class="overlay_image00 glyphicon glyphicon-picture" ></span>#}
-{#                    </div>#}
-                </div>
-                <div class="col-xs-6">
-                    <a id="id_a_imsim2" data-toggle="lightbox" data-title="Similar image #2" href="/data/cameramask.png">
-                        <img id="id_imsim2" class="img-thumbnail img_scores" src="/data/cameramask.png" width="200px" height="200px">
-                    </a>
+<div class="container div-90p">
+<div class="row">
+    <div class="col-md-3 col-lg-2">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-12 col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4> <kbd>1</kbd> Upload legion images for examination:</h4>
+                    </div>
+                    <div class="panel-body">
+                        {% block upload %}
+                            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appmelanoma:upload' %}">
+                                <div class="btn-group-vertical" style="width: 100%">
+                                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
+                                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                                    <a class="btn btn-danger" href="{% url 'appmelanoma:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Clear </a>
+                                </div>
+                            </form>
+                        {% endblock %}
+                    </div>
                 </div>
             </div>
-            <br>
-            <div class="row">
-                <div class="col-xs-6">
-                    <a id="id_a_imsim3" data-toggle="lightbox" data-title="Similar image #3" href="/data/cameramask.png">
-                        <img id="id_imsim3" class="img-thumbnail img_scores" src="/data/cameramask.png" width="200px" height="200px">
-                    </a>
-                </div>
-                <div class="col-xs-6">
-                    <a id="id_a_imsim4" data-toggle="lightbox" data-title="Similar image #4" href="/data/cameramask.png">
-                        <img id="id_imsim4" class="img-thumbnail img_scores" src="/data/cameramask.png" width="200px" height="200px">
-                    </a>
+            <div class="col-xs-12 col-sm-8 col-md-12 col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4> <kbd>2</kbd> Examined images:</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div id="user_images" style="min-height: 300px;">
+                            {% for ii in uploadedImages %}
+                                <div class="container00">
+                                    {% if ii.isSegm %}
+                                        <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.urlSegm }}" style="max-width: 90px; max-height: 90px;" id="{{ ii.idx }}">
+                                    {% else %}
+                                        <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="max-width: 90px; max-height: 90px;" id="{{ ii.idx }}">
+                                    {% endif %}
+                                    <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <br>
-
-            <div class="panel panel-default">
-                <div class="panel-heading text-left" id="id_txt_body">
-                    Legend:
-                </div>
-                <table class="table">
-                    <tr>
-                        <th>
-                            <img src="/data/legend_tnevus.png" class="img_max32"> <b>Typical nevus</b>
-                        </th>
-                        <th>
-                            <img src="/data/legend_anevus.png" class="img_max32"> <b>Atypical nevus</b>
-                        </th>
-                        <th>
-                            <img src="/data/legend_melanoma.png" class="img_max32"> <b>Melanoma</b>
-                        </th>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading text-left" id="id_txt_body_sim">
-{#                    <h4> <b>Looks like a NEVUS (1 of 4)</b></h4>#}
-                    <h4> <b>...</b></h4>
-                </div>
-{#                <div class="panel-body" id="id_txt_body2">#}
-{#                    <h5>Header info</h5>#}
-{#                </div>#}
-{#                <!-- Table -->#}
-{#                <table class="table" id="id_txt_table">#}
-{#                </table>#}
-            </div>
-
         </div>
     </div>
+    <div class="col-md-9 col-lg-10 algnc">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><kbd>3</kbd> Examination results:</h4>
+                    </div>
+                    <div class="panel-body algnc">
+                        <img id="img_selected" class="img-thumbnail" src="/data/cameramask.png" style="max-width: 380px; width: 100%">
+                        <br><br>
+                        <a id="id_btn_show_segm" class="btn btn-sm btn-primary" data-toggle="lightbox" data-title="Segmented image">
+                            <span class="glyphicon glyphicon-eye-open"></span> Show enlarged
+                        </a>
+                        <br>
+                        <div class="progress" id="id_progress_div" style="display: none;">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="id_progress"></div>
+                        </div>
+                        <br>
+                        <div class="panel panel-default">
+                            <div class="panel-heading text-left" id="id_txt_body">
+                                Melanoma classification results:
+                            </div>
+                            <div class="panel-body" id="id_txt_body2">
+                                <b>Extracted features:</b>
+                            </div>
+                            <table class="table" id="id_txt_table">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4> <kbd>4</kbd> Similar images:</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a id="id_a_imsim1" data-toggle="lightbox" data-title="Similar image #1" href="/data/cameramask.png">
+                                    <img id="id_imsim1" class="img-thumbnail img_scores" src="/data/cameramask.png">
+                                </a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a id="id_a_imsim2" data-toggle="lightbox" data-title="Similar image #2" href="/data/cameramask.png">
+                                    <img id="id_imsim2" class="img-thumbnail img_scores" src="/data/cameramask.png">
+                                </a>
+                            </div>
+                            </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a id="id_a_imsim3" data-toggle="lightbox" data-title="Similar image #3" href="/data/cameramask.png">
+                                    <img id="id_imsim3" class="img-thumbnail img_scores" src="/data/cameramask.png">
+                                </a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a id="id_a_imsim4" data-toggle="lightbox" data-title="Similar image #4" href="/data/cameramask.png">
+                                    <img id="id_imsim4" class="img-thumbnail img_scores" src="/data/cameramask.png">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left" id="id_txt_body">
+                        Legend:
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                <img src="/data/legend_tnevus.png" class="img_max32"> <b>Typical nevus</b>
+                            </th>
+                            <th>
+                                <img src="/data/legend_anevus.png" class="img_max32"> <b>Atypical nevus</b>
+                            </th>
+                            <th>
+                                <img src="/data/legend_melanoma.png" class="img_max32"> <b>Melanoma</b>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading text-left" id="id_txt_body_sim">
+                        <h4> <b>...</b></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -202,9 +207,6 @@
       </div>
     </div>
   </div>
-</div>
-
-
 </div>
 
 <script type="application/javascript">

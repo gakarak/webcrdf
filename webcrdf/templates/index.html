@@ -1,23 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
+    <script type="text/javascript">
+        function src_on_hover(el, src) {
+            el.setAttribute('src', src);
+        }
+    </script>
+    <style type="text/css">
+        .algnc {
+            text-align: center;
+        }
+    </style>
     <div class="container" xmlns="http://www.w3.org/1999/html">
-        <header class="jumbotron jumbotron-custom hero-spacer">
-            <h2><center>On-line services for Medical Image Analysis & Retrieval</center></h2>
-
-{#            <h1>BTBDB: Web-Services</h1>#}
-{#            <p>Here we presenting the 1-st version of web-based services which potentially can be included into the BTBDB Portal.</p>#}
-{#            <p>Portal contains several examples of interactive web applications for medical image processing tasks.</p>#}
-{#            <p><a class="btn btn-primary btn-large">Call to action!</a></p>#}
-            <script type="text/javascript">
-                function src_on_hover(el, src) {
-                    el.setAttribute('src', src);
-                }
-                /*
-                function src_un_hover(el, src) {
-                    el.setAttribute('src', src);
-                }
-                */
-            </script>
+{#        <header class="jumbotron jumbotron-custom hero-spacer algnc">#}
+        <header class="algnc">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2>On-line services for Medical Image Analysis & Retrieval</h2>
+                </div>
+            </div>
+            {#            <h1>BTBDB: Web-Services</h1>#}
+            {#            <p>Here we presenting the 1-st version of web-based services which potentially can be included into the BTBDB Portal.</p>#}
+            {#            <p>Portal contains several examples of interactive web applications for medical image processing tasks.</p>#}
+            {#            <p><a class="btn btn-primary btn-large">Call to action!</a></p>#}
         </header>
         <div class="row text-center">
             <div class="col-md-3 col-sm-6 hero-feature">

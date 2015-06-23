@@ -1,7 +1,7 @@
 webcrdf
 =======
-    Django project with three applications: 
-    CBIR, ROI-Search, X-Ray segmentation, WebCam-CBIR
+    Django project with some demo applications: 
+    CBIR, ROI-Search, X-Ray segmentation, WebCam-CBIR and others
 
 Parent project: http://tuberculosis.by/
 

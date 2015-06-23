@@ -1,0 +1,514 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <script type="text/javascript" src="{{ STATIC_URL }}cssjs/jquery.tmpl.js"></script>
+    <style type="text/css">
+        .div-90p {
+            width: 90%;
+        }
+        .algnc {
+            text-align: center;
+            align-content: center;
+            align-items: center;
+        }
+        .div-frm {
+            border: solid black;
+        }
+        .div-mid {
+            position: relative;
+            float: inherit;
+        }
+        .span-mid {
+            position: absolute;
+            text-shadow:
+            1px  1px 2px black,
+            1px -1px 2px black,
+            -1px  1px 2px black,
+            -1px -1px 2px black;
+            font-size: 64px;
+            color: orangered;
+            left: 50%; top: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .span-mid:hover {
+            font-size: 64px;
+            color: lightcoral;
+        }
+        .img-thumbnail:hover {
+            background-color: darkred;
+        }
+        .td-vc {
+            vertical-align: middle;
+            text-align: center;
+        }
+        .table >tbody >tr >td {
+            vertical-align: middle;
+            text-align: center;
+
+        }
+        .div-item {
+            display: table;
+            width: 100%;
+            height: 180px;
+        }
+        .div-content {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .row-centered {
+            text-align: center;
+        }
+        .panel-body {
+            padding: 6px;
+        }
+        #idImagePreview {
+            max-width: 256px;
+            display: none;
+            position: absolute;
+            left: 200px;
+            right: 200px;
+            box-shadow: 0 0 15px 8px;
+            z-index: 1000;
+        }
+        #panelRndSampl img {
+            max-width: 128px;
+        }
+        #infoHelpQuery {
+            padding: 16px;
+        }
+    </style>
+
+    <script id="rowTemplate" type="text/html">
+        <!--<div class="row">-->
+            <div class="col-md-12 col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row row-centered">
+                            <div class="col-xs-4 col-sm-2 col-md-1">
+                                <div class="div-item">
+                                    <div class="div-content">
+                                        <h3><strong><kbd>${ID_TEXT_S}</kbd></strong></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-8 col-sm-3 col-md-3">
+                                <div class="div-item">
+                                    <div class="div-content">
+                                        <a id='dlgVideo${ID_IDX}' param-idx="${ID_IDX}" href="#" data-toggle="modal" data-target="#dialogVideo" class="div-link">
+                                            <div class="div-mid">
+                                                <img src="${SRC_IMG_PREVIEW}" class="img-thumbnail" width="256px;">
+                                                <span class="glyphicon glyphicon-play-circle span-mid">
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-7 col-md-8">
+                                <div class="div-item">
+                                    <div class="div-content">
+                                        <div id="${ID_CANVAS_DIV}" style="width: 100%">
+                                            <canvas id="${ID_CANVAS}" param-idx="${ID_IDX}" height="96px" style="display: block; width: 100%; height: 96px;"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!--</div>-->
+    </script>
+
+
+    <img id="idImagePreview" src="#">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Random frame samples:</h4>
+                    </div>
+                    <div class="panel-body" id="panelRndSampl" style="text-align: center">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Current query: <span id="infoQuery"></span></h4>
+                    </div>
+                    <div class="panel-body">
+                        <div style="display: table;">
+                            <div class="div-content">
+                                <h4 id="infoHelpQuery">
+                                    <br>
+                                    <br>
+                                    <span class="glyphicon glyphicon-question-sign"></span> Please select query image from
+                                    <strong>"Random Queries"</strong> (left panel),
+                                    or from video frame-trackbar (mouse-click).
+                                    <br>
+                                    <br>
+                                    <br>
+                                </h4>
+                            </div>
+                        </div>
+                        <img class="img-thumbnail" src="" id="imageQuery" param-idcnv="" param-idfrm="" style="display: none;" width="100%">
+                    </div>
+                    <div class="panel-footer" style="text-align: center;">
+                        <button class="btn btn-primary disabled" id="buttonSearch">
+                            <span class="glyphicon glyphicon-search"></span>
+                            Search selected frame
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="progressContainer" style="display: none;">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="container div-90p" id="videoContainer">
+    </div>
+
+    <!-- Modal-Dialogs: BEGIN -->
+    <div class="modal fade" id="dialogVideo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Video Preview (mp4/webm)</h4>
+                </div>
+                <div class="modal-body" id="dialogVideoBody">
+                    <div align="center">
+                        <object class="embed-responsive-item">
+                            <video loop controls width="100%" id="videoPlayer">
+                                <source id='videoSrcMP4'  src="#"  type="video/mp4" />
+                                <source id='videoSrcWEBM' src="#" type="video/webm" />
+                            </video>
+                        </object>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal-Dialogs: END -->
+
+    <script type="text/javascript">
+        var isTemplateLoaded = false;
+        var numCanvas=null;
+        var arrCanvasId=null;
+        var arrCanvasDivId=null;
+        var sizCanvasH=96;
+        var dataJSON=null;
+        var isProcessLoading=false;
+        var numRandomSamples=15;
+        //
+        var idxSelectedVid=null;
+        var idxSelectedPos=0;
+        var isShowImagePreview=false;
+        var isLeftMouseDown=false;
+        var selectedCanvasIdx=null;
+        var selectedCanvasPos=null;
+        //
+        var colorMap=[
+            [0, 0, 255], [2, 2, 255], [4, 4, 255], [6, 6, 255], [8, 8, 255], [10, 10, 255], [12, 12, 255], [14, 14, 255], [16, 16, 255],
+            [18, 18, 255], [20, 20, 255], [22, 22, 255], [24, 24, 255], [26, 26, 255], [28, 28, 255], [30, 30, 255], [32, 32, 255],
+            [34, 34, 255], [36, 36, 255], [38, 38, 255], [40, 40, 255], [42, 42, 255], [44, 44, 255], [46, 46, 255], [48, 48, 255],
+            [50, 50, 255], [52, 52, 255], [54, 54, 255], [56, 56, 255], [58, 58, 255], [60, 60, 255], [62, 62, 255], [64, 64, 255],
+            [65, 65, 255], [68, 68, 255], [70, 70, 255], [72, 72, 255], [73, 73, 255], [76, 76, 255], [78, 78, 255], [80, 80, 255],
+            [81, 81, 255], [84, 84, 255], [86, 86, 255], [88, 88, 255], [89, 89, 255], [92, 92, 255], [94, 94, 255], [96, 96, 255],
+            [97, 97, 255], [100, 100, 255], [102, 102, 255], [104, 104, 255], [105, 105, 255], [108, 108, 255], [110, 110, 255],
+            [112, 112, 255], [113, 113, 255], [116, 116, 255], [118, 118, 255], [120, 120, 255], [121, 121, 255], [124, 124, 255],
+            [126, 126, 255], [128, 128, 255], [130, 130, 255], [131, 131, 255], [134, 134, 255], [136, 136, 255], [138, 138, 255],
+            [140, 140, 255], [142, 142, 255], [144, 144, 255], [146, 146, 255], [147, 147, 255], [150, 150, 255], [152, 152, 255],
+            [154, 154, 255], [156, 156, 255], [158, 158, 255], [160, 160, 255], [162, 162, 255], [163, 163, 255], [166, 166, 255],
+            [168, 168, 255], [170, 170, 255], [172, 172, 255], [174, 174, 255], [176, 176, 255], [178, 178, 255], [179, 179, 255],
+            [182, 182, 255], [184, 184, 255], [186, 186, 255], [188, 188, 255], [190, 190, 255], [192, 192, 255], [194, 194, 255],
+            [195, 195, 255], [198, 198, 255], [200, 200, 255], [202, 202, 255], [204, 204, 255], [206, 206, 255], [208, 208, 255],
+            [210, 210, 255], [211, 211, 255], [214, 214, 255], [216, 216, 255], [218, 218, 255], [220, 220, 255], [222, 222, 255],
+            [224, 224, 255], [226, 226, 255], [227, 227, 255], [230, 230, 255], [232, 232, 255], [234, 234, 255], [236, 236, 255],
+            [238, 238, 255], [240, 240, 255], [242, 242, 255], [243, 243, 255], [246, 246, 255], [248, 248, 255], [250, 250, 255],
+            [252, 252, 255], [254, 254, 255], [255, 254, 254], [255, 252, 252], [255, 250, 250], [255, 248, 248], [255, 246, 246],
+            [255, 244, 244], [255, 242, 242], [255, 240, 240], [255, 238, 238], [255, 236, 236], [255, 234, 234], [255, 232, 232],
+            [255, 230, 230], [255, 228, 228], [255, 226, 226], [255, 224, 224], [255, 222, 222], [255, 220, 220], [255, 218, 218],
+            [255, 216, 216], [255, 214, 214], [255, 211, 211], [255, 210, 210], [255, 208, 208], [255, 206, 206], [255, 204, 204],
+            [255, 202, 202], [255, 200, 200], [255, 198, 198], [255, 195, 195], [255, 194, 194], [255, 192, 192], [255, 190, 190],
+            [255, 188, 188], [255, 186, 186], [255, 184, 184], [255, 182, 182], [255, 179, 179], [255, 178, 178], [255, 176, 176],
+            [255, 174, 174], [255, 172, 172], [255, 170, 170], [255, 168, 168], [255, 166, 166], [255, 163, 163], [255, 162, 162],
+            [255, 160, 160], [255, 158, 158], [255, 156, 156], [255, 154, 154], [255, 152, 152], [255, 150, 150], [255, 147, 147],
+            [255, 146, 146], [255, 144, 144], [255, 142, 142], [255, 140, 140], [255, 138, 138], [255, 136, 136], [255, 134, 134],
+            [255, 131, 131], [255, 130, 130], [255, 128, 128], [255, 126, 126], [255, 124, 124], [255, 121, 121], [255, 120, 120],
+            [255, 118, 118], [255, 116, 116], [255, 113, 113], [255, 112, 112], [255, 110, 110], [255, 108, 108], [255, 105, 105],
+            [255, 104, 104], [255, 102, 102], [255, 100, 100], [255, 97, 97], [255, 96, 96], [255, 94, 94], [255, 92, 92], [255, 89, 89],
+            [255, 88, 88], [255, 86, 86], [255, 84, 84], [255, 81, 81], [255, 80, 80], [255, 78, 78], [255, 76, 76], [255, 73, 73],
+            [255, 72, 72], [255, 70, 70], [255, 68, 68], [255, 65, 65], [255, 64, 64], [255, 62, 62], [255, 60, 60], [255, 57, 57],
+            [255, 56, 56], [255, 54, 54], [255, 52, 52], [255, 49, 49], [255, 48, 48], [255, 46, 46], [255, 44, 44], [255, 41, 41],
+            [255,40, 40], [255, 38, 38], [255, 36, 36], [255, 33, 33], [255, 32, 32], [255, 30, 30], [255, 28, 28], [255, 25, 25],
+            [255, 24, 24], [255, 22, 22], [255, 20, 20], [255, 17, 17], [255, 16, 16], [255, 14, 14], [255, 12, 12], [255, 9, 9],
+            [255, 8, 8], [255, 6, 6], [255, 4, 4], [255, 1, 1], [255, 0, 0]];
+        $(function () {
+            //////////
+            var arrCanvasImages=null;
+            var isRequestInProgress=false;
+            $("#progressContainer").show();
+            $.getJSON("{{ STATIC_URL }}datadb.videocbir/data.json", function (data) {
+                dataJSON = data;
+                console.log(dataJSON);
+                initPage();
+            });
+            //////////
+            function initPage() {
+                numCanvas=dataJSON.length;
+                var tmplData=[];
+                for(var ii=0; ii<numCanvas; ii++) {
+                    var tdata={};
+                    tdata['ID_TEXT_S']=dataJSON[ii][0].split('-')[1];
+                    tdata['SRC_IMG_PREVIEW']='{{ STATIC_URL }}datadb.videocbir/'+dataJSON[ii][2];
+                    tdata['ID_CANVAS']="vidCanvas"+ii;
+                    tdata['ID_CANVAS_DIV']="vidCanvasDiv"+ii;
+                    tdata['ID_IDX']=ii;
+                    tmplData[ii]=tdata;
+                }
+                $("#rowTemplate").tmpl(tmplData).appendTo("#videoContainer");
+                isTemplateLoaded = true;
+                $("[id^=dlgVideo]").on('click',function() {
+                    var tidx=parseInt($(this).attr('param-idx'));
+                    var turl = "{{ STATIC_URL }}datadb.videocbir/" + dataJSON[tidx][0];
+                    $('#videoSrcMP4').attr('src',turl+'.mp4');
+                    $('#videoSrcWEBM').attr('src',turl+'.webm');
+                    $('#videoPlayer').load();
+                    console.log(turl);
+                });
+                loadRandomSamples();
+                initCanvas();
+                redrawCanvas();
+                $("#progressContainer").hide();
+            }
+            function getFrameName(cnvId,frmId) {
+                var tmp='00000'+(frmId+1);
+                return ('{{ STATIC_URL }}datadb.videocbir/'+ dataJSON[cnvId][0]+ '/frame' + tmp.slice(-4)+'.jpg');
+            }
+            function loadRandomSamples() {
+                $("#panelRndSampl").empty();
+                for(var ii=0; ii<numRandomSamples; ii++) {
+                    var rndCnvId=Math.floor(numCanvas*Math.random());
+                    var rndFrmId=Math.floor(dataJSON[rndCnvId][1]*Math.random());
+                    var imgURL = getFrameName(rndCnvId,rndFrmId);
+                    var timg=$('<img>',{
+                        'class': 'img-thumbnail',
+                        'param-idcnv': rndCnvId,
+                        'param-idfrm': rndFrmId,
+                        'src': imgURL
+                    });
+                    $(timg).on('click', function(){
+                        if(!isRequestInProgress) {
+                            var tIdCnv=parseInt($(this).attr('param-idcnv'));
+                            var tIdFrm=parseInt($(this).attr('param-idfrm'));
+                            selectQueryImage(tIdCnv, tIdFrm);
+                        }
+                    });
+                    $("#panelRndSampl").append(timg);
+                }
+            }
+            function selectQueryImage(idxCnv,idxFrm) {
+                $("#infoHelpQuery").hide();
+                $("#imageQuery").attr('param-idcnv',idxCnv);
+                $("#imageQuery").attr('param-idfrm',idxFrm);
+                var frmURL=getFrameName(idxCnv,idxFrm);
+                $("#imageQuery").attr('src',frmURL);
+                console.log(frmURL);
+                $("#imageQuery").show();
+                $("#buttonSearch").removeClass('disabled');
+                $("#infoQuery").html("<kbd>video=#" + (idxCnv+1) + ", frame=#" + idxFrm + "</kbd>");
+            }
+            $("#buttonSearch").on('click', function() {
+                if(!isRequestInProgress) {
+                    isRequestInProgress=true;
+                    $("#progressContainer").show();
+                    var idxVideo=parseInt($("#imageQuery").attr('param-idcnv'));
+                    var idxFrame=parseInt($("#imageQuery").attr('param-idfrm'));
+                    var params={
+                        idVideo: idxVideo,
+                        idFrame: idxFrame
+                    };
+                    console.log(params);
+                    $.ajax({
+                        url: "{% url 'appvideocbir:apiSearch' %}",
+                        type: 'POST',
+                        data: params,
+                        success: function (data, textStatus, jqXHR) {
+                            var retJSON = $.parseJSON(data);
+                            console.log(retJSON);
+                            for(ii=0; ii<numCanvas; ii++) {
+                                dataJSON[ii][3]=true;
+                                dataJSON[ii][4]=retJSON[ii];
+                            }
+                            initCanvas();
+                            redrawCanvas();
+                            $("#progressContainer").hide();
+                            isRequestInProgress=false;
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus);
+                            $("#progressContainer").hide();
+                            isRequestInProgress=false;
+                        }
+                    });
+                }
+            });
+            function initCanvas() {
+                var ii;
+                arrCanvasImages=null;
+                arrCanvasImages=new Array(numCanvas);
+                for(ii=0; ii<numCanvas; ii++) {
+                    var tmpCanvas = document.createElement('canvas');
+                    var sizCanvasW = dataJSON[ii][1];
+                    tmpCanvas.width = sizCanvasW;
+                    tmpCanvas.height = sizCanvasH;
+                    var ctx = tmpCanvas.getContext('2d');
+                    var tw = sizCanvasW;
+                    var th = sizCanvasH;
+                    ctx.clearRect(0, 0, tw, th);
+                    var h0 = th / 2;
+                    var hb = th / 16;
+                    var h8 = th / 8;
+                    var dh = (h0 - hb - th / 8);
+                    if(dataJSON[ii][3]) {
+                        var tmpDST=dataJSON[ii][4];
+                        for (var kk = 0; kk < tw; kk++) {
+                            var trgb=colorMap[tmpDST[kk]];
+                            var tr0=tmpDST[kk]/255;
+                            var strStyle = "rgb(" + trgb[0] + "," + trgb[1] + "," + trgb[2] + ")";
+                            ctx.beginPath();
+                            ctx.strokeStyle = strStyle;
+                            if(tr0>0.7) {
+                                ctx.lineWidth = 7;
+                            } else if(tr0>0.5) {
+                                ctx.lineWidth = 3;
+                            } else {
+                                ctx.lineWidth = 1;
+                            }
+                            var y0 = h0 - hb - tr0 * dh;
+                            var y1 = h0 + hb + tr0 * dh;
+                            ctx.moveTo(kk + 0.5, y0);
+                            ctx.lineTo(kk + 0.5, y1);
+                            ctx.stroke();
+                        }
+                    } else {
+                        var tmpRGB=dataJSON[ii][4];
+                        for (var kk = 0; kk < tw; kk++) {
+                            var strStyle = "rgb(" + tmpRGB[kk][0] + "," + tmpRGB[kk][1] + "," + tmpRGB[kk][2] + ")";
+                            ctx.beginPath();
+                            ctx.strokeStyle = strStyle;
+                            ctx.lineWidth = 1;
+                            var y0 = h8;
+                            var y1 = th-h8;
+                            ctx.moveTo(kk + 0.5, y0);
+                            ctx.lineTo(kk + 0.5, y1);
+                            ctx.stroke();
+                        }
+                    }
+                    arrCanvasImages[ii]=tmpCanvas;
+                }
+                // Mmouse-actions: [BEGIN]
+                for(ii=0; ii<numCanvas; ii++) {
+                    var strCanvsId="#vidCanvas"+ii;
+                    $(strCanvsId).mouseenter(function (ev) {
+                        $("#idImagePreview").show();
+                        isShowImagePreview=true;
+                    });
+                    $(strCanvsId).mouseleave(function (ev) {
+                        $("#idImagePreview").hide();
+                        isShowImagePreview=false;
+                    });
+                    $(strCanvsId).mousedown(function (ev) {
+                        if(!isRequestInProgress) {
+                            if(ev.which==1) {
+                                isLeftMouseDown=true;
+                            }
+                            var ctxPos = $(this).get(0).getBoundingClientRect();
+                            var tx = ev.clientX - ctxPos.left;
+                            var idPar=$(this).parent();
+                            var tw = idPar.width();
+                            var idxCanvas=parseInt($(this).attr('param-idx'));
+                            var sizCanvasW=dataJSON[idxCanvas][1];
+                            var posIdx=Math.round(tx*sizCanvasW/tw);
+                            if(posIdx<0) posIdx=0;
+                            if(posIdx>=(sizCanvasW)) posIdx=sizCanvasW-1;
+                            updateCanvasByIdx(selectedCanvasIdx,-1);
+                            updateCanvasByIdx(idxCanvas,posIdx);
+                            selectedCanvasIdx=idxCanvas;
+                            selectedCanvasPos=posIdx;
+                            selectQueryImage(idxCanvas, posIdx);
+                        }
+                    });
+                    $(strCanvsId).mouseup(function (ev) {
+                        isLeftMouseDown=false;
+                    });
+                    $(strCanvsId).mousemove(function (ev) {
+                        if(isShowImagePreview) {
+                            var ctxPos = $(this).get(0).getBoundingClientRect();
+                            var tx = ev.clientX - ctxPos.left;
+                            var ty = ev.clientY - ctxPos.top;
+                            var idxCanvas=parseInt($(this).attr('param-idx'));
+                            var sizCanvasW=dataJSON[idxCanvas][1];
+                            var posIdx=Math.round(tx*sizCanvasW/$(this).width());
+                            if(posIdx<0) posIdx=0;
+                            if(posIdx>=(sizCanvasW)) posIdx=sizCanvasW-1;
+                            var urlImg=getFrameName(idxCanvas,posIdx);
+                            $("#idImagePreview").attr('src',  urlImg);
+                            $("#idImagePreview").css('left', ev.pageX+25);
+                            $("#idImagePreview").css('top',  ev.pageY+0);
+                        }
+                    });
+                }
+                // Mmouse-actions: [END]
+            }
+            function updateCanvasByIdx(idxCanvas, posIdx) {
+                if(idxCanvas!=null) {
+                    var tcId = document.getElementById("vidCanvas" + idxCanvas);
+                    var tcIdDiv = $("#vidCanvas" + idxCanvas).parent();
+                    var tw = tcIdDiv.width();
+                    var th = tcIdDiv.height();
+                    tcId.width = tw;
+                    tcId.height = th;
+                    var ctx = tcId.getContext('2d');
+                    ctx.drawImage(arrCanvasImages[idxCanvas],0,0,tw,th);
+                    if(posIdx>-1) {
+                        var sizCanvasW=dataJSON[idxCanvas][1];
+                        posIdx=Math.round(posIdx*tw/sizCanvasW);
+                        ctx.beginPath();
+                        ctx.strokeStyle = "rgb(0,255,0)";
+                        ctx.lineWidth = 5;
+                        ctx.moveTo(posIdx, 0);
+                        ctx.lineTo(posIdx, th);
+                        ctx.stroke();
+                    }
+                }
+            }
+            function redrawCanvas() {
+                for(var ii=0; ii<numCanvas; ii++) {
+                    if( (selectedCanvasIdx!=null) && (selectedCanvasIdx==ii)) {
+                        updateCanvasByIdx(ii,selectedCanvasPos);
+                    } else {
+                        updateCanvasByIdx(ii,-1);
+                    }
+                }
+            }
+            $(window).resize(function() {
+                console.log('resize');
+                if(isTemplateLoaded && (dataJSON!=null)) {
+                    redrawCanvas();
+                }
+            });
+        });
+    </script>
+{% endblock %}

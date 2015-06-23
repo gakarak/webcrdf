@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
+    {% load static %}
+    <link rel="icon" type="image/png" href="{{ STATIC_URL }}/img/lena16x16.ico" />
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/data/cssjs/papaya-0.7.css" />
     <script type="text/javascript" src="/data/cssjs/papaya-0.7.js"></script>
@@ -126,7 +128,12 @@
                     </a>
                     <ul role="menu" class="dropdown-menu">
                         <li id="navbar-webcam">
-                            <a href="/appwebcam/"><span class="glyphicon glyphicon-facetime-video"></span> WebCam-Search (need camera)</a>
+                            <a href="/appwebcam/">
+                                <span class="glyphicon glyphicon-facetime-video"></span> WebCam Search (need camera)
+                            </a>
+                            <a href="/appvideocbir/">
+                                <span class="glyphicon glyphicon-film"></span> Video Search (TV-Series)
+                            </a>
                         </li>
                     </ul>
                 </li>

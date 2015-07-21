@@ -60,7 +60,7 @@
         <div class="col-md-4 col-sm-12 col-xs-12">
             <div class="panel panel-default pad8 algnc">
                 <div class="panel-heading">
-                    <h4>Histology database</h4>
+                    <h4><b>(1)</b> Select Hyper-Large histology scan</h4>
                     <a class="btn btn-default" id="btnShowDataset" data-toggle="modal" data-target="#dialogShowDataset">
                         <span class="glyphicon glyphicon-th"></span>
                         Preview dataset
@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-xs-12" id="panelPreviewSegm" style="display: none;">
                             <hr>
-                            <h4>Segmented histology maps:</h4>
+                            <h4><b>(4)</b> Similarity maps for current query image:</h4>
                             <div id="panelPreviewSegmImages">
                                 ...
                             </div>
@@ -94,17 +94,17 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="panel panel-default pad8 algnc" id="panelCurrent">
                         <div class="panel-heading">
-                            <h4>Current histology slide:</h4>
+                            <h4><b>(2)</b> Move and Click to select query image:</h4>
                         </div>
                         <div class="panel-body">
                             <img id="imgCurrent">
                         </div>
                         <div class="panel-footer">
-                            <h4>Data size:
-                                <span class="label label-default" id="infoSize">...</span>
-                            </h4>
-                            <h4>Number of images:
+                            <h4>Number of 512x512 image tiles:
                                 <span class="label label-default" id="infoData">...</span>
+                            </h4>
+                            <h4>Scan size:
+                                <span class="label label-default" id="infoSize">...</span>
                             </h4>
                             <div class="alert alert-danger fade in" id="message-error" style="position: relative; z-index: 10; display: none">
                                 <button type="button" class="close">×</button>
@@ -117,7 +117,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="panel panel-default pad8 algnc" id="panelQuery" style="display: none; height: 100%;">
                         <div class="panel-heading">
-                            <h4>Query image from microscope:</h4>
+                            <h4><b>(3)</b> Currecnt query image &amp; results:</h4>
                         </div>
                         <div class="panel-body">
                             <img class="img-thumbnail" id="imgQuery">

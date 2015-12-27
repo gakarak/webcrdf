@@ -246,6 +246,7 @@
                         console.log('tIdx = ' + tIdx + ', status = ' + tStatus);
                         if(tStatus) {
                             $('#'   + tIdx).attr('src', currentImageInfo[ii].urlSegm);
+                            $('#ashow-' + tIdx).attr('href', currentImageInfo[ii].urlSegm);
                             $('#info_' + tIdx).hide();
                             $('#ashow-' + tIdx + '-segm').removeClass('disabled');
                             $('#zip-'+tIdx).removeClass('disabled');

@@ -22,6 +22,7 @@ import appsegmct.alg    as algSegmCT
 import appdrugres.alg   as algDrugRes
 import apphistology.alg as algHistology
 import appvideocbir.alg as algVideoCBIR
+import appctslice.alg   as algCTSlice
 
 
 # Quick-start development settings - unsuitable for production
@@ -54,7 +55,8 @@ INSTALLED_APPS = (
     'appsegmct',
     'appdrugres',
     'apphistology',
-    'appvideocbir'
+    'appvideocbir',
+    'appctslice'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -211,11 +213,17 @@ for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):
 URL_HISTOLOGY_USERDATA='data/users_histology'
 STATIC_ROOT_HISTOLOGY_USERDATA=os.path.join(BASE_DIR, 'data/users_histology')
 STATIC_ROOT_HISTOLOGY_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.histology')
-HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)
-# HISTOLOGY=algHistology.HistologySearcher()
+# HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)
+HISTOLOGY=algHistology.HistologySearcher()
 
 #### Loading Video-CBIR data
 URL_VIDEOCBIR_USERDATA='data/users_videocbir'
 STATIC_ROOT_VIDEOCBIR_USERDATA=os.path.join(BASE_DIR, 'data/users_videocbir')
 STATIC_ROOT_VIDEOCBIR_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.videocbir')
 VIDEOCBIR=algVideoCBIR.VideoCBIRSearcher(STATIC_ROOT_VIDEOCBIR_DBDATA)
+
+#### Loading App-CTSlice data
+STATIC_ROOT_CTSLICE_USERDATA=os.path.join(BASE_DIR, 'data/users_ctslice')
+taskManagerCTSlice = algCTSlice.TaskManagerCTSlice()
+if not os.path.isdir(STATIC_ROOT_CTSLICE_USERDATA):
+    os.mkdir(STATIC_ROOT_CTSLICE_USERDATA)

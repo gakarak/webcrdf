@@ -30,13 +30,13 @@
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4> <kbd>1</kbd> Upload your X-Ray chest images:</h4>
+                        <h4> <kbd>1</kbd> Upload your X-Ray chest image:</h4>
                     </div>
                     <div class="panel-body">
                         {% block upload %}
                             <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmxr:upload' %}">
                                 <div class="btn-group-vertical" style="width: 100%;">
-                                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from our Database</a>
                                     <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
                                     <a class="btn btn-danger" href="{% url 'appsegmxr:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
                                 </div>

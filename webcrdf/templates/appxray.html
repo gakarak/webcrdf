@@ -34,7 +34,7 @@
                 {% block upload %}
                     <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appxray:upload' %}">
                         <div class="btn-group-vertical" style="width: 100%">
-                            <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from a Database</a>
+                            <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from our Database</a>
                             <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
                             <a class="btn btn-danger" href="{% url 'appxray:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
                         </div>
@@ -55,7 +55,7 @@
             <div class="col-md-8 col-lg-6">
                 <div class="panel panel-default algnc">
                     <div class="panel-heading">
-                        <h4> <kbd>2</kbd> Select ROI and push search-query:</h4>
+                        <h4> <kbd>2</kbd> Select ROI for searching similar:</h4>
                         <div class="row">
                             <a href="#" class="btn btn-primary" id="id_roisearch"><span class="glyphicon glyphicon-search"></span> Search ROI</a>
                             <span id="id_help" title='<span class="glyphicon glyphicon glyphicon-question-sign"></span> <b>LeftMouseButton</b> - change ROI position<br><b>RightMouseButton</b> - change ROI size' data-html="true" style="border-bottom: 1px dashed #000080; margin: 12px">Help</span>

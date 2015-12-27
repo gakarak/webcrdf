@@ -33,7 +33,7 @@
             <div class="panel-body">
                 <div class="btn-group-vertical" role="group" style="width: 100%">
                     <a href="#" class="btn btn-success btn-block" id="id-showdb" data-toggle="modal" data-target="#myModal">
-                        <span class="glyphicon glyphicon-th"></span> Select from a Database
+                        <span class="glyphicon glyphicon-th"></span> Select from our Database
                     </a>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#id_dialog">
                         <span class="glyphicon glyphicon-cloud-upload"></span> Upload CT-Image
@@ -156,7 +156,7 @@
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="tab_nifti">
-                    <h2>Please, select NIfTi format</h2>
+                    <h2>Please, select 3D CT-image in NIfTi format</h2>
                     <hr>
                     {% block upload %}
                         <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmct:upload' %}">

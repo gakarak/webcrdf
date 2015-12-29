@@ -1,7 +1,7 @@
 function go_informative_slices2(pathImgInp, pathImgOut)
     im3 = load_nii(pathImgInp);
     z2xy = im3.hdr.dime.dim(4) / im3.hdr.dime.dim(2);
-    sgm = load_nii(sprintf('%s_segm.nii.gz', pathImgInp));
+    sgm = load_nii(sprintf('%s_segm.nii.gz', pathImgInp(1:end-7)));
     [slwnd, slwndc, spwise, spwisec, cbir, cbirc] = genCTpreviews(im3.img, sgm.img, z2xy);
     imwrite(slwndc, pathImgOut);
 end

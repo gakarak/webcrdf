@@ -224,6 +224,7 @@ VIDEOCBIR=algVideoCBIR.VideoCBIRSearcher(STATIC_ROOT_VIDEOCBIR_DBDATA)
 
 #### Loading App-CTSlice data
 STATIC_ROOT_CTSLICE_USERDATA=os.path.join(BASE_DIR, 'data/users_ctslice')
+STATIC_ROOT_CTSLICE_SCRIPTS   = os.path.join(BASE_DIR, 'data/scripts_ctslice')
 taskManagerCTSlice = algCTSlice.TaskManagerCTSlice()
 if not os.path.isdir(STATIC_ROOT_CTSLICE_USERDATA):
     os.mkdir(STATIC_ROOT_CTSLICE_USERDATA)

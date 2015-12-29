@@ -176,17 +176,21 @@ def UploadFromDB(request):
                     os.makedirs(toDir)
                 except:
                     print "ERROR: Can't create directory [%s]" % toDir
+            fnBase=fnFrom[:-7]
             fext=alg.getFileExt(fname)
+            fnFromSegm='%s_segm%s' % (fnBase, fext)
             fnTo  ="%s/%s%s" % (toDir, alg.fileNameInput, fext)
+            fnToSegm="%s/%s_segm%s" % (toDir, alg.fileNameInput, fext)
             # fnTo  ="%s/%s" % (toDir, fname)
             print ":: [%s] ---> [%s]" % (fnFrom, fnTo)
             if not os.path.isfile(fnTo):
                 if os.path.isfile(fnFrom):
                     shutil.copyfile(fnFrom, fnTo)
-                    tmpCTSlicer=alg.CTSlicer(toDir)
+                    shutil.copyfile(fnFromSegm, fnToSegm)
+                    tmpCTSlicer=alg.CTSlicer(toDir, settings.STATIC_ROOT_CTSLICE_SCRIPTS)
                     if tmpCTSlicer.makePreviewInp():
                         pass
-                    taskManagerCTSlice.appendTaskCTSlice(toDir)
+                    taskManagerCTSlice.appendTaskCTSlice(toDir, settings.STATIC_ROOT_CTSLICE_SCRIPTS)
                     # taskManagerSegmCT.appendTaskSegmCT(toDir)
                     # taskManagerSegmXR.appendTaskSegmXR(fnTo)
         except:
@@ -204,7 +208,7 @@ def handle_uploaded_file(odir, f):
     with open(fout, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
-    tmpSegmCT=alg.CTSlicer(odir)
+    tmpSegmCT=alg.CTSlicer(odir, settings.STATIC_ROOT_CTSLICE_SCRIPTS)
     tmpSegmCT.makePreviewInp()
     # tmpImg=cv2.imread(fout)
     # if tmpImg==None:
@@ -212,7 +216,7 @@ def handle_uploaded_file(odir, f):
     #     shutil.rmtree(odir)
     #TODO: CHECK POINT
     tmpWDir=os.path.dirname(fout)
-    taskManagerCTSlice.appendTaskCTSlice(odir)
+    taskManagerCTSlice.appendTaskCTSlice(odir, settings.STATIC_ROOT_CTSLICE_SCRIPTS)
 
 def cleanUplodedData(request):
     if not 'is_logged' in request.session:

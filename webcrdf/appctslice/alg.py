@@ -45,31 +45,40 @@ def getFileExt(fname):
 #################################
 def task_proc_ctslice(data):
     ptrPathWdir     = data[0]
-    segmCT = CTSlicer(ptrPathWdir)
+    ptrPathScr      = data[1]
+    segmCT = CTSlicer(ptrPathWdir, ptrPathScr)
     segmCT.makePreviewInp(isPreviewStart=False)
 
 class TaskManagerCTSlice:
     def __init__(self, nproc=4):
         self.nProc  = nproc
         self.pool   = mp.Pool(processes=self.nProc)
-    def appendTaskCTSlice(self, wdir):
-        vdata=[wdir]
+    def appendTaskCTSlice(self, wdir, pathScr):
+        vdata=[wdir, pathScr]
         self.pool.apply_async(task_proc_ctslice, [vdata] )
 
 #################################
 class CTSlicer:
-    def __init__(self,parWDir):
+    def __init__(self,parWDir, parSCRDir):
         self.wdir=parWDir
+        self.dirScr=parSCRDir
         self.dirID=os.path.basename(self.wdir)
         self.run_esegm="Eduard_MIPL_Segmentation_CRDF_Nifti_Release_x64 %s %s >%s 2>&1"
         self.fnInput=None
-        self.fnSegmented="previewext.nii.gz"
+        self.fnSegmented=None #"previewext.nii.gz"
         self.fnPreviewInp="preview.png"
         self.fnPreviewExt="previewext.png"
         self.fnOutputZip="result.zip"
         self.fnError="err.txt"
         self.fnLOG="log.txt"
         self.findInput()
+        self.mrunStr="cd('%s'); try go_informative_slices2('%s', '%s'); catch end; exit"
+        self.runStr="matlab -nodesktop -nosplash -r \"%s\" >/dev/null 2>&1 "
+    def getRunCMD(self, pathInp):
+        tmpPathOutput='%s/%s' % (self.wdir, self.fnPreviewExt)
+        tmpMStr=self.mrunStr % (self.dirScr, pathInp, tmpPathOutput)
+        ret=self.runStr % tmpMStr
+        return ret
     """
     find input CT-image file by mask 'input.*' in wdir
     """
@@ -82,6 +91,7 @@ class CTSlicer:
         if not os.path.isfile(self.fnInput):
             self.fnInput=None
             return False
+        self.fnSegmented="%s/%s_segm.nii.gz" % (self.wdir, fileNameInput)
         pathError="%s/%s" % (self.wdir, self.fnError)
         if os.path.isfile(pathError):
             os.remove(pathError)
@@ -150,37 +160,21 @@ class CTSlicer:
     def makePreviewInp(self, isPreviewStart=True, sizPreview=(512,512)):
         if os.path.isdir(self.wdir):
             if os.path.isfile(self.fnInput):
-                try:
-                    if isPreviewStart:
-                        fout="%s/%s" % (self.wdir, self.fnPreviewInp)
-                        timg=self.makePreviewImageForCTStart(self.fnInput)
-                    else:
-                        fout="%s/%s" % (self.wdir, self.fnPreviewExt)
-                        timg=self.makePreviewImageForCT(self.fnInput)
-                        time.sleep(5)
-                    timgR=self.resizeImageToSize(timg, tuple(sizPreview))
-                    cv2.imwrite(fout, timgR)
-                    return True
-                    # ndata=nib.load(self.fnInput)
-                    # if (min(ndata.shape)>40) and (len(ndata.shape)==3):
-                    #     ndata=ndata.get_data()
-                    #     timg=np.rot90(ndata[:,:,ndata.shape[2]/2]).astype(np.float)
-                    #     vMin=-1000.
-                    #     vMax=+200.
-                    #     timg=255.*(timg-vMin)/(vMax-vMin)
-                    #     timg[timg<0]=0
-                    #     timg[timg>255.]=255.
-                    #     timg=cv2.normalize(timg,None,0,255,cv2.NORM_MINMAX, cv2.CV_8U)
-                    #     timg=cv2.resize(timg,(256,256))
-                    #     fout="%s/%s" % (self.wdir, self.fnPreviewInp)
-                    #     cv2.imwrite(fout, timg)
-                    #     return True
-                    # else:
-                    #     self.printError("Invalid CT-Image [%s] (bad resolution)" % self.fnInput)
-                    #     return False
-                except:
-                    self.printError("Can't load CT-Image [%s]" % self.fnInput)
-                    return False
+                # try:
+                print '[Segmented] : %s' % self.fnSegmented
+                if isPreviewStart:
+                    fout="%s/%s" % (self.wdir, self.fnPreviewInp)
+                    timg=self.makePreviewImageForCTStart(self.fnInput)
+                else:
+                    fout="%s/%s" % (self.wdir, self.fnPreviewExt)
+                    timg=self.makePreviewImageForCT2(self.fnInput)
+                    # time.sleep(5)
+                timgR=self.resizeImageToSize(timg, tuple(sizPreview))
+                cv2.imwrite(fout, timgR)
+                return True
+                # except:
+                #     self.printError("Can't load CT-Image [%s]" % self.fnInput)
+                #     return False
             else:
                 print "Can't find input file [%s]" % self.fnInput
                 return False
@@ -330,6 +324,13 @@ class CTSlicer:
     """
     Prepare preview for CT-Image on original size
     """
+    def makePreviewImageForCT2(self, fnii):
+        tcmd=self.getRunCMD(fnii)
+        print 'CMD = [%s]' % tcmd
+        os.system(tcmd)
+        tfimg='%s/%s' % (self.wdir, self.fnPreviewExt)
+        print 'tfimg = [%s]' % tfimg
+        return cv2.imread(tfimg)
     def makePreviewImageForCT(self, fnii, isDebug=False):
         dataHdr=nib.load(fnii)
         data=dataHdr.get_data()

@@ -4,7 +4,8 @@ function go_informative_slices2(pathImgInp, pathImgOut)
     sgm = load_nii(sprintf('%s_segm.nii.gz', pathImgInp(1:end-7)));
     image = permute(im3.img + 1024, [2 1 3]);
     segm = permute(sgm.img, [2 1 3]);
-    [slwnd, slwndc, spwise, spwisec, cbir, cbirc] = genCTpreviews(im3.img, sgm.img, z2xy);
+    % [slwnd, slwndc, spwise, spwisec, cbir, cbirc] = genCTpreviews(im3.img, sgm.img, z2xy);
+    [slwnd, slwndc, spwise, spwisec, cbir, cbirc] = genCTpreviews(image, segm, z2xy);
     imwrite(slwndc, pathImgOut);
 end
 % %     imwrite(cbir, sprintf('%sid%03i_CBIR.png', dr, id));

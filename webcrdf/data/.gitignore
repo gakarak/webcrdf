@@ -30,3 +30,6 @@
 /datadb.xray/
 *.segmxr-bk2
 *.xray-bk2
+/datadb.xray
+/datadb.segmxr
+/datadb.cbir

@@ -1,10 +1,8 @@
-/datadb.cbir/
 /datadb.drugres/
 /datadb.melanoma/
 /datadb.melanomadb/
 /datadb.segmct/
 /datadb.segmxr-out/
-/datadb.xray/
 /datadb.xray-out/
 /users_cbir/
 /users_drugres/
@@ -17,8 +15,6 @@
 /datadb.segmxr-bk/
 /datadb.xray-bk/
 /scripts_melanoma_tmp/
-/datadb.xray
-/datadb.cbir
 /datadb.segmct
 /datadb.histology/
 /users_histology/
@@ -29,3 +25,8 @@
 /img-bk/
 /datadb.videocbir
 /users_ctslice/
+/datadb.cbir/
+/datadb.segmxr/
+/datadb.xray/
+*.segmxr-bk2
+*.xray-bk2

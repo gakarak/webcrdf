@@ -8,7 +8,7 @@ import sys
 import numpy as np
 import cv2
 from skimage import io
-import skimage.filter
+import skimage.filters
 import sklearn.metrics as MT
 import shutil
 import multiprocessing as mp
@@ -274,7 +274,7 @@ class RegisterXray:
             os.system(strRun1)
             # tmsk=cv2.imread(toutMsk, cv2.IMREAD_GRAYSCALE).astype(np.float)/255.0
             tmsk=cv2.imread(toutMsk, 0).astype(np.float)/255.0
-            tmsk=skimage.filter.gaussian_filter(tmsk, 0.5)
+            tmsk=skimage.filters.gaussian_filter(tmsk, 0.5)
             # timg=cv2.imread(toutImg, cv2.IMREAD_GRAYSCALE).astype(np.float)
             timg=cv2.imread(toutImg, 0).astype(np.float)
             curCorr=np.corrcoef(img[20:-20].reshape(-1), timg[20:-20].reshape(-1))[0,1]

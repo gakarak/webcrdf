@@ -285,7 +285,7 @@ def handle_uploaded_file_xr(odir, f):
     if not os.path.isdir(odir):
         os.makedirs(odir)
     fext=alg.getFileExt(f.name)
-    fout='%s/%s%s' % (odir, alg.fileNameInputXR_Orig, fext)
+    fout='%s/%s%s' % (odir, alg.fileNameInputXR, fext)
     print fout
     with open(fout, 'wb+') as destination:
         for chunk in f.chunks():
@@ -320,4 +320,4 @@ def cleanUplodedData(request):
 
 if __name__=='__main__':
     print alg.fileNameInputCT
-    print alg.fileNameInputXR_Orig
+    print alg.fileNameInputXR

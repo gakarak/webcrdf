@@ -14,7 +14,8 @@ import appsegmct.alg as algct
 
 
 fileNameInputCT='inputct'
-fileNameInputXR='inputxr'
+fileNameInputXR_Orig='inputxrorig'
+fileNameInputXR_Imm='inputximg'
 
 #################################
 class ResultReader:
@@ -77,7 +78,7 @@ def getDataNamesCTXR(wdir):
         ret.append(lstCT[0])
     else:
         ret.append(None)
-    lstXR=glob.glob('%s/%s*' % (wdir, fileNameInputXR) )
+    lstXR=glob.glob('%s/%s*' % (wdir, fileNameInputXR_Orig) )
     lstXR.sort()
     if len(lstXR)>0:
         ret.append(lstXR[0])
@@ -261,15 +262,20 @@ if __name__=="__main__":
     # wdir='/home/ar/big.data/dev/work.django/webcrdf/data/datadb.drugres'
     # makePreviewForDatabase(wdir)
     #
-    # dirDBXr="/home/ar/big.data/dev/work.django/webcrdf/data/datadb.segmxr"
-    # dirWDir="/home/ar/big.data/dev/work.django/webcrdf/data/users_drugres/8r74lc0obbcfv65znq1r2u9jaxvwcigf/userdatadrugres-2015_03_12-10_01_44_677575"
-    dirDBXr="/home/ar/dev-git.git/dev.web/CRDF/webcrdf/data/datadb.segmxr"
-    dirWDir="/home/ar/dev-git.git/dev.web/CRDF/webcrdf/data/users_drugres/yr08tshg5gb9argqsxtp67txqesnkjz0/userdatadrugres-2015_03_16-21_30_29_629969"
-    # task_proc_drugres( [dirDBXr, dirWDir] )
-    tskMng=TaskManagerDrugRes()
-    tskMng.appendTaskProcessDrugRes(dirDBXr, dirWDir)
-    tskMng.pool.close()
-    tskMng.pool.join()
+    # dirDBXr="/home/ar/dev-git.git/dev.web/CRDF/webcrdf/data/datadb.segmxr"
+    # dirWDir="/home/ar/dev-git.git/dev.web/CRDF/webcrdf/data/users_drugres/yr08tshg5gb9argqsxtp67txqesnkjz0/userdatadrugres-2015_03_16-21_30_29_629969"
+    # ##task_proc_drugres( [dirDBXr, dirWDir] )
+    # tskMng=TaskManagerDrugRes()
+    # tskMng.appendTaskProcessDrugRes(dirDBXr, dirWDir)
+    # tskMng.pool.close()
+    # tskMng.pool.join()
+    #
+    #
+    tdir='/home/ar/github.com/webcrdf.git/webcrdf/data/users_drugres/jaieb3ww16eo0k2hff5t1tmafgsixf2j/userdatadrugres-2016_03_25-00_49_01_103158'
+    fnInpXR_Orig=glob.glob('%s/inputxrorig.*' % tdir)[0]
+    print fnInpXR_Orig
+
+
     #
     #
     # pathPCT="/home/ar/big.data/dev/work.django/webcrdf/data/users_drugres/8r74lc0obbcfv65znq1r2u9jaxvwcigf/userdatadrugres-2015_03_12-10_01_44_677575/inputct.nii.gz_segmented.png"

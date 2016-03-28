@@ -8,6 +8,7 @@ import datetime
 import nibabel as nib
 import numpy as np
 import cv2
+import dicom as dcm
 
 import appsegmxr.alg as algxr
 import appsegmct.alg as algct
@@ -15,7 +16,8 @@ import appsegmct.alg as algct
 
 fileNameInputCT='inputct'
 fileNameInputXR_Orig='inputxrorig'
-fileNameInputXR_Imm='inputximg'
+fileNameInputXR_uint8='inputxr_uint8.png'
+fileNameInputCT_uint8='inputct_uint8.png'
 
 #################################
 class ResultReader:
@@ -116,15 +118,16 @@ def task_proc_drugres(data):
     ptrDirDBXr=data[0]
     ptrDirWdir=data[1]
     pathInpCT,pathInpXR= getDataNamesCTXR(ptrDirWdir)
+    pathInpXR_uint8=os.path.join(ptrDirWdir,fileNameInputXR_uint8)
     # X-Ray segmentation:
-    pathXRMask    ="%s_maskxr.png" % pathInpXR
-    pathXRMasked  ="%s_maskedxr.png" % pathInpXR
+    pathXRMask    ="%s_maskxr.png" % pathInpXR_uint8
+    pathXRMasked  ="%s_maskedxr.png" % pathInpXR_uint8
     pathCTSgmP    ="%s_segmented.png" % pathInpCT
     pathPreviewSgm="%s/preview_segmented.png" % ptrDirWdir
     pathErr="%s/err.txt" % ptrDirDBXr
     pathPrg="%s/progress.txt" % ptrDirWdir
     setProgress(pathPrg, 30)
-    retCorr=algxr.task_proc_segmxr([ptrDirDBXr, pathInpXR])
+    retCorr=algxr.task_proc_segmxr2([ptrDirDBXr, pathInpXR_uint8])
     print "XR: retCorr=%s" % retCorr
     if not retCorr:
         printError(pathErr, "Error in X-Ray segmentation: incorrect input image")
@@ -177,6 +180,20 @@ def getImageInBox(img, smax):
         posxr=((smax - siznew[0])/2, 0)
     imgret=cv2.resize(img, (siznew[1],siznew[0]))
     return (imgret, posxr)
+
+def getPreviewFromCTNifti(pathCTNifti, psiz=(360,180)):
+    sizw,sizh=psiz
+    datact=nib.load(pathCTNifti).get_data()
+    #
+    # imgct=cv2.normalize(np.rot90(datact[:,:, datact.shape[2]/2 ], 1), None, 0,255, cv2.NORM_MINMAX, cv2.CV_8U)
+    vMin=-1000.
+    vMax=+200.
+    imgct=np.rot90(datact[:,:, datact.shape[2]/2 ], 1).astype(np.float)
+    imgct=255.*(imgct-vMin)/(vMax-vMin)
+    imgct[imgct<0]=0
+    imgct[imgct>255.]=255.
+    imgct=cv2.resize(imgct.astype(np.uint8), (sizh,sizh))
+    return imgct
 
 def makePreviewForCTXR(pathCT, pathXR, pathPV):
     sizw=360
@@ -249,6 +266,35 @@ def makePreviewForDatabase(wdir):
         cv2.imshow("win", imgout)
         cv2.waitKey(10)
 
+def postUplodProcessing(parDir):
+    fnPreviewIMG=os.path.join(parDir, 'preview.png')
+    fnInpCT_Orig=os.path.join(parDir, 'inputct.nii.gz')
+    fnInpCT_uint8=os.path.join(parDir, fileNameInputCT_uint8)
+    fnInpXR_Orig=glob.glob('%s/inputxrorig.*' % parDir)[0]
+    fnInpXR_uint8=os.path.join(parDir, fileNameInputXR_uint8)
+    isDicom=False
+    try:
+        inpDicom=dcm.read_file(fnInpXR_Orig).pixel_array.astype(np.float)
+        vmin=inpDicom.min()
+        vmax=inpDicom.max()
+        imgu8=(255.*(inpDicom-vmin)/(vmax-vmin)).astype(np.uint8)
+        imgu8=cv2.equalizeHist(imgu8)
+        cv2.imwrite(fnInpXR_uint8, imgu8)
+        isDicom=True
+    except dcm.errors.InvalidDicomError:
+        pass
+    if not isDicom:
+        imgu8=cv2.imread(fnInpXR_Orig, 0) #cv2.CV_LOAD_IMAGE_GRAYSCALE)
+        imgu8=cv2.equalizeHist(imgu8)
+        cv2.imwrite(fnInpXR_uint8, imgu8)
+    imgCTu8=getPreviewFromCTNifti(fnInpCT_Orig)
+    cv2.imwrite(fnInpCT_uint8, imgCTu8)
+    makePreviewForCTXR(fnInpCT_uint8,fnInpXR_uint8,fnPreviewIMG)
+    ret=os.path.isfile(fnPreviewIMG)  and \
+        os.path.isfile(fnInpXR_uint8) and \
+        os.path.isfile(fnInpCT_uint8)
+    return ret
+
 #################################
 def getFileExt(fname):
     tstr=os.path.splitext(fname)
@@ -270,13 +316,16 @@ if __name__=="__main__":
     # tskMng.pool.close()
     # tskMng.pool.join()
     #
+    # (1) Check Preview generation
+    # tdir='/home/ar/github.com/webcrdf.git/webcrdf/data/users_drugres/z0ug90buhwli2n9e09epszullznkuu8o/userdatadrugres-2016_03_28-18_37_26_796649'
+    # print postUplodProcessing(tdir)
     #
-    tdir='/home/ar/github.com/webcrdf.git/webcrdf/data/users_drugres/jaieb3ww16eo0k2hff5t1tmafgsixf2j/userdatadrugres-2016_03_25-00_49_01_103158'
-    fnInpXR_Orig=glob.glob('%s/inputxrorig.*' % tdir)[0]
-    print fnInpXR_Orig
-
-
-    #
+    # (2) Check DrugResistor Algorithm
+    taskManagerDrugRes = TaskManagerDrugRes()
+    pathXrDBData='/home/ar/github.com/webcrdf.git/webcrdf/data/datadb.segmxr'
+    toDir='/home/ar/github.com/webcrdf.git/webcrdf/data/users_drugres/z0ug90buhwli2n9e09epszullznkuu8o/userdatadrugres-2016_03_28-18_37_26_796649'
+    ### taskManagerDrugRes.appendTaskProcessDrugRes(pathXrDBData, toDir)
+    task_proc_drugres([pathXrDBData, toDir])
     #
     # pathPCT="/home/ar/big.data/dev/work.django/webcrdf/data/users_drugres/8r74lc0obbcfv65znq1r2u9jaxvwcigf/userdatadrugres-2015_03_12-10_01_44_677575/inputct.nii.gz_segmented.png"
     # pathPXR="/home/ar/big.data/dev/work.django/webcrdf/data/users_drugres/8r74lc0obbcfv65znq1r2u9jaxvwcigf/userdatadrugres-2015_03_12-10_01_44_677575/inputxr.png_maskedxr.png"

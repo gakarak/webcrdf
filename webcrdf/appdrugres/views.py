@@ -305,6 +305,7 @@ def FinishUploadData(request):
     if (lstCTXR[0]!=None) and (lstCTXR[1]!=None):
         shutil.move(lstCTXR[0], odir)
         shutil.move(lstCTXR[1], odir)
+        alg.postUplodProcessing(odir)
     return HttpResponseRedirect(reverse('appdrugres:index'))
 
 def cleanUplodedData(request):

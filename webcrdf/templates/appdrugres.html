@@ -243,7 +243,7 @@
                                 <td class="col-md-4">
                                     {% block uploadct %}
                                     <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appdrugres:uploadct' %}">
-                                        <input class="btn btn-primary" type="file" value="file" name="file" id="id_file_ct" />
+                                        <input class="btn btn-primary" type="file" value="file" name="file" id="id_file_ct"  accept=".nii.gz"/>
                                     </form>
                                     {% endblock %}
                                 </td>
@@ -263,7 +263,7 @@
                                 <td class="col-md-4">
                                     {% block uploadxr %}
                                     <form role="form" id="id_form_upload_xr" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appdrugres:uploadxr' %}">
-                                        <input class="btn btn-primary" type="file" value="file" name="file" id="id_file_xr" />
+                                        <input class="btn btn-primary" type="file" value="file" name="file" id="id_file_xr" accept=".dcm,.png"/>
                                     </form>
                                     {% endblock %}
                                 </td>

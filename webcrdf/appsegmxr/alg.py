@@ -55,8 +55,8 @@ def task_proc_segmxr(data):
     regXR.loadDB(ptrPathWdir)
     # regXR.printInfo()
     retMsk,retCorr  = regXR.registerMask(ptrPathImg)
-    pathImgMask     = "%s_mask.png"   % ptrPathImg
-    pathImgMasked   = "%s_masked.png" % ptrPathImg
+    pathImgMask     = "%s_maskxr.png"   % ptrPathImg
+    pathImgMasked   = "%s_maskedxr.png" % ptrPathImg
     if retCorr>regXR.threshCorrSum:
         cv2.imwrite(pathImgMask,   regXR.newMsk)
         cv2.imwrite(pathImgMasked, regXR.newImgMsk)
@@ -90,9 +90,9 @@ def task_proc_segmxr2(data):
     regXR.loadDB(ptrPathWdir)
     # regXR.printInfo()
     retMsk,retCorr,sumPts,ptsXY  = regXR.registerMask(ptrPathImg)
-    pathImgMask     = "%s_mask.png"   % ptrPathImg
-    pathImgMasked   = "%s_masked.png" % ptrPathImg
-    pathImgOnMask   = "%s_onmask.png" % ptrPathImg
+    pathImgMask     = "%s_maskxr.png"   % ptrPathImg
+    pathImgMasked   = "%s_maskedxr.png" % ptrPathImg
+    pathImgOnMask   = "%s_onmaskxr.png" % ptrPathImg
     pathPtsCSV      = "%s_pts.csv"    % ptrPathImg
     if retCorr>regXR.threshCorrSum:
         cv2.imwrite(pathImgMask,   regXR.newMsk)
@@ -124,7 +124,8 @@ def task_proc_segmxr2(data):
     for ff in lstFimg:
         ffbn = os.path.basename(ff)
         zObj.write(ff, "%s/%s" % (zipDir, ffbn))
-    print "retCorr = %s" % retCorr
+    # print "retCorr = %s" % retCorr
+    return retCorr
 
 
 class TaskManagerSegmXR:
@@ -274,12 +275,12 @@ class RegisterXray:
             os.system(strRun1)
             # tmsk=cv2.imread(toutMsk, cv2.IMREAD_GRAYSCALE).astype(np.float)/255.0
             tmsk=cv2.imread(toutMsk, 0).astype(np.float)/255.0
-            tmsk=skimage.filters.gaussian_filter(tmsk, 0.5)
+            tmsk=skimage.filters.gaussian(tmsk, 0.5)
             # timg=cv2.imread(toutImg, cv2.IMREAD_GRAYSCALE).astype(np.float)
             timg=cv2.imread(toutImg, 0).astype(np.float)
             curCorr=np.corrcoef(img[20:-20].reshape(-1), timg[20:-20].reshape(-1))[0,1]
             sumCorr+=curCorr
-            if sumMask==None:
+            if sumMask is None:
                 sumMask=tmsk
             else:
                 sumMask+=tmsk
@@ -322,7 +323,7 @@ class RegisterXray:
         tmp=img[:,:,2]
         tmp[msk>0]=255
         img[:,:,2]=tmp
-        if self.pts != None:
+        if self.pts is not None:
             numPts=self.pts.shape[0]
             scaleSiz=np.min( (img.shape[0],img.shape[1]) )
             prad=int(5.*scaleSiz/256.)

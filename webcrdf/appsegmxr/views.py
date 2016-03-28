@@ -51,8 +51,8 @@ def getInfoAboutImages(request):
             tfimg=os.path.basename(ii)
             isFinished=False
             isGood=True
-            tfMask='%s_mask.png' % tfimg
-            tfMasked='%s_masked.png' % tfimg
+            tfMask='%s_maskxr.png' % tfimg
+            tfMasked='%s_maskedxr.png' % tfimg
             tfZip='%s.zip' % tfimg
             tfErr='%s.err' % tfimg
             tUrl    = '%s/users_segmxr/%s/%s' % (settings.STATIC_URL, sessionId, tfimg)

@@ -103,8 +103,8 @@ if ~exist(xrorig, 'file')
 end
 
 if useXray && ~strcmpi(xrorig(end - 3:end), '.dcm')
-    throw(MException('VerifyInput:FileNotFound', ...
-       'X-ray DICOM image file extention is not ".dcm"'));
+    % throw(MException('VerifyInput:FileNotFound', 'X-ray DICOM image file extention is not ".dcm"'));
+	useXray = false;
 end
 
 if useXray && ~exist(xrsegm, 'file')

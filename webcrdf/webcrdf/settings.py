@@ -198,6 +198,7 @@ taskManagerDrugRes = algDrugRes.TaskManagerDrugRes()
 URL_DRUGRES_USERDATA='data/users_drugres'
 STATIC_ROOT_DRUGRES_USERDATA=os.path.join(BASE_DIR, 'data/users_drugres')
 STATIC_ROOT_DRUGRES_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.drugres')
+STATIC_ROOT_DRUGRES_SCRIPTS =os.path.join(BASE_DIR, 'data/scripts_drugres')
 SDRUGRES_TMPDIR="tmp_data"
 IMAGEDB_CT_DRUGRES=[]
 for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):

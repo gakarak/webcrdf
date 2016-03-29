@@ -24,6 +24,7 @@ class ResultReader:
     def __init__(self):
         self.nameRES  = 'res.txt'
         self.nameERR  = 'err.txt'
+        self.nameERRCT= 'errct.txt'
         self.namePRG  = 'progress.txt'
     def checkWDir(self, wdir):
         ret=getDataNamesCTXR(wdir)
@@ -41,6 +42,12 @@ class ResultReader:
         tfErr="%s/%s" % (wdir,self.nameERR)
         if os.path.exists(tfErr):
             f=open(tfErr,'r')
+            txtErr = f.readline()
+            f.close()
+            return (True,1,txtErr,0)
+        tfErrCT="%s/%s" % (wdir,self.nameERRCT)
+        if os.path.exists(tfErrCT):
+            f=open(tfErrCT,'r')
             txtErr = f.readline()
             f.close()
             return (True,1,txtErr,0)
@@ -136,9 +143,9 @@ def task_proc_drugres(data):
         printError(pathErr, "Error in X-Ray segmentation: unknown error")
         return
     # CT-Segmentation
-    setProgress(pathPrg, 15)
+    setProgress(pathPrg, 10)
     segmCT = algct.SegmentatorCT(ptrDirWdir)
-    setProgress(pathPrg, 35)
+    setProgress(pathPrg, 15)
     segmCT.fnInput=pathInpCT
     segmCT.fnSegmented="%s_maskct.nii.gz"   % os.path.basename(pathInpCT)
     segmCT.fnPreviewInp="%s_previewct.png"  % os.path.basename(pathInpCT)
@@ -146,6 +153,7 @@ def task_proc_drugres(data):
     segmCT.fnOutputZip="%s_resultct.zip"    % os.path.basename(pathInpCT)
     segmCT.fnError="errct.txt"
     segmCT.segmentCTMask()
+    setProgress(pathPrg, 35)
     if os.path.isfile("%s/%s" % (ptrDirWdir, segmCT.fnError)):
         printError(pathErr, "Error in CT segmentation: unknown error")
         return

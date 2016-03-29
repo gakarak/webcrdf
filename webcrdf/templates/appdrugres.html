@@ -94,14 +94,16 @@
                                         <a id="zip-{{ ii.idx }}" href="#" class="btn btn-sm btn-primary" url-data="{{ ii.urlZip }}">
                                             <span class="glyphicon glyphicon-circle-arrow-down"></span>
                                         </a>
-                                        <a id="ctshow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary" url-inp="{{ ii.urlCTSegm }}" data-toggle="modal" data-target="#myModal3D">
+{#                                        <a id="ctshow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary" url-inp="{{ ii.urlCTSegm }}" data-toggle="modal" data-target="#myModal3D">#}
+                                        <a id="ctshow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary" url-inp="{{ ii.urlCTSegm }}">
                                             <span class="glyphicon glyphicon-eye-open"></span> Segmented CT
                                         </a>
                                     {% else %}
                                         <a id="zip-{{ ii.idx }}" href="#" class="btn btn-sm btn-primary disabled" url-data="{{ ii.urlZip }}">
                                             <span class="glyphicon glyphicon-circle-arrow-down"></span>
                                         </a>
-                                        <a id="ctshow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary disabled" url-inp="{{ ii.urlCTSegm }}" data-toggle="modal" data-target="#myModal3D">
+{#                                        <a id="ctshow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary disabled" url-inp="{{ ii.urlCTSegm }}" data-toggle="modal" data-target="#myModal3D">#}
+                                        <a id="ctshow-{{ ii.idx }}-segm" href="#" class="btn btn-sm btn-primary disabled" url-inp="{{ ii.urlCTSegm }}">
                                             <span class="glyphicon glyphicon-eye-open"></span> Segmented CT
                                         </a>
                                     {% endif %}
@@ -388,6 +390,16 @@
                                 +"</tr>";
                     }
                 }
+                if(numData==1) {
+                    var tmpInfo = dataQuick.split("\n")[0].split(":");
+                    if (tmpInfo.length>1) {
+                        htmlTxt+= "<tr>"
+                                + "<td>" + "Unknown" + "</td>"
+                                + "<td>" + "Drug Resistant" + "</td>"
+                                + "<td><span class='color_red'>" + tmpInfo[1] + "</span></td>"
+                                +"</tr>";
+                    }
+                }
                 $("#id-info-table-tbody").html(htmlTxt);
             }
         } else {
@@ -403,12 +415,16 @@
     $("a[id^='ctshow-']").on("click", function() {
         var tmpUrl = [$(this).attr('url-inp')];
         console.log(tmpUrl);
+        var requestId = tmpUrl[0].split("/")[5];
+        window.open("{% url 'appdrugres:showct' %}?q="+requestId,'_blank');
+        /*
         if(currentUrlCT!=null && currentUrlCT===tmpUrl) {
 //            papayaContainers[0].viewer.loadBaseImage(tmpUrl, true, false);
         } else {
             papayaContainers[0].viewer.resetViewer();
             papayaContainers[0].viewer.loadBaseImage(tmpUrl, true, false);
         }
+        */
         currentUrlCT=tmpUrl;
     });
     $("a[id^='zip-']").on("click", function() {

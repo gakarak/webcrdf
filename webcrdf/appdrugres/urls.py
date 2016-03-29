@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^clean/',         views.cleanUplodedData,		name='clean'),
     url(r'^getinfo/',       views.getInfoAboutImages,	name='getinfo'),
     url(r'^gallery/',       views.ImageGallery,		    name='gallery'),
+    url(r'^showct/',        views.ShowCT,		        name='showct'),
 )

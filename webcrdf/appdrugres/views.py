@@ -84,6 +84,15 @@ def getInfoAboutImages(request):
     return HttpResponse(json.dumps(ret))
 
 ################################################
+def ShowCT(request):
+    if not 'is_logged' in request.session:
+        return HttpResponseRedirect( reverse('appdrugres:index') )
+    tdir=request.GET.get('q', '')
+    sessionId = request.session.session_key
+    tmpURLCT='%susers_drugres/%s/%s/inputct.nii.gz' % (settings.STATIC_URL, sessionId, tdir)
+    context={'urlCTNifti': tmpURLCT }
+    return render(request, 'ctview.html', context)
+
 def ImageGallery(request):
     num=10
     try:
@@ -265,7 +274,7 @@ def UploadFromDB(request):
             print ":: PV: [%s] ---> [%s]" % (fnFromPV, fnToPV)
             shutil.copyfile(fnFromPV, fnToPV)
             #TODO: CHECK POINT
-            taskManagerDrugRes.appendTaskProcessDrugRes(settings.STATIC_ROOT_SEGMXR_DBDATA, toDir)
+            taskManagerDrugRes.appendTaskProcessDrugRes(settings.STATIC_ROOT_SEGMXR_DBDATA, settings.STATIC_ROOT_DRUGRES_SCRIPTS, toDir)
         except:
             print "ERROR: Can't copy file from Database"
         ret=HttpResponse(json.dumps({'widx': widx}))
@@ -309,7 +318,7 @@ def FinishUploadData(request):
         shutil.move(lstCTXR[0], odir)
         shutil.move(lstCTXR[1], odir)
         alg.postUplodProcessing(odir)
-        taskManagerDrugRes.appendTaskProcessDrugRes(settings.STATIC_ROOT_SEGMXR_DBDATA, odir)
+        taskManagerDrugRes.appendTaskProcessDrugRes(settings.STATIC_ROOT_SEGMXR_DBDATA, settings.STATIC_ROOT_DRUGRES_SCRIPTS, odir)
     return HttpResponseRedirect(reverse('appdrugres:index'))
 
 def cleanUplodedData(request):

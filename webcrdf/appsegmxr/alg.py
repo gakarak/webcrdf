@@ -83,7 +83,7 @@ def task_proc_segmxr(data):
         zObj.write(ff, "%s/%s" % (zipDir, ffbn))
     print "retCorr = %s" % retCorr
 
-def task_proc_segmxr2(data):
+def task_proc_segmxr2(data, parRhreshCorrSum=None):
     ptrPathWdir     = data[0]
     ptrPathImg      = data[1]
     regXR           = RegisterXray()
@@ -94,7 +94,9 @@ def task_proc_segmxr2(data):
     pathImgMasked   = "%s_maskedxr.png" % ptrPathImg
     pathImgOnMask   = "%s_onmaskxr.png" % ptrPathImg
     pathPtsCSV      = "%s_pts.csv"    % ptrPathImg
-    if retCorr>regXR.threshCorrSum:
+    if parRhreshCorrSum is None:
+        parRhreshCorrSum=regXR.threshCorrSum
+    if retCorr>parRhreshCorrSum:
         cv2.imwrite(pathImgMask,   regXR.newMsk)
         cv2.imwrite(pathImgMasked, regXR.newImgMsk)
         cv2.imwrite(pathImgOnMask, regXR.newImgOnMsk)

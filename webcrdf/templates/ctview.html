@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+{#    {% load static %}#}
+{#    <link rel="icon" type="image/png" href="{{ STATIC_URL }}/img/lena16x16.ico" />#}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" type="text/css" href="/data/cssjs/papaya.css" />
+    <script type="text/javascript" src="/data/cssjs/papaya.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <title>3D CT Viewer</title>
+</head>
+<body>
+    <div class="papaya" data-params="params"></div>
+    <script type="text/javascript">
+        var params = [];
+        params["worldSpace"] = true;
+        params["images"] = ['{{ urlCTNifti }}'];
+        // for more options, see http://ric.uthscsa.edu/mango/papaya_devguide.html
+    </script>
+</body>
+</html>

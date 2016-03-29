@@ -123,18 +123,20 @@ def getProgress(fprg):
 
 def task_proc_drugres(data):
     ptrDirDBXr=data[0]
-    ptrDirWdir=data[1]
+    ptrDirScr =data[1]
+    ptrDirWdir=data[2]
     pathInpCT,pathInpXR= getDataNamesCTXR(ptrDirWdir)
     pathInpXR_uint8=os.path.join(ptrDirWdir,fileNameInputXR_uint8)
     # X-Ray segmentation:
     pathXRMask    ="%s_maskxr.png" % pathInpXR_uint8
     pathXRMasked  ="%s_maskedxr.png" % pathInpXR_uint8
+    pathCTSgm     ="%s_maskct.nii.gz" % pathInpCT
     pathCTSgmP    ="%s_segmented.png" % pathInpCT
     pathPreviewSgm="%s/preview_segmented.png" % ptrDirWdir
     pathErr="%s/err.txt" % ptrDirDBXr
     pathPrg="%s/progress.txt" % ptrDirWdir
     setProgress(pathPrg, 5)
-    retCorr=algxr.task_proc_segmxr2([ptrDirDBXr, pathInpXR_uint8])
+    retCorr=algxr.task_proc_segmxr2([ptrDirDBXr, pathInpXR_uint8], 0.1)
     print "XR: retCorr=%s" % retCorr
     if not retCorr:
         printError(pathErr, "Error in X-Ray segmentation: incorrect input image")
@@ -160,21 +162,27 @@ def task_proc_drugres(data):
     if not makePreviewForCTXR(pathCTSgmP, pathXRMasked, pathPreviewSgm):
         printError(pathErr, "Unknown in postprocessing stage")
         return
-    pathResTXT="%s/res.txt" % ptrDirWdir
-    with open(pathResTXT, 'w') as f:
-        f.write("Drug Resistatnt\n")
-        f.write("93%\n")
-        f.write("Not treated before:Drug Resistant:93\n")
-        f.write("Treated before:Drug Resistant:83\n")
-        f.write("Unknown:Drug Resistant:63\n")
+    mrunStr="cd('%s'); try DrugResistorScript('%s', '%s', '%s', '%s', '%s'); catch end; exit" % (ptrDirScr, pathInpXR, pathXRMask, pathInpCT, pathCTSgm, ptrDirWdir)
+    # runStr="matlab -nodesktop -nosplash -r \"%s\" >/dev/null 2>&1" % mrunStr
+    runStr="matlab -nodesktop -nosplash -r \"%s\" " % mrunStr
+    print "[%s]" % runStr
+    os.system(runStr)
+    #
+    # pathResTXT="%s/res.txt" % ptrDirWdir
+    # with open(pathResTXT, 'w') as f:
+    #     f.write("Drug Resistatnt\n")
+    #     f.write("93%\n")
+    #     f.write("Not treated before:Drug Resistant:93\n")
+    #     f.write("Treated before:Drug Resistant:83\n")
+    #     f.write("Unknown:Drug Resistant:63\n")
     print "All [Ok]"
 
 class TaskManagerDrugRes:
     def __init__(self, nproc=2):
         self.nProc  = nproc
         self.pool   = mp.Pool(processes=self.nProc)
-    def appendTaskProcessDrugRes(self, parDirDBXr, wdir):
-        vdata=[parDirDBXr, wdir]
+    def appendTaskProcessDrugRes(self, parDirDBXr, parDirScr, wdir):
+        vdata=[parDirDBXr, parDirScr, wdir]
         # self.pool.apply_async(task_proc_segmxr, [vdata] )
         self.pool.apply_async(task_proc_drugres, [vdata] )
 
@@ -329,11 +337,24 @@ if __name__=="__main__":
     # print postUplodProcessing(tdir)
     #
     # (2) Check DrugResistor Algorithm
-    taskManagerDrugRes = TaskManagerDrugRes()
-    pathXrDBData='/home/ar/github.com/webcrdf.git/webcrdf/data/datadb.segmxr'
-    toDir='/home/ar/github.com/webcrdf.git/webcrdf/data/users_drugres/z0ug90buhwli2n9e09epszullznkuu8o/userdatadrugres-2016_03_28-18_37_26_796649'
+    # taskManagerDrugRes = TaskManagerDrugRes()
+    # pathXrDBData='/home/ar/github.com/webcrdf.git/webcrdf/data/datadb.segmxr'
+    # toDir='/home/ar/github.com/webcrdf.git/webcrdf/data/users_drugres/z0ug90buhwli2n9e09epszullznkuu8o/userdatadrugres-2016_03_28-18_37_26_796649'
     ### taskManagerDrugRes.appendTaskProcessDrugRes(pathXrDBData, toDir)
-    task_proc_drugres([pathXrDBData, toDir])
+    # task_proc_drugres([pathXrDBData, toDir])
+    # (3) Check MATLAB DrugRes:
+
+    wdir='/home/ar/github.com/webcrdf.git/webcrdf/data/users_drugres/wpkwx5cm392zlngfbgthiynn4xbq24p5/userdatadrugres-2016_03_28-22_24_19_562913'
+    pathDrugResSRC='/home/ar/github.com/webcrdf.git/webcrdf/data/scripts_drugres'
+    pathXR='%s/inputxrorig.dcm' % wdir
+    pathXR_Segm='%s/inputxr_uint8.png_maskxr.png' % wdir
+    pathCT='%s/inputct.nii.gz' % wdir
+    pathCT_Segm='%s/inputct.nii.gz_maskct.nii.gz' % wdir
+    odir=wdir
+    mrunStr="cd('%s'); try DrugResistorScript('%s', '%s', '%s', '%s', '%s'); catch end; exit" % (pathDrugResSRC, pathXR, pathXR_Segm, pathCT, pathCT_Segm, odir)
+    runStr="matlab -nodesktop -nosplash -r \"%s\" >/dev/null 2>&1" % mrunStr
+    print "[%s]" % runStr
+    os.system(runStr)
     #
     # pathPCT="/home/ar/big.data/dev/work.django/webcrdf/data/users_drugres/8r74lc0obbcfv65znq1r2u9jaxvwcigf/userdatadrugres-2015_03_12-10_01_44_677575/inputct.nii.gz_segmented.png"
     # pathPXR="/home/ar/big.data/dev/work.django/webcrdf/data/users_drugres/8r74lc0obbcfv65znq1r2u9jaxvwcigf/userdatadrugres-2015_03_12-10_01_44_677575/inputxr.png_maskedxr.png"

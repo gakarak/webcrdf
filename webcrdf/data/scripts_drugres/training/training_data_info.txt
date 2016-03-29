@@ -1,0 +1,1 @@
+CT descs: ct_422_segm_SP_fhist_16_0.3.txt; X-ray descs: xray_120_segm_IIID[8,8,8,3]_Contrasted_by_LungsMedian.txt. Trained on 120 patients.

@@ -251,7 +251,8 @@ def UploadFromDB(request):
                 except:
                     print "ERROR: Can't create directory [%s]" % toDir
             fnToCT="%s/inputct.nii.gz" % toDir
-            fnToXR="%s/inputxr.png" % toDir
+            fnToXR="%s/inputxrorig.png" % toDir
+            fnToXR_uint8="%s/inputxr_uint8.png" % toDir
             fnToPV="%s/preview.png" % toDir
             # fext=os.path.splitext(fname)[1]
             # fnTo  ="%s/%s%s" % (toDir, alg.fileNameInputCT, fext)
@@ -259,6 +260,8 @@ def UploadFromDB(request):
             shutil.copyfile(fnFromCT, fnToCT)
             print ":: XR: [%s] ---> [%s]" % (fnFromXR, fnToXR)
             shutil.copyfile(fnFromXR, fnToXR)
+            print ":: XR: [%s] ---> [%s]" % (fnFromXR, fnToXR_uint8)
+            shutil.copyfile(fnFromXR, fnToXR_uint8)
             print ":: PV: [%s] ---> [%s]" % (fnFromPV, fnToPV)
             shutil.copyfile(fnFromPV, fnToPV)
             #TODO: CHECK POINT
@@ -306,6 +309,7 @@ def FinishUploadData(request):
         shutil.move(lstCTXR[0], odir)
         shutil.move(lstCTXR[1], odir)
         alg.postUplodProcessing(odir)
+        taskManagerDrugRes.appendTaskProcessDrugRes(settings.STATIC_ROOT_SEGMXR_DBDATA, odir)
     return HttpResponseRedirect(reverse('appdrugres:index'))
 
 def cleanUplodedData(request):

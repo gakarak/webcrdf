@@ -126,7 +126,7 @@ def task_proc_drugres(data):
     pathPreviewSgm="%s/preview_segmented.png" % ptrDirWdir
     pathErr="%s/err.txt" % ptrDirDBXr
     pathPrg="%s/progress.txt" % ptrDirWdir
-    setProgress(pathPrg, 30)
+    setProgress(pathPrg, 5)
     retCorr=algxr.task_proc_segmxr2([ptrDirDBXr, pathInpXR_uint8])
     print "XR: retCorr=%s" % retCorr
     if not retCorr:
@@ -136,9 +136,9 @@ def task_proc_drugres(data):
         printError(pathErr, "Error in X-Ray segmentation: unknown error")
         return
     # CT-Segmentation
-    setProgress(pathPrg, 70)
+    setProgress(pathPrg, 15)
     segmCT = algct.SegmentatorCT(ptrDirWdir)
-    setProgress(pathPrg, 90)
+    setProgress(pathPrg, 35)
     segmCT.fnInput=pathInpCT
     segmCT.fnSegmented="%s_maskct.nii.gz"   % os.path.basename(pathInpCT)
     segmCT.fnPreviewInp="%s_previewct.png"  % os.path.basename(pathInpCT)

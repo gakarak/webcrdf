@@ -80,7 +80,7 @@
                                     <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
                                 </a>
                                 {% if ii.isError %}
-                                    <h3 id="infotxt-{{ ii.idx }}"><span class="color_red"> Error classification... </span></h3>
+                                    <h3 id="infotxt-{{ ii.idx }}"><span class="color_red"> Classification error... </span></h3>
                                 {% else %}
                                     {% if ii.isFinished %}
                                         <h3 id="infotxt-{{ ii.idx }}">{{ ii.dataQuick }}<span class="color_red">{{ ii.dataQuickP }}</span></h3>
@@ -477,7 +477,7 @@
                             caption.append(btnError);
                             $("#error-text").html(currentImageInfo[ii].txtError);
                             $('#infotxt-' + tIdx).empty();
-                            $('#infotxt-' + tIdx).html("<span class='color_red'>Error classification</span>");
+                            $('#infotxt-' + tIdx).html("<span class='color_red'>Classification error...</span>");
                         } else {
                             $('#info_' + tIdx).show();
                             $('#infotxt-' + tIdx).empty();

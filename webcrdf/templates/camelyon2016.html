@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% block content %}
+    <link rel="stylesheet" href="/data/cssjs/webcam_style.css">
+    <style type="text/css">
+        .algnc {
+            text-align: center;
+        }
+        .div-90p {
+            width: 95%;
+        }
+        .img-thumbnail {
+            cursor: pointer;
+        }
+        .img-thumbnail:hover {
+            background-color: darkred;
+        }
+    </style>
+    <div class="modal fade" id="idPreviewImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">GoogelNet, 300k Samples ROC</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview">
+                <img src="/data/img/PlotROC_GoogleNet_S2.png" width="100%"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="idPreviewSet1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelSet1">
+                    GoogelNet, 300k Samples ROC (3D Histech)<br>
+                    GT: Ground Truth, NN-Cls: Classified using the Neural Network
+                </h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview-s1">
+                <img src="/data/img/Set1/Tumor_001-preview-s2.png" alt="Tumor_001" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_002-preview-s2.png" alt="Tumor_002" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_003-preview-s2.png" alt="Tumor_003" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_004-preview-s2.png" alt="Tumor_004" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_005-preview-s2.png" alt="Tumor_005" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_006-preview-s2.png" alt="Tumor_006" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_007-preview-s2.png" alt="Tumor_007" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_008-preview-s2.png" alt="Tumor_008" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_009-preview-s2.png" alt="Tumor_009" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_010-preview-s2.png" alt="Tumor_010" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_011-preview-s2.png" alt="Tumor_011" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_012-preview-s2.png" alt="Tumor_012" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_013-preview-s2.png" alt="Tumor_013" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_014-preview-s2.png" alt="Tumor_014" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_015-preview-s2.png" alt="Tumor_015" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_016-preview-s2.png" alt="Tumor_016" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_017-preview-s2.png" alt="Tumor_017" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_018-preview-s2.png" alt="Tumor_018" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_019-preview-s2.png" alt="Tumor_019" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_020-preview-s2.png" alt="Tumor_020" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_021-preview-s2.png" alt="Tumor_021" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_022-preview-s2.png" alt="Tumor_022" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_023-preview-s2.png" alt="Tumor_023" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_024-preview-s2.png" alt="Tumor_024" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_025-preview-s2.png" alt="Tumor_025" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_026-preview-s2.png" alt="Tumor_026" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_027-preview-s2.png" alt="Tumor_027" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_028-preview-s2.png" alt="Tumor_028" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_029-preview-s2.png" alt="Tumor_029" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_030-preview-s2.png" alt="Tumor_030" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_031-preview-s2.png" alt="Tumor_031" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_032-preview-s2.png" alt="Tumor_032" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_033-preview-s2.png" alt="Tumor_033" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_034-preview-s2.png" alt="Tumor_034" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_035-preview-s2.png" alt="Tumor_035" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_036-preview-s2.png" alt="Tumor_036" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_037-preview-s2.png" alt="Tumor_037" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_038-preview-s2.png" alt="Tumor_038" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_039-preview-s2.png" alt="Tumor_039" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_040-preview-s2.png" alt="Tumor_040" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_041-preview-s2.png" alt="Tumor_041" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_042-preview-s2.png" alt="Tumor_042" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_043-preview-s2.png" alt="Tumor_043" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_044-preview-s2.png" alt="Tumor_044" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_045-preview-s2.png" alt="Tumor_045" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_046-preview-s2.png" alt="Tumor_046" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_047-preview-s2.png" alt="Tumor_047" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_048-preview-s2.png" alt="Tumor_048" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_049-preview-s2.png" alt="Tumor_049" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_050-preview-s2.png" alt="Tumor_050" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_051-preview-s2.png" alt="Tumor_051" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_052-preview-s2.png" alt="Tumor_052" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_053-preview-s2.png" alt="Tumor_053" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_054-preview-s2.png" alt="Tumor_054" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_055-preview-s2.png" alt="Tumor_055" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_056-preview-s2.png" alt="Tumor_056" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_057-preview-s2.png" alt="Tumor_057" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_058-preview-s2.png" alt="Tumor_058" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_059-preview-s2.png" alt="Tumor_059" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_060-preview-s2.png" alt="Tumor_060" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_061-preview-s2.png" alt="Tumor_061" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_062-preview-s2.png" alt="Tumor_062" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_063-preview-s2.png" alt="Tumor_063" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_064-preview-s2.png" alt="Tumor_064" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_065-preview-s2.png" alt="Tumor_065" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_066-preview-s2.png" alt="Tumor_066" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_067-preview-s2.png" alt="Tumor_067" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_068-preview-s2.png" alt="Tumor_068" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_069-preview-s2.png" alt="Tumor_069" class="img-thumbnail"/>
+                <img src="/data/img/Set1/Tumor_070-preview-s2.png" alt="Tumor_070" class="img-thumbnail"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close-s1">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="idPreviewSet2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelSet2">
+                    GoogelNet, 300k Samples ROC (Hamamatsu) <br>
+                    GT: Ground Truth, NN-Cls: Classified using the Neural Network
+                </h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview-s2">
+                <img src="/data/img/Set2/tumor_071-preview.png" alt="tumor_071" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_072-preview.png" alt="tumor_072" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_073-preview.png" alt="tumor_073" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_074-preview.png" alt="tumor_074" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_075-preview.png" alt="tumor_075" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_076-preview.png" alt="tumor_076" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_077-preview.png" alt="tumor_077" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_078-preview.png" alt="tumor_078" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_079-preview.png" alt="tumor_079" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_080-preview.png" alt="tumor_080" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_081-preview.png" alt="tumor_081" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_082-preview.png" alt="tumor_082" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_083-preview.png" alt="tumor_083" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_084-preview.png" alt="tumor_084" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_085-preview.png" alt="tumor_085" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_086-preview.png" alt="tumor_086" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_087-preview.png" alt="tumor_087" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_088-preview.png" alt="tumor_088" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_089-preview.png" alt="tumor_089" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_090-preview.png" alt="tumor_090" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_092-preview.png" alt="tumor_092" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_093-preview.png" alt="tumor_093" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_094-preview.png" alt="tumor_094" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_095-preview.png" alt="tumor_095" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_096-preview.png" alt="tumor_096" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_097-preview.png" alt="tumor_097" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_098-preview.png" alt="tumor_098" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_099-preview.png" alt="tumor_099" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_100-preview.png" alt="tumor_100" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_101-preview.png" alt="tumor_101" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_102-preview.png" alt="tumor_102" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_103-preview.png" alt="tumor_103" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_104-preview.png" alt="tumor_104" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_105-preview.png" alt="tumor_105" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_106-preview.png" alt="tumor_106" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_107-preview.png" alt="tumor_107" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_108-preview.png" alt="tumor_108" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_109-preview.png" alt="tumor_109" class="img-thumbnail"/>
+                <img src="/data/img/Set2/tumor_110-preview.png" alt="tumor_110" class="img-thumbnail"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close-s2">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+{#    <header>#}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="algnc">
+                    <h2><a href="http://camelyon16.grand-challenge.org/">Camlelyon2016</a> Imlab team results</h2>
+                </div>
+                <hr>
+                <div class="algnc">
+                    <a class="btn btn-default" data-toggle="modal" data-target="#idPreviewSet1">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        Segmentation results<br>
+                        (3D Histech scaner)
+                    </a>
+                    <a class="btn btn-default" data-toggle="modal" data-target="#idPreviewSet2">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        Segmentation results<br>
+                        (Hamamatsu scaner)
+                    </a>
+                    <a class="btn btn-primary" href="https://goo.gl/kIjbu3" target="_blank">
+                        <span class="glyphicon glyphicon-cloud"></span>
+                        Neural Network Model<br>
+                        (for Caffe framework)
+                    </a>
+                    <a href="https://github.com/gakarak/Camelyon2016Code" target="_blank">
+                        <img src="/data/img/GitHub-Mark-32px.png">
+                        Source code
+                    </a>
+                </div>
+                <hr>
+                <h3>Introduction</h3>
+                Purpose. The purpose of this study was to examine the ability of recently introduced Convolutional
+                Neural Networks (CNN) and Deep Learning methods on the problem of automated detection of
+                metastases in whole-slide images of lymph node sections.
+                Introductory notes. The following remarks need to be taken into account for suitable interpretation of
+                methods and results given below.
+                <ul>
+                    <li>
+                        Slides scanned by both Hamamatsu NDPI and 3DHistech scanners were analyzed and
+                        segmented in the same way but separately.
+                    </li>
+                    <li>
+                        Despite authors are in close touch with histopathology professionals (e.g., [1]), no any medical
+                        experts were attracted to this study to avoid any possible bias and/or professional interventions.
+                    </li>
+                    <li>
+                        The key intermediate results were placed on a temporal, free access web site [2] to facilitate
+                        their in-depth check and to enable possible re-use.
+                    </li>
+                </ul>
+                <hr>
+                <h3>Materials and Methods</h3>
+                The segmentation algorithm was implemented using commonly known sliding window technique
+                which supposes solving corresponding local image recognition task at each window position.
+                Materials. A large number of image “tiles”, i.e. square-shaped image regions were sampled from
+                original slide images and used as training sets for CNNs. The sampling was done on the Level 0 with
+                highest spatial resolution, separately for 3DHistech (Set-1) and Hamamatsu NDPI (Set-2) scanners
+                (see Tab. 1 and Tab.2 below). The tile size was set to 256x256 pixels as a compromise between the intention of
+                tiles to be as small as possible for more accurate tumor border segmentation whereas be large enough
+                to represent image semantics, i.e. contain sufficient quantity of characteristic morphological elements.
+
+                <br>
+                <br>
+                <div>
+                    <table class="table table-hover" style="width: 100%">
+                        <thead>
+                            <h4> Table #1. Training Set-1 300000 image tiles</h4>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                Class 1<br>
+                                “Tumor”
+                            </td>
+                            <td>
+                                150 000 tiles sampled from
+                                metastasis regions annotated by
+                                pathologists as Group “_0”.
+                            </td>
+                            <td width="40%">
+                                <img src="/data/img/Set1_Cls1.png" width="100%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Class 2<br>
+                                “Non-Tumor”
+                            </td>
+                            <td>
+                                150 000 tiles sampled
+                                regions conditionally called as
+                                norm, background, bubbles,
+                                erythrocytes, and epithelium.
+                            </td>
+                            <td width="40%">
+                                <img src="/data/img/Set1_Cls2.png" width="100%">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                <div>
+                    <table class="table table-hover" style="width: 100%">
+                        <thead>
+                        <h4>Table #2. Training Set-2 300 000 image tiles</h4>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                Class 1<br>
+                                “Tumor”
+                            </td>
+                            <td>
+                                150 000 tiles. Same types of
+                                regions as in Class 1 of Training
+                                Set-1.
+                            </td>
+                            <td width="40%">
+                                <img src="/data/img/Set2_Cls1.png" width="100%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Class 2<br>
+                                “Non-Tumor”
+                            </td>
+                            <td>
+                                150 000 tiles. Same types
+                                regions as in Class 2 of Training
+                                Set-1.
+                            </td>
+                            <td width="40%">
+                                <img src="/data/img/Set2_Cls2.png" width="100%">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Methods</h3>
+                Methods.  The segmentation method used in this study consists of four main stages which are briefly
+                described below.
+                    <h4>Stage-1:</h4> Preparing Training Sets. Image tile sets were prepared by way of moving sampling window
+                over corresponding regions on the Level 0 with the half-window step of 128 pixels and cutting
+                underlying pixels out. The resultant sets of image tiles were shuffled at random and the necessary
+                number of them moved to corresponding training set.
+                    <h4>Stage-2:</h4>Training Convolutional Neural Networks. The two neural networks were trained using
+                graphics processor Nvidia TITAN X with 12Gb of GDDR5 memory. The network training parameters
+                were set to:
+                <ul>
+                    <li>
+                        Batch size: 64 (the minimum batch size to place network in GPU memory),
+                    </li>
+                    <li>
+                        Solver: SGD Caffe solver,
+                    </li>
+                    <li>
+                        Number of iterations: ~100000,
+                    </li>
+                    <li>
+                        Number of epochs: 30,
+                    </li>
+                    <li>
+                        Network architecture: <a href="http://arxiv.org/abs/1409.4842">GoogleNet</a>.
+                    </li>
+                </ul>
+                <h4>Stage-3:</h4> Slide Image Segmentation. The segmentation algorithm employs neural network trained at the
+                previous stage for categorization of every underlying 256x256 image region at each sliding window
+                position either to Tumor (i.e., metastasis) or to Non-Tumor class. The process resulted in a probability
+                map which represents the probability of belonging of each particular image locality to the class of
+                metastasis. Each pixel of the map corresponds to suitable 256x256 region of original whole-slide
+                image on the Level 0.
+                <h4>Stage-4:</h4>Post-processing. At this segmentation stage the probability maps produced by neural network
+                were threshoulded using MINPROB parameter and filtered using morphological opening operations.
+                Finally, coordinates of centers of each connected component which represent masks of probable
+                metastasis regions were stored in the final CSV files together with their probabilities. Since the centers
+                of gravity of connected components could be located outside of the component itself, they were
+                skeletonised first and then the “centers” were defined as skeleton’s point closest to the center of
+                gravity.
+
+                <h3>Results</h3>
+                Training of each neural network took about 8 hours of time and approximately 11 Gb of GPU memory.
+                The potential discrimination ability of both networks was examined on the corresponding image
+                subsets containing 30000 image tiles each. Results are presented in form of ROC curves.
+                <div class="algnc">
+                    <a href="#" data-toggle="modal" data-target="#idPreviewImg">
+                        <img src="/data/img/PlotROC_GoogleNet_S2.png" alt="ROC" width="60%" />
+                    </a>
+                </div>
+                After completing the preliminary examination of neural networks, they were used for segmenting of
+                the whole slide images by way of tile-wise recognition and categorization of every 256x256 region and
+                calculating resultant tumor probability maps.
+            </div>
+
+
+        </div>
+{#    </header>#}
+<script type="application/javascript">
+    $("#navbar-camelyon2016").addClass("active");
+</script>
+</div>
+{% endblock %}

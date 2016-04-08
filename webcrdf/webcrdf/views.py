@@ -55,3 +55,13 @@ def WebCamSearch(request):
         return render(request, 'appwebcam2.html', context)
     else:
         return render(request, 'login.html')
+
+def Camelyon2016(request):
+    if 'is_logged' in request.session:
+        userName = 'Unknown'
+        if 'username' in request.session:
+            userName = request.session['username']
+        context={'userName': userName}
+        return render(request, 'camelyon2016.html', context)
+    else:
+        return render(request, 'login.html')

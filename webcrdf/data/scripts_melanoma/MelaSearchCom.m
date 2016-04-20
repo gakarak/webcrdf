@@ -4,7 +4,7 @@ function MelaSearchCom(pathDB, filename, oiFlag)
 % initialize
 warning off all
 
-ver = 'v0.4(com)';
+ver = 'v2.7(com)';
 logmess('');
 logmess(['MelaSearch ' ver ' started']);
 
@@ -740,11 +740,12 @@ function P = bwconvhull_alt(BW)
 % P= bwconvhull_alt(BW);
 
 % warning off all
-s=regionprops(logical(BW),'ConvexImage','BoundingBox');
-P=zeros(size(BW));
-for no=1:length(s)
-P(s(no).BoundingBox(2):s(no).BoundingBox(2)+s(no).BoundingBox(4)-1,...
-    s(no).BoundingBox:s(no).BoundingBox(1)+s(no).BoundingBox(3)-1)=s(no).ConvexImage;
+s = regionprops(logical(BW), 'ConvexImage', 'BoundingBox');
+P = zeros(size(BW));
+for no = 1:length(s)
+    bb = s(no).BoundingBox;
+    bb = round(bb);
+    P(bb(2):bb(2) + bb(4) - 1, bb:bb(1) + bb(3) - 1) = s(no).ConvexImage;
 end
 
 function [glb, gmap, n] = globules(gr, segm, hairmap, refl)

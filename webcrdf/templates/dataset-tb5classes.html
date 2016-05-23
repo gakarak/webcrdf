@@ -1,0 +1,779 @@
+{% extends "base.html" %}
+{% block content %}
+    <link rel="stylesheet" href="/data/cssjs/webcam_style.css">
+    <link rel="stylesheet" type="text/css" href="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.css">
+    <script type="text/javascript" src="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.js"></script>
+    <style type="text/css">
+        .algnc {
+            text-align: center;
+        }
+        .div-90p {
+            width: 95%;
+        }
+        .img-thumbnail {
+            cursor: pointer;
+        }
+        .img-thumbnail:hover {
+            background-color: darkred;
+        }
+    </style>
+    <div class="modal fade" id="idPreviewImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">GoogelNet, 300k Samples ROC</h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview">
+                <img src="/data/img/PlotROC_GoogleNet_S2.png" width="100%"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="idPreviewSet1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelSet1">
+                    Infiltrative TB (TB-1)
+                </h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview-s1">
+                <table class="table table-hover" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th data-field="gender" data-sortable="true">Gender</th>
+                            <th data-field="age" data-sortable="true">Age</th>
+                            <th>Study Date</th>
+                            <th>Diagnosis</th>
+                            <th>Size (in pix)</th>
+                            <th data-field="path" data-sortable="true">File Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<tr><td>female</td> <td>17</td> <td>01.02.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|96</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/3218_1_16777217.nii.gz" target="_blank">3218_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>65</td> <td>26.02.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/3394_1_16777217.nii.gz" target="_blank">3394_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>62</td> <td>28.02.2011</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/13562_1_16777217.nii.gz" target="_blank">13562_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>12.07.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4695_1_16777217.nii.gz" target="_blank">4695_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>60</td> <td>14.09.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|150</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/5230_1_16777217.nii.gz" target="_blank">5230_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>31</td> <td>23.08.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1377_2_16777217.nii.gz" target="_blank">1377_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>16.07.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|138</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/12297_1_16777217.nii.gz" target="_blank">12297_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>33</td> <td>28.12.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/11092_1_16777217.nii.gz" target="_blank">11092_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>07.07.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/8060_1_16777217.nii.gz" target="_blank">8060_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>35</td> <td>08.09.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|102</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1930_1_16777217.nii.gz" target="_blank">1930_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>65</td> <td>05.01.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2922_1_16777217.nii.gz" target="_blank">2922_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>39</td> <td>03.04.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/7259_1_16777217.nii.gz" target="_blank">7259_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>62</td> <td>21.05.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4272_1_16777217.nii.gz" target="_blank">4272_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>02.07.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4615_1_16777217.nii.gz" target="_blank">4615_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>78</td> <td>04.04.2011</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|66</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/13861_1_16777217.nii.gz" target="_blank">13861_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>27</td> <td>28.04.2011</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/14083_1_16777217.nii.gz" target="_blank">14083_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>78</td> <td>26.09.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2042_1_16777217.nii.gz" target="_blank">2042_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>61</td> <td>06.07.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1388_1_16777217.nii.gz" target="_blank">1388_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>46</td> <td>07.05.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/11907_1_16777217.nii.gz" target="_blank">11907_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>67</td> <td>06.06.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4409_1_16777221.nii.gz" target="_blank">4409_1_16777221.nii.gz</a></td></tr>
+<tr><td>male</td> <td>61</td> <td>09.01.2012</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|144</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/14255_3_16777217.nii.gz" target="_blank">14255_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>46</td> <td>19.02.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|288</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/6921_2_16777217.nii.gz" target="_blank">6921_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>18</td> <td>20.05.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/7682_1_16777217.nii.gz" target="_blank">7682_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>60</td> <td>24.11.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/102_3_16777217.nii.gz" target="_blank">102_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>23.04.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1240_2_16777217.nii.gz" target="_blank">1240_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>66</td> <td>07.02.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/22_1_16777217.nii.gz" target="_blank">22_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>10.04.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|140</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/620_1_16777217.nii.gz" target="_blank">620_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>30</td> <td>30.05.2011</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/12494_3_16777217.nii.gz" target="_blank">12494_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>35</td> <td>23.09.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/12625_1_16777217.nii.gz" target="_blank">12625_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>36</td> <td>10.02.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/77_1_16777217.nii.gz" target="_blank">77_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>19.12.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2764_1_16777217.nii.gz" target="_blank">2764_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>78</td> <td>31.10.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|99</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2315_1_16777217.nii.gz" target="_blank">2315_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>06.04.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/580_1_16777217.nii.gz" target="_blank">580_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>78</td> <td>18.12.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2344_2_16777217.nii.gz" target="_blank">2344_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>21</td> <td>12.11.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/3258_3_16777217.nii.gz" target="_blank">3258_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>06.06.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/7834_1_16777217.nii.gz" target="_blank">7834_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>28.03.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|139</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/12_2_16777217.nii.gz" target="_blank">12_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>56</td> <td>26.01.2015</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|258</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/11666_12_16777217.nii.gz" target="_blank">11666_12_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>17.05.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/958_1_33554433.nii.gz" target="_blank">958_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>13.02.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/6717_1_16777217.nii.gz" target="_blank">6717_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>30</td> <td>19.10.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/307_6_16777217.nii.gz" target="_blank">307_6_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>49</td> <td>11.12.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2682_1_16777217.nii.gz" target="_blank">2682_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>75</td> <td>05.10.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|139</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/294_3_16777217.nii.gz" target="_blank">294_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>62</td> <td>18.07.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1888_3_16777217.nii.gz" target="_blank">1888_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>20.09.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/5283_1_16777217.nii.gz" target="_blank">5283_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>08.12.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/12996_1_16777217.nii.gz" target="_blank">12996_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>28</td> <td>13.11.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|85</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2398_1_16777217.nii.gz" target="_blank">2398_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>12.07.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4695_1_16777217.nii.gz" target="_blank">4695_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>25.10.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|110</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2276_1_16777217.nii.gz" target="_blank">2276_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>16.01.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/6409_1_16777217.nii.gz" target="_blank">6409_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>62</td> <td>28.02.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/6881_1_16777217.nii.gz" target="_blank">6881_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>17</td> <td>24.08.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/5040_1_16777217.nii.gz" target="_blank">5040_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>43</td> <td>30.07.2013</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|135</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/8456_4_16777217.nii.gz" target="_blank">8456_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>11.05.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/886_1_33554433.nii.gz" target="_blank">886_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>28.06.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|108</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1330_1_16777217.nii.gz" target="_blank">1330_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>71</td> <td>12.07.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2676_3_16777217.nii.gz" target="_blank">2676_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>68</td> <td>12.08.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/8325_1_16777217.nii.gz" target="_blank">8325_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>23.07.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|143</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/12328_1_16777217.nii.gz" target="_blank">12328_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>08.02.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/3281_1_16777217.nii.gz" target="_blank">3281_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>59</td> <td>21.12.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/11053_1_16777217.nii.gz" target="_blank">11053_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>43</td> <td>24.03.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|93</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/470_1_16777217.nii.gz" target="_blank">470_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>51</td> <td>29.04.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|101</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/7092_2_16777217.nii.gz" target="_blank">7092_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>24</td> <td>06.07.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4649_1_33554433.nii.gz" target="_blank">4649_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>13.10.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2171_1_16777217.nii.gz" target="_blank">2171_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>52</td> <td>18.10.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2215_1_16777217.nii.gz" target="_blank">2215_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>69</td> <td>06.05.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|147</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/866_1_16777217.nii.gz" target="_blank">866_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>17.02.2012</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|152</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/944_20_16777217.nii.gz" target="_blank">944_20_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>18</td> <td>21.06.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/910_3_16777217.nii.gz" target="_blank">910_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>18</td> <td>19.07.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1480_1_16777217.nii.gz" target="_blank">1480_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>61</td> <td>10.12.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|102</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/9283_1_16777217.nii.gz" target="_blank">9283_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>70</td> <td>11.05.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/888_1_50331649.nii.gz" target="_blank">888_1_50331649.nii.gz</a></td></tr>
+<tr><td>male</td> <td>52</td> <td>04.06.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/5285_2_16777217.nii.gz" target="_blank">5285_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>77</td> <td>20.06.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/3631_2_16777217.nii.gz" target="_blank">3631_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>69</td> <td>22.05.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|115</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1001_1_33554433.nii.gz" target="_blank">1001_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>18</td> <td>17.07.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/8134_1_16777217.nii.gz" target="_blank">8134_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>14.04.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/7370_1_16777217.nii.gz" target="_blank">7370_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>27.10.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2297_1_16777217.nii.gz" target="_blank">2297_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>41</td> <td>24.11.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2522_1_16777217.nii.gz" target="_blank">2522_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>72</td> <td>14.01.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|141</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/9534_1_16777217.nii.gz" target="_blank">9534_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>18</td> <td>31.07.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4838_1_16777217.nii.gz" target="_blank">4838_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>20.03.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|138</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/5902_2_16777217.nii.gz" target="_blank">5902_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>37</td> <td>03.05.2012</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|132</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/3807_2_16777217.nii.gz" target="_blank">3807_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>28.05.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/1967_2_16777217.nii.gz" target="_blank">1967_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>51</td> <td>06.04.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/8912_4_16777217.nii.gz" target="_blank">8912_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>31</td> <td>21.01.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/9589_1_16777217.nii.gz" target="_blank">9589_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>36</td> <td>11.12.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/9304_1_16777217.nii.gz" target="_blank">9304_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>55</td> <td>06.02.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|141</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/6036_2_16777217.nii.gz" target="_blank">6036_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>27.04.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/9488_2_16777217.nii.gz" target="_blank">9488_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>12.03.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/8683_2_33554433.nii.gz" target="_blank">8683_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>07.05.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4138_1_16777217.nii.gz" target="_blank">4138_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>47</td> <td>06.05.2010</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2783_2_16777217.nii.gz" target="_blank">2783_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>59</td> <td>27.09.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4982_2_16777217.nii.gz" target="_blank">4982_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>28</td> <td>15.06.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/4215_2_16777217.nii.gz" target="_blank">4215_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50?</td> <td>03.06.2009</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/10064_1_33554433.nii.gz" target="_blank">10064_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>67</td> <td>19.09.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|257</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/5096_2_16777217.nii.gz" target="_blank">5096_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>51</td> <td>14.04.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/676_1_33554433.nii.gz" target="_blank">676_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>33</td> <td>10.05.2007</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|140</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2138_2_16777217.nii.gz" target="_blank">2138_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>40</td> <td>20.10.2008</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/7999_2_16777217.nii.gz" target="_blank">7999_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>04.10.2006</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/2107_1_16777217.nii.gz" target="_blank">2107_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>20.01.2011</td> <td>Infiltrative TB (TB-1)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_1/13252_1_16777217.nii.gz" target="_blank">13252_1_16777217.nii.gz</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close-s1">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="idPreviewSet2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelSet2">
+                    Focal TB (TB-2)
+                </h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview-s2">
+                <table class="table table-hover" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th data-field="gender" data-sortable="true">Gender</th>
+                            <th data-field="age" data-sortable="true">Age</th>
+                            <th>Study Date</th>
+                            <th>Diagnosis</th>
+                            <th>Size (in pix)</th>
+                            <th data-field="path" data-sortable="true">File Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<tr><td>male</td> <td>23</td> <td>03.09.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/8509_1_16777217.nii.gz" target="_blank">8509_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>23</td> <td>25.10.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|63</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12816_2_16777217.nii.gz" target="_blank">12816_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>24</td> <td>31.05.2011</td> <td>Focal TB (TB-2)</td> <td>512|512|281</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/13757_4_16777217.nii.gz" target="_blank">13757_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>24</td> <td>23.11.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/2513_1_16777217.nii.gz" target="_blank">2513_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>18</td> <td>08.12.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/2669_1_16777217.nii.gz" target="_blank">2669_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>24</td> <td>01.03.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/267_1_16777217.nii.gz" target="_blank">267_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>12.05.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/902_1_16777217.nii.gz" target="_blank">902_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>29</td> <td>15.07.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/7060_3_16777217.nii.gz" target="_blank">7060_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>43</td> <td>03.06.2011</td> <td>Focal TB (TB-2)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/13576_2_16777217.nii.gz" target="_blank">13576_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>42</td> <td>03.06.2011</td> <td>Focal TB (TB-2)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/14339_1_16777217.nii.gz" target="_blank">14339_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>30</td> <td>28.04.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|100</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/7506_1_16777217.nii.gz" target="_blank">7506_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>27</td> <td>14.08.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/753_3_16777217.nii.gz" target="_blank">753_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>07.08.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|154</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/8286_1_16777217.nii.gz" target="_blank">8286_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>37</td> <td>15.01.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|142</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/11164_1_16777217.nii.gz" target="_blank">11164_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>48</td> <td>23.05.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/3747_2_16777217.nii.gz" target="_blank">3747_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>46</td> <td>04.04.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/6604_2_16777217.nii.gz" target="_blank">6604_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>25.10.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/5059_2_16777217.nii.gz" target="_blank">5059_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>10?</td> <td>23.07.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|84</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/10215_1_33554433.nii.gz" target="_blank">10215_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>73</td> <td>18.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|101</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/713_1_33554433.nii.gz" target="_blank">713_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>65</td> <td>20.03.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/404_1_16777217.nii.gz" target="_blank">404_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>51</td> <td>10.11.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/3914_3_16777217.nii.gz" target="_blank">3914_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>18</td> <td>30.04.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/4069_1_16777217.nii.gz" target="_blank">4069_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>47</td> <td>20.07.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1197_4_16777217.nii.gz" target="_blank">1197_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>37</td> <td>24.11.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|65</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12924_1_16777217.nii.gz" target="_blank">12924_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>59</td> <td>09.07.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|108</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/4664_1_16777217.nii.gz" target="_blank">4664_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>14.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/683_1_16777217.nii.gz" target="_blank">683_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>24</td> <td>31.01.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|100</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/6582_1_16777217.nii.gz" target="_blank">6582_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>30.08.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1854_1_16777217.nii.gz" target="_blank">1854_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>46</td> <td>24.03.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/6097_3_16777217.nii.gz" target="_blank">6097_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>21</td> <td>24.05.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/4311_1_16777217.nii.gz" target="_blank">4311_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>33</td> <td>30.03.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/11672_2_16777217.nii.gz" target="_blank">11672_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>25.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/791_1_16777217.nii.gz" target="_blank">791_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>31.05.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12022_1_16777226.nii.gz" target="_blank">12022_1_16777226.nii.gz</a></td></tr>
+<tr><td>male</td> <td>73</td> <td>27.03.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/7188_1_16777217.nii.gz" target="_blank">7188_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>22.10.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|140</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/7920_3_16777217.nii.gz" target="_blank">7920_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>53</td> <td>09.01.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/9507_1_16777217.nii.gz" target="_blank">9507_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>31</td> <td>08.06.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/3844_2_16777217.nii.gz" target="_blank">3844_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>30</td> <td>24.02.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/225_1_16777217.nii.gz" target="_blank">225_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>66</td> <td>20.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|93</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/739_1_16777217.nii.gz" target="_blank">739_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>21</td> <td>22.12.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/11064_1_16777217.nii.gz" target="_blank">11064_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>42</td> <td>17.09.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/4830_2_16777217.nii.gz" target="_blank">4830_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>50</td> <td>21.02.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/189_1_16777217.nii.gz" target="_blank">189_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>25.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/791_1_16777217.nii.gz" target="_blank">791_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>51</td> <td>04.05.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/785_3_16777217.nii.gz" target="_blank">785_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>14.02.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|144</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/604_4_16777217.nii.gz" target="_blank">604_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>34</td> <td>15.12.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|138</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/11009_1_16777217.nii.gz" target="_blank">11009_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>18</td> <td>20.09.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12282_2_16777217.nii.gz" target="_blank">12282_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>26.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/810_1_16777217.nii.gz" target="_blank">810_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>36</td> <td>06.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/593_1_33554433.nii.gz" target="_blank">593_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>61</td> <td>07.04.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/9895_1_16777217.nii.gz" target="_blank">9895_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>21</td> <td>24.05.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/4311_1_16777217.nii.gz" target="_blank">4311_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>10.09.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12585_1_16777217.nii.gz" target="_blank">12585_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>14.02.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|144</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/604_4_16777217.nii.gz" target="_blank">604_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>31</td> <td>26.08.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12514_1_16777217.nii.gz" target="_blank">12514_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>72</td> <td>10.02.2011</td> <td>Focal TB (TB-2)</td> <td>512|512|99</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/13404_1_16777217.nii.gz" target="_blank">13404_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>28</td> <td>23.03.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/3670_1_16777217.nii.gz" target="_blank">3670_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>51</td> <td>27.06.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|100</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1151_2_16777217.nii.gz" target="_blank">1151_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>08.10.2013</td> <td>Focal TB (TB-2)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12483_2_16777217.nii.gz" target="_blank">12483_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>12.11.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/5771_1_16777217.nii.gz" target="_blank">5771_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>63</td> <td>28.09.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|98</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/10504_1_16777217.nii.gz" target="_blank">10504_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>59</td> <td>15.08.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/4965_1_16777217.nii.gz" target="_blank">4965_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>47</td> <td>11.02.2011</td> <td>Focal TB (TB-2)</td> <td>512|512|138</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/13413_1_33554433.nii.gz" target="_blank">13413_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>60</td> <td>07.02.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/28_1_16777217.nii.gz" target="_blank">28_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>11</td> <td>20.04.2011</td> <td>Focal TB (TB-2)</td> <td>512|512|87</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/13713_2_16777217.nii.gz" target="_blank">13713_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>29</td> <td>17.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/126_2_33554433.nii.gz" target="_blank">126_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>05.07.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/10355_2_16777217.nii.gz" target="_blank">10355_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>19.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|98</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/733_1_16777217.nii.gz" target="_blank">733_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>02.07.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/2667_4_16777217.nii.gz" target="_blank">2667_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>18</td> <td>18.12.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1663_2_16777217.nii.gz" target="_blank">1663_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>59</td> <td>15.04.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1147_3_16777217.nii.gz" target="_blank">1147_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>52</td> <td>27.08.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|115</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/5052_1_16777217.nii.gz" target="_blank">5052_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>19</td> <td>31.08.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|115</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/4821_2_16777217.nii.gz" target="_blank">4821_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>10.04.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/7341_1_16777217.nii.gz" target="_blank">7341_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>35</td> <td>02.02.2015</td> <td>Focal TB (TB-2)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/9858_4_16777217.nii.gz" target="_blank">9858_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>18</td> <td>22.08.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/5015_1_16777217.nii.gz" target="_blank">5015_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>13</td> <td>05.11.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/10732_1_16777217.nii.gz" target="_blank">10732_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>25</td> <td>20.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/742_1_33554433.nii.gz" target="_blank">742_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>46</td> <td>05.12.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|150</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1192_5_16777217.nii.gz" target="_blank">1192_5_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>51</td> <td>12.10.2011</td> <td>Focal TB (TB-2)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/2338_3_16777217.nii.gz" target="_blank">2338_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>19.11.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|108</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/5830_1_16777217.nii.gz" target="_blank">5830_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>28.04.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|139</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/11194_2_16777217.nii.gz" target="_blank">11194_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>16.05.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/942_1_33554433.nii.gz" target="_blank">942_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>71</td> <td>30.06.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|132</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/8016_1_16777217.nii.gz" target="_blank">8016_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>16</td> <td>26.09.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/2033_1_16777217.nii.gz" target="_blank">2033_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>16</td> <td>08.09.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|103</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12569_1_16777217.nii.gz" target="_blank">12569_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>37</td> <td>18.02.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/6280_2_16777217.nii.gz" target="_blank">6280_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>57</td> <td>05.12.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|132</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/2619_1_16777217.nii.gz" target="_blank">2619_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>52</td> <td>08.11.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|141</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/2828_3_16777217.nii.gz" target="_blank">2828_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>35</td> <td>01.12.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/9200_1_16777217.nii.gz" target="_blank">9200_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>42</td> <td>10.01.2013</td> <td>Focal TB (TB-2)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/13057_3_16777217.nii.gz" target="_blank">13057_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>29</td> <td>19.05.2008</td> <td>Focal TB (TB-2)</td> <td>512|512|166</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/7675_1_16777217.nii.gz" target="_blank">7675_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>36</td> <td>19.01.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/10749_2_16777217.nii.gz" target="_blank">10749_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>35</td> <td>10.11.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/10606_2_16777217.nii.gz" target="_blank">10606_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>29</td> <td>26.07.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1539_1_16777217.nii.gz" target="_blank">1539_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>27.07.2010</td> <td>Focal TB (TB-2)</td> <td>512|512|147</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/12344_1_16777217.nii.gz" target="_blank">12344_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>40</td> <td>20.04.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|101</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/3972_1_16777217.nii.gz" target="_blank">3972_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>27</td> <td>14.08.2007</td> <td>Focal TB (TB-2)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/753_3_16777217.nii.gz" target="_blank">753_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>25.04.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/791_1_16777217.nii.gz" target="_blank">791_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>41</td> <td>14.10.2009</td> <td>Focal TB (TB-2)</td> <td>512|512|145</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/6110_3_16777217.nii.gz" target="_blank">6110_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>46</td> <td>06.09.2006</td> <td>Focal TB (TB-2)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_2/1899_1_16777217.nii.gz" target="_blank">1899_1_16777217.nii.gz</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close-s2">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="idPreviewSet3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelSet3">
+                    Tuberculoma (TB-3)
+                </h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview-s3">
+                <table class="table table-hover" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th data-field="gender" data-sortable="true">Gender</th>
+                            <th data-field="age" data-sortable="true">Age</th>
+                            <th>Study Date</th>
+                            <th>Diagnosis</th>
+                            <th>Size (in pix)</th>
+                            <th data-field="path" data-sortable="true">File Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<tr><td>male</td> <td>25</td> <td>19.10.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|98</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2236_1_16777217.nii.gz" target="_blank">2236_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>20.11.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5846_1_16777217.nii.gz" target="_blank">5846_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>52</td> <td>10.12.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4060_2_16777217.nii.gz" target="_blank">4060_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>72</td> <td>07.04.2011</td> <td>Tuberculoma (TB-3)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/495_2_16777217.nii.gz" target="_blank">495_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>41</td> <td>09.09.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/8549_1_16777217.nii.gz" target="_blank">8549_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>7</td> <td>21.08.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|66</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5003_1_16777217.nii.gz" target="_blank">5003_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>48</td> <td>31.10.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1272_2_16777217.nii.gz" target="_blank">1272_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>27.07.2011</td> <td>Tuberculoma (TB-3)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/12138_2_16777217.nii.gz" target="_blank">12138_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>22.09.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/8644_1_16777217.nii.gz" target="_blank">8644_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>69</td> <td>24.12.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5703_2_16777217.nii.gz" target="_blank">5703_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>40</td> <td>24.12.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|110</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/6229_1_16777217.nii.gz" target="_blank">6229_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>36</td> <td>12.08.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|115</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2137_5_16777217.nii.gz" target="_blank">2137_5_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>21</td> <td>26.01.2009</td> <td>Tuberculoma (TB-3)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/9618_1_16777217.nii.gz" target="_blank">9618_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>26</td> <td>26.03.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|140</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/3686_1_16777217.nii.gz" target="_blank">3686_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>07.08.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4893_1_16777217.nii.gz" target="_blank">4893_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>48</td> <td>31.10.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1272_2_16777217.nii.gz" target="_blank">1272_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>23</td> <td>29.09.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/12667_1_33554433.nii.gz" target="_blank">12667_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>50</td> <td>09.01.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|107</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2965_1_16777217.nii.gz" target="_blank">2965_1_16777217.nii.gz</a></td></tr>
+<tr><td>female?</td> <td>50?</td> <td>01.01.2001?</td> <td>Tuberculoma (TB-3)</td> <td>512|512|137</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/771_1_33554433.nii.gz" target="_blank">771_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>21</td> <td>26.03.2009</td> <td>Tuberculoma (TB-3)</td> <td>512|512|137</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/8983_3_33554433.nii.gz" target="_blank">8983_3_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>28.02.2012</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/862_9_16777217.nii.gz" target="_blank">862_9_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>13.02.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|139</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/6719_1_16777217.nii.gz" target="_blank">6719_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>23.08.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5029_1_16777217.nii.gz" target="_blank">5029_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>43</td> <td>03.04.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/547_1_33554433.nii.gz" target="_blank">547_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>29</td> <td>04.05.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/413_3_33554433.nii.gz" target="_blank">413_3_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>19</td> <td>14.08.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|143</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4954_1_16777217.nii.gz" target="_blank">4954_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>28.02.2012</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/862_9_16777217.nii.gz" target="_blank">862_9_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>05.10.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|145</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/12706_2_16777217.nii.gz" target="_blank">12706_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>33</td> <td>27.11.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|92</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2541_1_16777217.nii.gz" target="_blank">2541_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>50</td> <td>11.10.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|100</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2150_1_16777217.nii.gz" target="_blank">2150_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>46</td> <td>25.03.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/10330_3_16777217.nii.gz" target="_blank">10330_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>83</td> <td>21.09.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|100</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5293_1_16777217.nii.gz" target="_blank">5293_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>10.08.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/651_2_16777217.nii.gz" target="_blank">651_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>34</td> <td>07.12.2009</td> <td>Tuberculoma (TB-3)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/323_2_16777217.nii.gz" target="_blank">323_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>02.12.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|137</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/9216_1_16777217.nii.gz" target="_blank">9216_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>26.04.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4029_1_16777217.nii.gz" target="_blank">4029_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>34</td> <td>07.12.2009</td> <td>Tuberculoma (TB-3)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/323_2_16777217.nii.gz" target="_blank">323_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>72</td> <td>25.01.2011</td> <td>Tuberculoma (TB-3)</td> <td>512|512|215</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/13283_3_16777217.nii.gz" target="_blank">13283_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>05.09.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5138_1_16777217.nii.gz" target="_blank">5138_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>32</td> <td>04.07.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|101</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1367_1_16777217.nii.gz" target="_blank">1367_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>20</td> <td>18.07.2011</td> <td>Tuberculoma (TB-3)</td> <td>512|512|198</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/14629_2_33554433.nii.gz" target="_blank">14629_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>08.08.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|105</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1653_1_16777217.nii.gz" target="_blank">1653_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>25</td> <td>14.04.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/678_1_33554433.nii.gz" target="_blank">678_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>17.09.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2995_5_16777217.nii.gz" target="_blank">2995_5_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>28.02.2012</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/862_9_16777217.nii.gz" target="_blank">862_9_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>25</td> <td>27.02.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/235_2_16777217.nii.gz" target="_blank">235_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>40</td> <td>07.08.2012</td> <td>Tuberculoma (TB-3)</td> <td>512|512|251</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/8280_5_16777217.nii.gz" target="_blank">8280_5_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>23.04.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/3988_1_16777217.nii.gz" target="_blank">3988_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>47</td> <td>10.08.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1678_1_16777217.nii.gz" target="_blank">1678_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>17.09.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2995_5_16777217.nii.gz" target="_blank">2995_5_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>16</td> <td>22.05.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4287_1_16777217.nii.gz" target="_blank">4287_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>69</td> <td>04.12.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|101</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2608_1_16777217.nii.gz" target="_blank">2608_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>17</td> <td>28.11.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|97</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2555_1_16777217.nii.gz" target="_blank">2555_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>79</td> <td>26.01.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/11256_1_33554433.nii.gz" target="_blank">11256_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>46</td> <td>04.04.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/559_1_50331649.nii.gz" target="_blank">559_1_50331649.nii.gz</a></td></tr>
+<tr><td>female</td> <td>69</td> <td>20.09.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|108</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1987_1_16777217.nii.gz" target="_blank">1987_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>77</td> <td>04.10.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|100</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2101_1_16777217.nii.gz" target="_blank">2101_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>05.06.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5274_2_16777217.nii.gz" target="_blank">5274_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>22.02.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|137</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/11409_1_16777217.nii.gz" target="_blank">11409_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>05.07.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4638_1_16777217.nii.gz" target="_blank">4638_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>69</td> <td>03.04.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|95</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/548_1_33554433.nii.gz" target="_blank">548_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>57</td> <td>20.08.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4992_1_16777217.nii.gz" target="_blank">4992_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>14.04.2011</td> <td>Tuberculoma (TB-3)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/13950_1_16777217.nii.gz" target="_blank">13950_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>05.06.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5274_2_16777217.nii.gz" target="_blank">5274_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>39</td> <td>25.10.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5612_1_16777217.nii.gz" target="_blank">5612_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>25</td> <td>14.11.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5804_1_16777217.nii.gz" target="_blank">5804_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>28.02.2012</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/862_9_16777217.nii.gz" target="_blank">862_9_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>04.01.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5057_2_16777217.nii.gz" target="_blank">5057_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>30.10.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2060_2_16777217.nii.gz" target="_blank">2060_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>22</td> <td>26.09.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5336_1_16777217.nii.gz" target="_blank">5336_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>60</td> <td>12.12.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|135</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/369_3_16777217.nii.gz" target="_blank">369_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>40</td> <td>15.10.2013</td> <td>Tuberculoma (TB-3)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/12184_2_16777217.nii.gz" target="_blank">12184_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>28.02.2012</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/862_9_16777217.nii.gz" target="_blank">862_9_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>26</td> <td>16.07.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/4724_1_16777217.nii.gz" target="_blank">4724_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>37</td> <td>27.09.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/12640_1_16777217.nii.gz" target="_blank">12640_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>15.11.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2430_1_16777217.nii.gz" target="_blank">2430_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>05.06.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/5274_2_16777217.nii.gz" target="_blank">5274_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>25.07.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1527_1_16777217.nii.gz" target="_blank">1527_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>25.07.2008</td> <td>Tuberculoma (TB-3)</td> <td>512|512|143</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/8206_1_16777217.nii.gz" target="_blank">8206_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>25</td> <td>14.04.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/678_1_33554433.nii.gz" target="_blank">678_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>64</td> <td>08.12.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/13003_1_16777217.nii.gz" target="_blank">13003_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>70</td> <td>28.07.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1566_1_16777217.nii.gz" target="_blank">1566_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>37</td> <td>03.12.2009</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/6019_3_16777217.nii.gz" target="_blank">6019_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>02.02.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|66</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/11306_1_33554433.nii.gz" target="_blank">11306_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>32</td> <td>23.06.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/12172_1_16777217.nii.gz" target="_blank">12172_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>12.01.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|164</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/3010_1_16777217.nii.gz" target="_blank">3010_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>01.08.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|110</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1578_1_16777217.nii.gz" target="_blank">1578_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>35</td> <td>17.02.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/164_1_16777217.nii.gz" target="_blank">164_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>30</td> <td>29.11.2013</td> <td>Tuberculoma (TB-3)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/11035_10_16777217.nii.gz" target="_blank">11035_10_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>23</td> <td>29.09.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/12667_1_33554433.nii.gz" target="_blank">12667_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>24</td> <td>11.06.2009</td> <td>Tuberculoma (TB-3)</td> <td>512|512|143</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/10086_1_16777217.nii.gz" target="_blank">10086_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>46</td> <td>25.03.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/10330_3_16777217.nii.gz" target="_blank">10330_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>24</td> <td>16.02.2007</td> <td>Tuberculoma (TB-3)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/3357_1_16777217.nii.gz" target="_blank">3357_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>52</td> <td>14.12.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2740_1_16777217.nii.gz" target="_blank">2740_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>30.10.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/2060_2_16777217.nii.gz" target="_blank">2060_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>30</td> <td>30.08.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|99</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1859_1_16777217.nii.gz" target="_blank">1859_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>25.08.2006</td> <td>Tuberculoma (TB-3)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/1250_2_16777217.nii.gz" target="_blank">1250_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>22.12.2010</td> <td>Tuberculoma (TB-3)</td> <td>512|512|145</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/13102_1_33554433.nii.gz" target="_blank">13102_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>25.04.2011</td> <td>Tuberculoma (TB-3)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/14049_1_16777217.nii.gz" target="_blank">14049_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>17.12.2009</td> <td>Tuberculoma (TB-3)</td> <td>512|512|132</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_3/11036_1_16777217.nii.gz" target="_blank">11036_1_16777217.nii.gz</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close-s3">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="idPreviewSet4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelSet4">
+                    Miliary TB (TB-4)
+                </h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview-s4">
+                <table class="table table-hover" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th data-field="gender" data-sortable="true">Gender</th>
+                            <th data-field="age" data-sortable="true">Age</th>
+                            <th>Study Date</th>
+                            <th>Diagnosis</th>
+                            <th>Size (in pix)</th>
+                            <th data-field="path" data-sortable="true">File Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<tr><td>male</td> <td>40</td> <td>01.08.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/4852_1_16777217.nii.gz" target="_blank">4852_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>14.03.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|225</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/523_2_16777217.nii.gz" target="_blank">523_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>72</td> <td>07.12.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/1286_2_16777217.nii.gz" target="_blank">1286_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>22</td> <td>31.12.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/11102_1_16777217.nii.gz" target="_blank">11102_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>45</td> <td>17.12.2012</td> <td>Miliary TB (TB-4)</td> <td>512|512|146</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/105_3_16777217.nii.gz" target="_blank">105_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>42</td> <td>08.12.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9262_1_16777217.nii.gz" target="_blank">9262_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>91</td> <td>14.03.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|198</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13680_1_33554433.nii.gz" target="_blank">13680_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>81</td> <td>20.05.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13863_4_16777217.nii.gz" target="_blank">13863_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>55</td> <td>20.10.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|67</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/12807_1_33554433.nii.gz" target="_blank">12807_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>27.11.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9088_2_16777217.nii.gz" target="_blank">9088_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>18</td> <td>09.01.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9503_1_16777217.nii.gz" target="_blank">9503_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>18.03.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/3854_3_16777217.nii.gz" target="_blank">3854_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>58</td> <td>13.02.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/99_1_16777217.nii.gz" target="_blank">99_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>28.01.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9648_1_16777217.nii.gz" target="_blank">9648_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>19.01.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|560</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13246_1_33554433.nii.gz" target="_blank">13246_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>56</td> <td>21.01.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|115</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/6442_1_16777217.nii.gz" target="_blank">6442_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>55</td> <td>02.10.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|147</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/8713_1_16777217.nii.gz" target="_blank">8713_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>06.05.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|108</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/264_2_16777217.nii.gz" target="_blank">264_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>70</td> <td>14.06.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|245</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/14420_1_16777217.nii.gz" target="_blank">14420_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>78</td> <td>20.01.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9715_4_16777217.nii.gz" target="_blank">9715_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>13.09.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5213_1_16777217.nii.gz" target="_blank">5213_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>09.02.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/59_1_16777217.nii.gz" target="_blank">59_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>72</td> <td>26.05.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/14266_2_16777217.nii.gz" target="_blank">14266_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>54</td> <td>01.02.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|105</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/10383_3_16777217.nii.gz" target="_blank">10383_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>47</td> <td>03.04.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/3774_1_16777217.nii.gz" target="_blank">3774_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38??</td> <td>24.03.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|256</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/458_1_33554433.nii.gz" target="_blank">458_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>80</td> <td>12.09.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/8577_1_16777217.nii.gz" target="_blank">8577_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>39</td> <td>30.03.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/11667_1_16777217.nii.gz" target="_blank">11667_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>10.07.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/8082_1_16777217.nii.gz" target="_blank">8082_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>45</td> <td>08.10.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5448_1_16777217.nii.gz" target="_blank">5448_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>54</td> <td>01.02.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|105</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/10383_3_16777217.nii.gz" target="_blank">10383_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>31</td> <td>04.02.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/6607_1_16777217.nii.gz" target="_blank">6607_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>72</td> <td>07.12.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/1286_2_16777217.nii.gz" target="_blank">1286_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>77</td> <td>01.03.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|141</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13553_2_33554433.nii.gz" target="_blank">13553_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>12.07.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/4692_1_16777217.nii.gz" target="_blank">4692_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>57</td> <td>09.03.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13631_1_16777217.nii.gz" target="_blank">13631_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>41</td> <td>18.05.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/1301_2_16777217.nii.gz" target="_blank">1301_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>80</td> <td>28.09.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/2058_1_16777217.nii.gz" target="_blank">2058_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>04.08.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|295</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/8119_2_33554433.nii.gz" target="_blank">8119_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>03.01.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/2895_1_16777217.nii.gz" target="_blank">2895_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>20</td> <td>27.08.2014</td> <td>Miliary TB (TB-4)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13458_3_16777217.nii.gz" target="_blank">13458_3_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>80</td> <td>06.10.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/8746_1_16777217.nii.gz" target="_blank">8746_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>69</td> <td>26.11.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/12935_1_33554433.nii.gz" target="_blank">12935_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>15.01.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|51</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9547_1_16777217.nii.gz" target="_blank">9547_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>78</td> <td>20.01.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9715_4_16777217.nii.gz" target="_blank">9715_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>41</td> <td>18.05.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/1301_2_16777217.nii.gz" target="_blank">1301_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>09.04.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/3846_1_16777217.nii.gz" target="_blank">3846_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>76</td> <td>20.03.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/408_1_16777217.nii.gz" target="_blank">408_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>41</td> <td>24.09.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/12629_2_50331649.nii.gz" target="_blank">12629_2_50331649.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>13.04.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/4849_2_16777217.nii.gz" target="_blank">4849_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>17.02.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/155_1_16777217.nii.gz" target="_blank">155_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>74</td> <td>01.04.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|230</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9874_1_16777217.nii.gz" target="_blank">9874_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>50</td> <td>26.07.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/1543_1_16777217.nii.gz" target="_blank">1543_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>71</td> <td>10.01.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5966_2_16777217.nii.gz" target="_blank">5966_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>16.12.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9337_1_16777217.nii.gz" target="_blank">9337_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>59</td> <td>22.02.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|166</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/6435_3_16777217.nii.gz" target="_blank">6435_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>12.11.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/1879_2_16777217.nii.gz" target="_blank">1879_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38??</td> <td>24.03.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|256</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/458_1_33554433.nii.gz" target="_blank">458_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>31.03.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/531_1_16777217.nii.gz" target="_blank">531_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>50</td> <td>15.12.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13059_1_16777217.nii.gz" target="_blank">13059_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>41</td> <td>24.09.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/12629_2_50331649.nii.gz" target="_blank">12629_2_50331649.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>26.09.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|110</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5337_1_16777217.nii.gz" target="_blank">5337_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>68</td> <td>02.04.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/7250_1_16777217.nii.gz" target="_blank">7250_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>59</td> <td>02.11.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5691_1_16777217.nii.gz" target="_blank">5691_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>22.03.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|53</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/436_1_16777217.nii.gz" target="_blank">436_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>74</td> <td>12.11.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5767_1_16777217.nii.gz" target="_blank">5767_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>58</td> <td>13.02.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/99_1_16777217.nii.gz" target="_blank">99_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>68</td> <td>02.04.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/7250_1_16777217.nii.gz" target="_blank">7250_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>41</td> <td>18.05.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/1301_2_16777217.nii.gz" target="_blank">1301_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>30</td> <td>04.05.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/11889_1_16777217.nii.gz" target="_blank">11889_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>20</td> <td>03.08.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|149</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/8772_4_16777217.nii.gz" target="_blank">8772_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>32</td> <td>21.06.2013</td> <td>Miliary TB (TB-4)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/11119_3_16777217.nii.gz" target="_blank">11119_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>21.03.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|115</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/13723_1_16777217.nii.gz" target="_blank">13723_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>23</td> <td>09.11.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/10750_1_16777217.nii.gz" target="_blank">10750_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>51</td> <td>02.03.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|101</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/274_1_16777217.nii.gz" target="_blank">274_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>26.04.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/110_2_16777217.nii.gz" target="_blank">110_2_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>57</td> <td>17.09.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5247_1_16777217.nii.gz" target="_blank">5247_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>27.02.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/231_1_16777217.nii.gz" target="_blank">231_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>58</td> <td>28.12.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/6270_1_16777217.nii.gz" target="_blank">6270_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>72</td> <td>26.02.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/6214_2_16777217.nii.gz" target="_blank">6214_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>43</td> <td>24.03.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/465_1_16777217.nii.gz" target="_blank">465_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>16.05.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/7660_1_16777217.nii.gz" target="_blank">7660_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>70</td> <td>12.07.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|558</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/14585_2_33554433.nii.gz" target="_blank">14585_2_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>59</td> <td>22.02.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|166</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/6435_3_16777217.nii.gz" target="_blank">6435_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>01.08.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/4852_1_16777217.nii.gz" target="_blank">4852_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>78</td> <td>20.01.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9715_4_16777217.nii.gz" target="_blank">9715_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>78</td> <td>20.01.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/9715_4_16777217.nii.gz" target="_blank">9715_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>70</td> <td>03.05.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|102</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/653_2_16777217.nii.gz" target="_blank">653_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>33</td> <td>15.10.2012</td> <td>Miliary TB (TB-4)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/11415_2_33554433.nii.gz" target="_blank">11415_2_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>79</td> <td>08.09.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|251</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/10398_1_33554433.nii.gz" target="_blank">10398_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>59</td> <td>03.02.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/151_1_16777217.nii.gz" target="_blank">151_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>63</td> <td>13.12.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/3733_4_16777217.nii.gz" target="_blank">3733_4_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>68</td> <td>02.04.2008</td> <td>Miliary TB (TB-4)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/7250_1_16777217.nii.gz" target="_blank">7250_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>09.11.2009</td> <td>Miliary TB (TB-4)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/10748_1_16777217.nii.gz" target="_blank">10748_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>18.11.2010</td> <td>Miliary TB (TB-4)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/12891_1_33554433.nii.gz" target="_blank">12891_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>49</td> <td>06.12.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/6042_1_16777217.nii.gz" target="_blank">6042_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>59</td> <td>30.07.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/4833_1_16777217.nii.gz" target="_blank">4833_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>56</td> <td>24.11.2006</td> <td>Miliary TB (TB-4)</td> <td>512|512|96</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/2529_1_16777217.nii.gz" target="_blank">2529_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>44</td> <td>14.03.2011</td> <td>Miliary TB (TB-4)</td> <td>512|512|225</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/523_2_16777217.nii.gz" target="_blank">523_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>59</td> <td>02.11.2007</td> <td>Miliary TB (TB-4)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_4/5691_1_16777217.nii.gz" target="_blank">5691_1_16777217.nii.gz</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close-s4">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="idPreviewSet5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90%; height: 90%">
+        <div class="modal-content" style="width: 100%; height: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelSet5">
+                    Fibro-cavernous TB (TB-5)
+                </h4>
+            </div>
+            <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx-preview-s5">
+                <table class="table table-hover" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th data-field="gender" data-sortable="true">Gender</th>
+                            <th data-field="age" data-sortable="true">Age</th>
+                            <th>Study Date</th>
+                            <th>Diagnosis</th>
+                            <th>Size (in pix)</th>
+                            <th data-field="path" data-sortable="true">File Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<tr><td>male</td> <td>40</td> <td>03.02.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|142</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/8239_3_16777217.nii.gz" target="_blank">8239_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>60</td> <td>16.01.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3028_1_33554433.nii.gz" target="_blank">3028_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>49</td> <td>25.04.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/793_1_16777217.nii.gz" target="_blank">793_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>26.06.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/4372_2_16777217.nii.gz" target="_blank">4372_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>29</td> <td>21.12.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2811_1_16777217.nii.gz" target="_blank">2811_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>18.05.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/732_2_33554433.nii.gz" target="_blank">732_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>26</td> <td>29.12.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2873_1_16777217.nii.gz" target="_blank">2873_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>20</td> <td>28.07.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|104</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1562_1_16777217.nii.gz" target="_blank">1562_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>26</td> <td>14.02.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/117_1_16777217.nii.gz" target="_blank">117_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>16.09.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/8612_1_16777217.nii.gz" target="_blank">8612_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>36</td> <td>22.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/438_1_50331649.nii.gz" target="_blank">438_1_50331649.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>29.01.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3162_1_16777217.nii.gz" target="_blank">3162_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>06.03.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/6953_1_16777217.nii.gz" target="_blank">6953_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>39</td> <td>05.05.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|132</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/5900_2_33554433.nii.gz" target="_blank">5900_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>20.03.2012</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|215</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/12050_6_16777217.nii.gz" target="_blank">12050_6_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>54</td> <td>15.07.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/4708_2_16777217.nii.gz" target="_blank">4708_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>33</td> <td>30.01.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3273_2_16777217.nii.gz" target="_blank">3273_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>29</td> <td>06.10.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2122_1_16777217.nii.gz" target="_blank">2122_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>47</td> <td>06.05.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/867_1_16777217.nii.gz" target="_blank">867_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>49</td> <td>25.04.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/793_1_16777217.nii.gz" target="_blank">793_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>22.02.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/195_1_16777217.nii.gz" target="_blank">195_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>36</td> <td>22.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/438_1_50331649.nii.gz" target="_blank">438_1_50331649.nii.gz</a></td></tr>
+<tr><td>female</td> <td>37</td> <td>04.04.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|108</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/560_1_16777217.nii.gz" target="_blank">560_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>06.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/73_2_16777217.nii.gz" target="_blank">73_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>23</td> <td>02.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/275_1_16777217.nii.gz" target="_blank">275_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>70</td> <td>27.02.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3417_1_16777217.nii.gz" target="_blank">3417_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>08.12.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/777_3_16777217.nii.gz" target="_blank">777_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>06.06.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|112</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/4408_1_16777217.nii.gz" target="_blank">4408_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>39</td> <td>01.11.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|137</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/5679_1_16777217.nii.gz" target="_blank">5679_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>23</td> <td>19.02.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|118</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3373_1_16777217.nii.gz" target="_blank">3373_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>08.12.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/777_3_16777217.nii.gz" target="_blank">777_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>27.02.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/238_1_16777217.nii.gz" target="_blank">238_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>06.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/73_2_16777217.nii.gz" target="_blank">73_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>56</td> <td>14.02.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/119_1_16777217.nii.gz" target="_blank">119_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>20</td> <td>07.04.2010</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/11754_1_16777217.nii.gz" target="_blank">11754_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>22.08.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|142</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/5016_1_16777217.nii.gz" target="_blank">5016_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>39</td> <td>06.11.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|135</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/5721_1_16777217.nii.gz" target="_blank">5721_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>34</td> <td>14.07.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|123</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/8107_1_16777217.nii.gz" target="_blank">8107_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>18.09.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1481_2_16777217.nii.gz" target="_blank">1481_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>05.04.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1658_4_16777217.nii.gz" target="_blank">1658_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>33</td> <td>05.09.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1175_2_16777217.nii.gz" target="_blank">1175_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>05.04.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1658_4_16777217.nii.gz" target="_blank">1658_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>22.08.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|142</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/5016_1_16777217.nii.gz" target="_blank">5016_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>28.05.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|131</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/7745_1_16777217.nii.gz" target="_blank">7745_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>25</td> <td>21.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|53</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/423_1_16777217.nii.gz" target="_blank">423_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>20.03.2012</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|215</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/12050_6_16777217.nii.gz" target="_blank">12050_6_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>24</td> <td>22.09.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|100</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2014_1_16777217.nii.gz" target="_blank">2014_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>36</td> <td>17.05.2011</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/14194_1_16777217.nii.gz" target="_blank">14194_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>03.02.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|142</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/8239_3_16777217.nii.gz" target="_blank">8239_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>26</td> <td>29.12.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2873_1_16777217.nii.gz" target="_blank">2873_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>39</td> <td>17.04.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|94</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/699_1_16777217.nii.gz" target="_blank">699_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>05.04.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1658_4_16777217.nii.gz" target="_blank">1658_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>18.05.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|127</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/732_2_33554433.nii.gz" target="_blank">732_2_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>05.12.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/9246_1_16777217.nii.gz" target="_blank">9246_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>46</td> <td>24.12.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|125</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/11081_1_16777217.nii.gz" target="_blank">11081_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>04.07.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|133</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/248_2_16777217.nii.gz" target="_blank">248_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>52</td> <td>01.06.2010</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/12031_1_16777217.nii.gz" target="_blank">12031_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>19.10.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2231_1_16777217.nii.gz" target="_blank">2231_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>25.07.2013</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|135</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/67_4_16777217.nii.gz" target="_blank">67_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>32</td> <td>08.12.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/777_3_16777217.nii.gz" target="_blank">777_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>63</td> <td>20.01.2012</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2265_3_16777217.nii.gz" target="_blank">2265_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>26.09.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2034_1_16777217.nii.gz" target="_blank">2034_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>63</td> <td>20.01.2012</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2265_3_16777217.nii.gz" target="_blank">2265_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>36</td> <td>10.01.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2979_1_16777217.nii.gz" target="_blank">2979_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>28</td> <td>20.03.2012</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|215</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/12050_6_16777217.nii.gz" target="_blank">12050_6_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>20</td> <td>07.04.2010</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/11754_1_16777217.nii.gz" target="_blank">11754_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>56</td> <td>18.07.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|120</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1472_1_16777217.nii.gz" target="_blank">1472_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>33</td> <td>30.01.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|114</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3273_2_16777217.nii.gz" target="_blank">3273_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>34</td> <td>14.12.2011</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|134</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/5813_2_16777217.nii.gz" target="_blank">5813_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>16</td> <td>01.04.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3553_2_16777217.nii.gz" target="_blank">3553_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>45</td> <td>25.07.2013</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|135</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/67_4_16777217.nii.gz" target="_blank">67_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>18.09.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|109</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1481_2_16777217.nii.gz" target="_blank">1481_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>81</td> <td>05.02.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3245_1_16777217.nii.gz" target="_blank">3245_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>31.03.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/9867_1_33554433.nii.gz" target="_blank">9867_1_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>55</td> <td>13.01.2014</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|124</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/9917_2_16777217.nii.gz" target="_blank">9917_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>41</td> <td>17.01.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/6418_1_16777217.nii.gz" target="_blank">6418_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>42</td> <td>17.11.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|132</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/7962_2_16777217.nii.gz" target="_blank">7962_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>53</td> <td>09.02.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|117</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/57_1_16777217.nii.gz" target="_blank">57_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>56</td> <td>14.02.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|116</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/119_1_16777217.nii.gz" target="_blank">119_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>58</td> <td>26.06.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|130</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/4372_2_16777217.nii.gz" target="_blank">4372_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>31.03.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/9867_1_33554433.nii.gz" target="_blank">9867_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>41</td> <td>23.01.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|129</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3114_1_16777217.nii.gz" target="_blank">3114_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>39</td> <td>05.05.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|132</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/5900_2_33554433.nii.gz" target="_blank">5900_2_33554433.nii.gz</a></td></tr>
+<tr><td>female</td> <td>49</td> <td>25.04.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|119</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/793_1_16777217.nii.gz" target="_blank">793_1_16777217.nii.gz</a></td></tr>
+<tr><td>female</td> <td>71</td> <td>27.03.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3709_1_16777217.nii.gz" target="_blank">3709_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>37</td> <td>29.06.2010</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/12201_1_16777217.nii.gz" target="_blank">12201_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>23.02.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/214_1_16777217.nii.gz" target="_blank">214_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>31</td> <td>06.06.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/7835_1_16777217.nii.gz" target="_blank">7835_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>46</td> <td>12.04.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|113</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/645_1_33554433.nii.gz" target="_blank">645_1_33554433.nii.gz</a></td></tr>
+<tr><td>male</td> <td>26</td> <td>07.06.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|128</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/4425_1_16777217.nii.gz" target="_blank">4425_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>24</td> <td>03.06.2008</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|149</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/7804_1_16777217.nii.gz" target="_blank">7804_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>36</td> <td>22.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|111</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/438_1_50331649.nii.gz" target="_blank">438_1_50331649.nii.gz</a></td></tr>
+<tr><td>female</td> <td>68</td> <td>30.12.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|105</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/2884_1_16777217.nii.gz" target="_blank">2884_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>49</td> <td>16.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|50</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/368_1_16777217.nii.gz" target="_blank">368_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>40</td> <td>03.02.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|142</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/8239_3_16777217.nii.gz" target="_blank">8239_3_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>38</td> <td>16.01.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|94</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/3036_1_16777217.nii.gz" target="_blank">3036_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>26</td> <td>06.05.2011</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|136</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/11157_2_16777217.nii.gz" target="_blank">11157_2_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>30</td> <td>20.03.2006</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|121</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/401_1_16777217.nii.gz" target="_blank">401_1_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>05.04.2007</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|122</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/1658_4_16777217.nii.gz" target="_blank">1658_4_16777217.nii.gz</a></td></tr>
+<tr><td>male</td> <td>48</td> <td>03.12.2009</td> <td>Fibro-cavernous TB (TB-5)</td> <td>512|512|126</td> <td><a href="https://cloud.mail.ru/public/F3HV/EF938GWpW/TB_Class_5/10925_1_16777217.nii.gz" target="_blank">10925_1_16777217.nii.gz</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close-s5">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+{#    <header>#}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="algnc">
+                    <h2>
+                        Download a pilot dataset of 500 CT images of patients suffering
+                        from Lung Tuberculosis (TB)<br>
+                    </h2>
+                    <h3>
+                        (5 types of TB, 100 CT images of each TB type)
+                    </h3>
+                </div>
+                <hr>
+
+                <h3><u>Image Description</u></h3>
+                Please see the CARS-2016 Congress paper entitled:
+                <a href="/data/articles/Towards_Lung_Tuberculosis_CAD.pdf" target="_blank">
+                    Towards a lung tuberculosis CAD: selecting the CT image analysis method
+                </a>
+                <br>A limited data about the TB patients
+                presented in the <b>Tables</b> below.
+                <br>
+                <hr>
+                <center>
+                    <a class="btn btn-default" data-toggle="modal" data-target="#idPreviewSet1">
+                        <span class="glyphicon glyphicon-eye-open"></span> Infiltrative TB (TB-1)
+                    </a>
+                    <a class="btn btn-default" data-toggle="modal" data-target="#idPreviewSet2">
+                        <span class="glyphicon glyphicon-eye-open"></span> Focal TB (TB-2)
+                    </a>
+                    <a class="btn btn-default" data-toggle="modal" data-target="#idPreviewSet3">
+                        <span class="glyphicon glyphicon-eye-open"></span> Tuberculoma (TB-3)
+                    </a>
+                    <a class="btn btn-default" data-toggle="modal" data-target="#idPreviewSet4">
+                        <span class="glyphicon glyphicon-eye-open"></span> Miliary TB (TB-4)
+                    </a>
+                    <a class="btn btn-default" data-toggle="modal" data-target="#idPreviewSet5">
+                        <span class="glyphicon glyphicon-eye-open"></span> Fibro-cavernous TB (TB-5)
+                    </a>
+                </center>
+
+                <hr>
+                <h3><u> Image Download </u></h3>
+                Original CT images can be downloaded from Google Drive using the links below.
+                <br><br>
+                <ul>
+                    <li>
+                        <a href="https://cloud.mail.ru/public/CMxQ/S2rjaQhqP" target="_blank">
+                            Infiltrative TB (TB-1)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://cloud.mail.ru/public/MGxM/hh2AGFxhN" target="_blank">
+                            Focal TB (TB-2)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://cloud.mail.ru/public/Mdjr/NxUzDigq2" target="_blank">
+                            Tuberculoma (TB-3)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://cloud.mail.ru/public/3gYf/sVzD3AndA" target="_blank">
+                            Miliary TB (TB-4)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://cloud.mail.ru/public/3L7o/2n7N2aAdk" target="_blank">
+                            Fibro-cavernous TB (TB-5)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+{#    </header>#}
+<script type="application/javascript">
+    $("#navbar-dataset-tb5classes").addClass("active");
+</script>
+</div>
+{% endblock %}

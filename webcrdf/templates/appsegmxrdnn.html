@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+{% block content %}
+    <link href="/data/cssjs/ekko-lightbox.min.css" type="text/css">
+    <script src="/data/cssjs/ekko-lightbox.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .container00 {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: inline-block;
+        }
+        .main_image00 {
+            width: 100%;
+            height: 100%;
+        }
+        .overlay_image00 {
+            position: absolute;
+            top: 16px;
+            left: 22px;
+        }
+        .error_info {
+{#            width:  64px;#}
+{#            height: 64px;#}
+            font-size: x-large;
+            color: red;
+        }
+        .div-90p {
+            width: 100%;
+        }
+        .algnc {
+            text-align: center;
+        }
+        .img-def {
+            min-width: 180px;
+            min-height: 180px;
+            width: 180px;
+            height: 180px;
+            max-width: 180px;
+            max-height: 180px;
+        }
+    </style>
+    <div class="container div-90p">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        For more information, please see artile:
+                        <a href="/data/articles/Lung_Segmentation_by_Convolutional_NN.pdf" target="_blank">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                            Lung Image Segmentation Using Deep Learning Methods and Convolutional Neural Networks
+                        </a>
+                        <hr>
+                        <h4> <kbd>1</kbd> Upload your X-Ray chest image:</h4>
+                    </div>
+                    <div class="panel-body">
+                        {% block upload %}
+                            <form role="form" id="id_form_upload" style="padding: 2px" enctype="multipart/form-data" method="post" action="{% url 'appsegmxrdnn:upload' %}">
+                                <div class="btn-group-vertical" style="width: 100%;">
+                                    <a href="#" class="btn btn-success btn-block" id="id_showdb" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-th"></span> Select from our Database</a>
+                                    <input class="btn btn-primary" type="file" value="file" name="file" id="id_file" />
+                                    <a class="btn btn-danger" href="{% url 'appsegmxrdnn:clean' %}"><span class="glyphicon glyphicon-remove-circle"></span> Remove files</a>
+                                </div>
+                            </form>
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-7 algnc">
+                <div class="panel panel-default">
+                    <div class="panel-heading algnc">
+                        <img src="/data/img/deep-learning/fcnn-v1.png">
+                        <br>
+                        <h4> <kbd>2</kbd> DeepLearning X-Ray Image Segmentation:</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div id="user_images" class="row">
+                            {% for ii in uploadedImages %}
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 hero-feature">
+                                    <div class="thumbnail">
+                                        <a id="ashow-{{ ii.idx }}" class="container00" href="#" url-inp="{{ ii.urlInp }}" data-toggle="modal" data-target="#dialogPreviewXRay">
+                                            {#style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;"#}
+                                            <img class="img-thumbnail img-user img-def" alt="100x100" src="{{ ii.url }}" id="{{ ii.idx }}">
+                                            {% if not ii.isFinished %}
+                                                <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>
+                                            {% endif %}
+                                            <span class="overlay_image00 error_info glyphicon glyphicon-minus-sign" style="display: none;" id="error_{{ ii.idx }}"></span>
+                                        </a>
+                                        <div class="caption" id="caption-{{ ii.idx }}">
+                                            {% if ii.isFinished %}
+                                                {% if ii.isGood %}
+                                                    <a id="zip-{{ ii.idx }}" href="#" class="btn btn-sm btn-primary" url-data="{{ ii.urlZip }}">
+                                                        <span class="glyphicon glyphicon-circle-arrow-up"></span> Download</a>
+                                                    <a id="err-{{ ii.idx }}" href="#" class="btn btn-sm btn-danger" style="display: none;" data-toggle="modal" data-target="#dialogErrorMessage">
+                                                        <span class="glyphicon glyphicon-flash"></span> Error</a>
+                                                {% else %}
+                                                    <a id="zip-{{ ii.idx }}" href="#" class="btn btn-sm btn-primary" url-data="{{ ii.urlZip }}" style="display: none;">
+                                                        <span class="glyphicon glyphicon-circle-arrow-up"></span> Download</a>
+                                                    <a id="err-{{ ii.idx }}" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#dialogErrorMessage">
+                                                        <span class="glyphicon glyphicon-flash"></span> Error</a>
+                                                {% endif %}
+                                            {% else %}
+                                                <a id="zip-{{ ii.idx }}" href="#" class="btn btn-sm btn-primary disabled" url-data="{{ ii.urlZip }}">
+                                                    <span class="glyphicon glyphicon-circle-arrow-up"></span> Download</a>
+                                                <a id="err-{{ ii.idx }}" href="#" class="btn btn-sm btn-danger" style="display: none;" data-toggle="modal" data-target="#dialogErrorMessage">
+                                                        <span class="glyphicon glyphicon-flash"></span> Error</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+{#                                <a id="a_{{ ii.idx }}" class="container00" href="{{ ii.url }}" data-toggle="lightbox" data-title="{{ ii.idx }}" data-footer="{{ ii.sizeW }}x{{ ii.sizeH }}" data-buttona="Download">#}
+{#                                    <img class="img-thumbnail img-user" alt="100x100" src="{{ ii.url }}" style="width: {{ ii.sizeW }}px; height: {{ ii.sizeH }}px;" id="{{ ii.idx }}">#}
+{#                                    <i class="overlay_image00 fa fa-refresh fa-inverse fa-spin fa-3x" id="info_{{ ii.idx }}"></i>#}
+{#                                    <span class="overlay_image00 error_info glyphicon glyphicon-minus-sign" style="display: none;" id="error_{{ ii.idx }}"></span>#}
+{#                                </a>#}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialog: Preview of X-Ray image -->
+<div class="modal fade" id="dialogPreviewXRay" tabindex="-1" role="dialog" aria-labelledby="dialogPreviewXRay" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">X-Ray Preview</h4>
+            </div>
+            <div class="modal-body text-center">
+                <img src="#" id="dlg-preview-xray-img" width="90%">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dialog: Error Message -->
+<div class="modal fade" id="dialogErrorMessage" tabindex="-1" role="dialog" aria-labelledby="dialogErrorMessage" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dialogErrorMessageTitle">Error in segmentation process</h4>
+            </div>
+            <div class="modal-body text-center">
+                <h2 id="dialog-error-text" style="color: red; font-style: oblique;">
+                </h2>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Dialog: X-Ray database -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 90%; height: 90%">
+    <div class="modal-content" style="width: 100%; height: 100%">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">X-Ray database</h4>
+      </div>
+      <div class="modal-body" style="width: 100%; height: 80%; overflow: scroll;" id="idx_gallery"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="gallery-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/javascript">
+    var currentImageInfo = null;
+    /*
+    $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox.defaults.onShow = function() {
+            console.log("::onShow()");
+            $("#lightbox_btna").on("click", function() {
+                var urlZip = $("#lightbox_img_href").attr('src');
+                //TODO: This IS STUPID HAK(FUCK)!!!!
+                urlZip = urlZip.substr(0,urlZip.length-11) + ".zip";
+{#                $.fileDownload(urlZip);#}
+                window.location=urlZip;
+                console.log("::onClick() : " + urlZip);
+            });
+        };
+        return $(this).ekkoLightbox();
+    });
+    */
+    $("a[id^='ashow-']").on("click", function() {
+        var tmpUrl = [$(this).attr('url-inp')];
+        console.log('[PUSH] : ' + tmpUrl);
+        $("#dlg-preview-xray-img").attr("src", tmpUrl);
+    });
+    $("a[id^='zip-']").on("click", function() {
+        var urlZip = $(this).attr('url-data');
+        window.location=urlZip;
+    });
+    $("a[id^='err-']").on("click", function() {
+        var tidx = $(this).attr('id').substr(4);
+        $("ialog-error-text").text("Unknown error...");
+        if(currentImageInfo != null) {
+            var numInfo = currentImageInfo.length;
+            var posIdx = -1;
+            for (var ii=0; ii<numInfo; ii++) {
+                if(currentImageInfo[ii].idx==tidx) {
+                    posIdx=ii;
+                }
+            }
+            if(posIdx>=0) {
+                $("#dialog-error-text").text(currentImageInfo[posIdx].textError);
+            }
+        }
+        console.log('[PUSH] : ERROR --> ' + tidx);
+    });
+    $(function () {
+        var timeCounter = 0;
+        var timeDelay   = 1000;
+        ///////////////////////////////////////
+        function imageListUpdater() {
+            $.ajax({
+                url: "{% url 'appsegmxrdnn:getinfo' %}",
+                success: function(data) {
+                    currentImageInfo = $.parseJSON(data);
+                    console.log(currentImageInfo);
+                    var isAllFinished = true;
+                    var tStatus, tIdx;
+                    var tGood = false;
+                    for(var ii=0; ii<currentImageInfo.length; ii++) {
+                        tStatus = currentImageInfo[ii].isFinished;
+                        tGood   = currentImageInfo[ii].isGood;
+                        tIdx    = currentImageInfo[ii].idx;
+                        if(tStatus) {
+                            $('#'   + tIdx).attr('src', currentImageInfo[ii].urlSegm);
+                            $('#ashow-' + tIdx).attr('url-inp',currentImageInfo[ii].urlSegm);
+                            $('#zip-' + tIdx).removeClass('disabled');
+                            $('#info_' + tIdx).hide();
+                            if(!tGood) {
+                                $('#error_' + tIdx).show();
+                                $('#err-' + tIdx).show();
+                                $('#zip-' + tIdx).hide();
+                            }
+                        } else {
+{#                            $('#'   + tIdx).attr('src', currentImageInfo[ii].url);#}
+{#                            $('#a_' + tIdx).attr('href',currentImageInfo[ii].url);#}
+                            $('#info_' + tIdx).show();
+                            isAllFinished = false;
+                        }
+                    }
+                    if(!isAllFinished) {
+                        updateImageList();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("ERROR[Ajax] : status=" + textStatus);
+                }
+            });
+        }
+        function updateImageList() {
+            var currDelay = 100;
+            if(timeCounter>0) {
+                currDelay=timeDelay;
+            }
+            setTimeout(function() {
+                console.log("Timeout: " + timeCounter);
+                timeCounter++;
+                imageListUpdater();
+            }, currDelay);
+        }
+        updateImageList();
+        ///////////////////////////////////////
+        $("#id_help").tooltip({html:true});
+        $("#navbar-segmxrdnn").addClass("active");
+        $('.alert .close').on('click', function(e) {
+            $(this).parent().hide();
+        });
+
+        $("#id_file").on("change", function() {
+            $("#id_form_upload").submit();
+        });
+        var funShowErrorMessage = function(txt) {
+            $('#message-error-text').html(txt);
+            $('#message-error').show();
+        };
+    /////////////////////////////////////////////////
+        $("#id_showdb").on('click', function () {
+            var gal = $('#idx_gallery');
+            var param={'num': 10};
+            $.ajax({
+                url: "{% url 'appsegmxrdnn:gallery' %}",
+                type: "POST",
+                data: param,
+                success: function (data, textStatus, jqXHR) {
+                    var tobj = $.parseJSON(data);
+                    var dataLen=tobj.length;
+                    var maxSiz=200;
+                    gal.empty();
+                    for(var ii=0; ii<dataLen; ii++) {
+                        var tUrl = tobj[ii].url;
+                        var pw = 1;
+                        var ph = 1;
+                        if (tobj[ii].w >= tobj[ii].h) {
+                            pw = maxSiz;
+                            ph = Math.floor(maxSiz * tobj[ii].h / tobj[ii].w);
+                        } else {
+                            pw = Math.floor(maxSiz * tobj[ii].w / tobj[ii].h);
+                            ph = maxSiz;
+                        }
+                        var tmpImg = $('<img>',{
+                            class: 'img-thumbnail',
+                            width:  pw,
+                            height: ph,
+                            id:  'gal_'+tobj[ii].idx,
+                            src: tUrl
+                        });
+                        $(tmpImg).on('click', function() {
+                            var spl = this.src.split('/');
+                            var fn  = spl[spl.length-1];
+                            console.log(fn);
+                            $('#gallery-close').click();
+                            var param2={'fname': fn};
+                            $.ajax({
+                                url: "{% url 'appsegmxrdnn:uploadfdb' %}",
+                                type: "POST",
+                                data: param2,
+                                success: function (data, textStatus, jqXHR) {
+                                    console.log(data);
+                                    window.location="{% url 'appsegmxrdnn:index' %}";
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    funShowErrorMessage('Server error: bad image in DB');
+                                }
+                            });
+                            //window.location="/";
+                        });
+                        $(tmpImg).css('cursor','pointer');
+                        $(tmpImg).prop('title', 'Press mouse button to add image');
+                        gal.append(tmpImg);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    funShowErrorMessage('Error gallery query...');
+                }
+            });
+        });
+    /////////////////////////////////////////////////
+    });
+</script>
+
+{% endblock %}

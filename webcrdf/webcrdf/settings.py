@@ -23,6 +23,7 @@ import appdrugres.alg   as algDrugRes
 import apphistology.alg as algHistology
 import appvideocbir.alg as algVideoCBIR
 import appctslice.alg   as algCTSlice
+import appsegmxrdnn.alg as algSegmXRDNN
 
 
 # Quick-start development settings - unsuitable for production
@@ -125,8 +126,8 @@ if not os.path.isdir(STATIC_ROOT_USERDATA_CBIR):
     os.mkdir(STATIC_ROOT_USERDATA_CBIR)
 
 CBIR=algCBIR.SCBIR(STATIC_ROOT_DATADB)
-CBIR.load()
-CBIR.printInfo()
+# CBIR.load()
+# CBIR.printInfo()
 
 #### Loading X-Ray data
 STATIC_ROOT_XRAY_USERDATA  =os.path.join(BASE_DIR, 'data/users_xray')
@@ -214,14 +215,15 @@ for ii in glob.glob('%s/data/datadb.drugres/*.nii.gz' % BASE_DIR):
 URL_HISTOLOGY_USERDATA='data/users_histology'
 STATIC_ROOT_HISTOLOGY_USERDATA=os.path.join(BASE_DIR, 'data/users_histology')
 STATIC_ROOT_HISTOLOGY_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.histology')
-HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)
-# HISTOLOGY=algHistology.HistologySearcher()
+# HISTOLOGY=algHistology.HistologySearcher(STATIC_ROOT_HISTOLOGY_DBDATA)
+HISTOLOGY=algHistology.HistologySearcher()
 
 #### Loading Video-CBIR data
 URL_VIDEOCBIR_USERDATA='data/users_videocbir'
 STATIC_ROOT_VIDEOCBIR_USERDATA=os.path.join(BASE_DIR, 'data/users_videocbir')
 STATIC_ROOT_VIDEOCBIR_DBDATA  =os.path.join(BASE_DIR, 'data/datadb.videocbir')
-VIDEOCBIR=algVideoCBIR.VideoCBIRSearcher(STATIC_ROOT_VIDEOCBIR_DBDATA)
+# VIDEOCBIR=algVideoCBIR.VideoCBIRSearcher(STATIC_ROOT_VIDEOCBIR_DBDATA)
+VIDEOCBIR=None
 
 #### Loading App-CTSlice data
 STATIC_ROOT_CTSLICE_USERDATA=os.path.join(BASE_DIR, 'data/users_ctslice')
@@ -229,3 +231,23 @@ STATIC_ROOT_CTSLICE_SCRIPTS   = os.path.join(BASE_DIR, 'data/scripts_ctslice')
 taskManagerCTSlice = algCTSlice.TaskManagerCTSlice()
 if not os.path.isdir(STATIC_ROOT_CTSLICE_USERDATA):
     os.mkdir(STATIC_ROOT_CTSLICE_USERDATA)
+
+#### Loading data X-Ray DNN Segmentation
+STATIC_ROOT_SEGMXRDNN_PATH_CAFFE_SEGNET=os.path.join(BASE_DIR, 'data/scripts_segmxrdnn/caffe-segnet.git-build')
+STATIC_ROOT_SEGMXRDNN_PATH_MODEL=os.path.join(BASE_DIR, 'data/scripts_segmxrdnn/segnet_xray_weights.caffemodel')
+STATIC_ROOT_SEGMXRDNN_USERDATA=os.path.join(BASE_DIR, 'data/users_segmxrdnn')
+if not os.path.isdir(STATIC_ROOT_SEGMXRDNN_USERDATA):
+    os.mkdir(STATIC_ROOT_SEGMXRDNN_USERDATA)
+taskManagerSegmXRDNN = algSegmXRDNN.TaskManagerSegmXR_DNN()
+taskManagerSegmXRDNN.setParams(pathCaffe=STATIC_ROOT_SEGMXRDNN_PATH_CAFFE_SEGNET,
+                               pathModelDNN=STATIC_ROOT_SEGMXRDNN_PATH_MODEL)
+STATIC_ROOT_XRAYDNN_DBDATA    =os.path.join(BASE_DIR, 'data/datadb.xraydnn')
+IMAGEDB_DNN=[]
+for ii in glob.glob('%s/data/datadb.xraydnn/*.png' % BASE_DIR):
+    img=cv2.imread(ii, 0) ##cv2.CV_LOAD_IMAGE_GRAYSCALE)
+    if img is not None:
+        tmp={'w': img.shape[1], 'h': img.shape[0], 'url': '/data/datadb.xraydnn/%s' % os.path.basename(ii), 'idx': os.path.basename(ii)}
+        IMAGEDB_DNN.append(tmp)
+
+# taskManagerSegmXR = algSegmXR.TaskManagerSegmXR(nproc=2)
+# taskManagerSegmXR.loadData(STATIC_ROOT_SEGMXR_DBDATA)

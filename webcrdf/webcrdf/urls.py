@@ -27,5 +27,6 @@ urlpatterns = patterns('',
     url(r'^apphistology/',	include('apphistology.urls', namespace='apphistology',  app_name='apphistology')),
     url(r'^appvideocbir/',	include('appvideocbir.urls', namespace='appvideocbir',  app_name='appvideocbir')),
     url(r'^appctslice/',	include('appctslice.urls',   namespace='appctslice',    app_name='appctslice')),
+    url(r'^appsegmxrdnn/',	include('appsegmxrdnn.urls',  namespace='appsegmxrdnn', app_name='appsegmxrdnn')),
 )
 

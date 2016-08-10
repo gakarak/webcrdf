@@ -1,0 +1,5 @@
+*.dcm.png.zip
+*.dcm.png_maskedxr.png
+*.dcm.png_maskxr.png
+*.dcm.png_onmaskxr.png
+*.dcm.png_pts.csv

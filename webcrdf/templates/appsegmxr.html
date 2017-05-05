@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-    <link href="/data/cssjs/ekko-lightbox.min.css" type="text/css">
-    <script src="/data/cssjs/ekko-lightbox.min.js" type="text/javascript"></script>
+{#    <link href="/data/cssjs/ekko-lightbox.min.css" type="text/css">#}
+{#    <script src="/data/cssjs/ekko-lightbox.min.js" type="text/javascript"></script>#}
+    <link href="/data/cssjs/ekko-lightbox.css" type="text/css">
+    <script src="/data/cssjs/ekko-lightbox.js" type="text/javascript"></script>
     <style type="text/css">
         .container00 {
             position: relative;
@@ -89,7 +91,7 @@
             $("#lightbox_btna").on("click", function() {
                 var urlZip = $("#lightbox_img_href").attr('src');
                 //TODO: This IS STUPID HAK(FUCK)!!!!
-                urlZip = urlZip.substr(0,urlZip.length-11) + ".zip";
+                urlZip = urlZip.substr(0,urlZip.length-13) + ".zip";
 {#                $.fileDownload(urlZip);#}
                 window.location=urlZip;
                 console.log("::onClick() : " + urlZip);
